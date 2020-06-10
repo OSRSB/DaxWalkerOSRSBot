@@ -1,5 +1,10 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl;
 
+import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.MoveTaskHandler;
+import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
+import net.runelite.client.rsb.walker.dax_api.walker.models.MoveTask;
+import net.runelite.client.rsb.walker.dax_api.walker.models.enums.MoveActionResult;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.path.DaxPathFinder;
 import org.tribot.api.General;
 import org.tribot.api2007.Options;
 import scripts.dax_api.walker.handlers.move_task.MoveTaskHandler;

@@ -5,6 +5,8 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.Positionable;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSItemHelper;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSNPCHelper;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSObjectHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.wrappers.*;
 import org.tribot.api.General;

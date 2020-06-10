@@ -1,5 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl;
 
+import net.runelite.client.rsb.walker.dax_api.walker.models.enums.MoveActionResult;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
