@@ -3,24 +3,15 @@ package net.runelite.client.rsb.walker.dax_api.walker.utils;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.Filters;
 import net.runelite.client.rsb.walker.dax_api.Positionable;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSItemHelper;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSNPCHelper;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSObjectHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.wrappers.*;
-import org.tribot.api.General;
-import org.tribot.api.input.Mouse;
-import org.tribot.api.interfaces.Clickable;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.*;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.*;
-import scripts.dax_api.shared.helpers.RSItemHelper;
-import scripts.dax_api.shared.helpers.RSNPCHelper;
-import scripts.dax_api.shared.helpers.RSObjectHelper;
-import scripts.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.wrappers.common.Clickable;
+import net.runelite.client.rsb.wrappers.subwrap.RSMenuNode;
 import net.runelite.api.Point;
 
 import java.awt.*;
@@ -176,7 +167,7 @@ public class AccurateMouse {
                 click(1);
                 if (waitResponse() == State.YELLOW) {
                     RSTile clicked = WaitFor.getValue(900, Game::getDestination);
-                    return clicked != null && (clicked.equals(destination) || Player.getPosition().equals(destination));
+                    return clicked != null && (clicked.equals(destination) || Web.methods.players.getMyPlayer().getPosition().equals(destination));
                 } else {
                     break;
                 }
@@ -186,7 +177,7 @@ public class AccurateMouse {
     }
 
     public static boolean hoverScreenTileWalkHere(RSTile destination) {
-        for (int i = 0; i < General.random(4, 6); i++) {
+        for (int i = 0; i < Web.methods.web.random(4, 6); i++) {
             Point point = getWalkingPoint(destination);
             if (point == null) {
                 continue;
@@ -227,12 +218,12 @@ public class AccurateMouse {
             return false;
         }
 
-        if (ChooseOption.isOpen()) {
-            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
+        if (Web.methods.chooseOption.isOpen()) {
+            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, Web.methods.chooseOption.getMenuNodes(), clickActions);
             if (handleMenuNode(menuNode, hover)) {
                 return true;
             } else {
-                ChooseOption.close();
+                Web.methods.chooseOption.close();
             }
         }
 
@@ -261,10 +252,10 @@ public class AccurateMouse {
         String regex = String.format("(%s) (.*-> )?%s(.*)", String.join("|", Arrays.stream(clickActions).map(
 		        Pattern::quote).collect(Collectors.toList())), targetName != null ? Pattern.quote(targetName) : "");
 
-        if (WaitFor.condition(80, () -> Arrays.stream(ChooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
+        if (WaitFor.condition(80, () -> Arrays.stream(Web.methods.chooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
             boolean multipleMatches = false;
 
-            String[] options = ChooseOption.getOptions();
+            String[] options = Web.methods.chooseOption.getOptions();
             if (Arrays.stream(options).filter(s -> s.matches(regex)).count() > 1) {
                 multipleMatches = true;
             }
@@ -280,7 +271,7 @@ public class AccurateMouse {
             }
 
             click(3);
-            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, ChooseOption.getMenuNodes(), clickActions);
+            RSMenuNode menuNode = getValidMenuNode(clickable, targetName, Web.methods.chooseOption.getMenuNodes(), clickActions);
             if (handleMenuNode(menuNode, hover)) {
                 return true;
             }
@@ -290,11 +281,12 @@ public class AccurateMouse {
     }
 
     private static boolean handleRSItemRSInterface(Clickable clickable, boolean hover, String... clickActions) {
-        if (!(clickable instanceof RSItem || clickable instanceof RSInterface)) {
+        /*
+        if (!(clickable instanceof RSItem || clickable instanceof RSWidget)) {
             return false;
         }
 
-        Rectangle area = clickable instanceof RSItem ? ((RSItem) clickable).getArea() : ((RSInterface) clickable).getAbsoluteBounds();
+        Rectangle area = clickable instanceof RSItem ? ((RSItem) clickable).getArea() : ((RSWidget) clickable).getArea();
         String uptext = Game.getUptext();
         if (area.contains(Mouse.getPos())) {
             if (uptext != null && (clickActions.length == 0 || Arrays.stream(clickActions).anyMatch(uptext::contains))) {
@@ -305,16 +297,24 @@ public class AccurateMouse {
                 return true;
             } else {
                 Mouse.click(3);
-                return ChooseOption.select(clickActions);
+                return Web.methods.chooseOption.select(clickActions);
             }
         } else {
             Mouse.moveBox(area);
             if (!hover) {
-                return clickable.click(clickActions);
+                for (String option : clickActions) {
+                    if (clickable.doAction(option)) {
+                        return true;
+                    }
+                }
+                return false;
             }
             //TODO: handle hovering of interfaces for secondary actions such as right click hover
             return true;
         }
+
+         */
+        return false;
     }
 
     private static boolean handleMenuNode(RSMenuNode rsMenuNode, boolean hover) {
@@ -323,7 +323,7 @@ public class AccurateMouse {
         }
         Rectangle rectangle = rsMenuNode.getArea();
         if (rectangle == null) {
-            ChooseOption.close();
+            Web.methods.chooseOption.close();
             return false;
         }
         Point currentMousePosition = Mouse.getPos();
@@ -400,22 +400,22 @@ public class AccurateMouse {
             if (tile.equals(destination)) {
                 continue;
             }
-            polygons.add(Projection.getTileBoundsPoly(tile, 0));
+            polygons.add(Web.methods.calc.getTileBoundsPoly(tile, 0));
             polygons.addAll(
-		            Arrays.stream(Objects.getAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
+		            Arrays.stream(Web.methods.objects.getAllAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
 				            Collectors.toList()));
             polygons.addAll(
-		            Arrays.stream(GroundItems.getAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
+		            Arrays.stream(Web.methods.groundItems.getAllAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
 				            Collectors.toList()));
             polygons.addAll(
-		            Arrays.stream(NPCs.find(Filters.NPCs.tileEquals(tile))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
+		            Arrays.stream(Web.methods.npcs.getAll(Filters.NPCs.tileEquals(tile))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(java.util.Objects::nonNull).map(RSModel::getEnclosedArea).filter(java.util.Objects::nonNull).collect(
 				            Collectors.toList()));
         }
 
         outterLoop:
         for (int i = 0; i < 1000; i++) {
             Point point = getRandomPoint(area.getBounds());
-            if (Projection.isInViewport(point) && area.contains(point)) {
+            if (Web.methods.calc.tileOnScreen((point) && area.contains(point)) {
                 for (Polygon polygon : polygons) {
                     if (polygon.contains(point)) {
                         continue outterLoop;

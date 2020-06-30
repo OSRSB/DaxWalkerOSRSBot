@@ -8,19 +8,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 public interface Filters {
-
-    Filter<?> actionsContains(String... actions);
-    Filter<?> actionsEquals(String... actions);
-    Filter<?> actionsNotContains(String... actions);
-    Filter<?> actionsNotEquals(String... actions);
-    Filter<?> idEquals(int... ids);
-    Filter<?> idNotEquals(int... ids);
-    Filter<?> nameContains(String... names);
-    Filter<?> nameEquals(String... names);
-    Filter<?> nameNotContains(String... names);
-    Filter<?> nameNotEquals(String... names);
-
-
+    
     /**
      * A class used to compare an object against an array with a passable comparing operation
      * @param <T> The type of the objects being compared
@@ -49,8 +37,8 @@ public interface Filters {
 
     class Items implements Filters {
 
-        @Override
-        public Filter<RSItem> actionsContains(String... actions) {
+        
+        public static Filter<RSItem> actionsContains(String... actions) {
             return (RSItem item) -> {
                 String[] itemActions = item.getInventoryActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -61,8 +49,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> actionsEquals(String... actions) {
+        
+        public static Filter<RSItem> actionsEquals(String... actions) {
             return (RSItem item) -> {
                 String[] itemActions = item.getInventoryActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -73,8 +61,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> actionsNotContains(String... actions) {
+        
+        public static Filter<RSItem> actionsNotContains(String... actions) {
             return (RSItem item) -> {
                 String[] itemActions = item.getInventoryActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -85,8 +73,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> actionsNotEquals(String... actions) {
+        
+        public static Filter<RSItem> actionsNotEquals(String... actions) {
             return (RSItem item) -> {
                 String[] itemActions = item.getInventoryActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -97,8 +85,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> idEquals(int... ids) {
+        
+        public static Filter<RSItem> idEquals(int... ids) {
             return (RSItem item) -> {
                 int iid = item.getItem().getItemId();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -106,8 +94,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> idNotEquals(int... ids) {
+        
+        public static Filter<RSItem> idNotEquals(int... ids) {
             return (RSItem item) -> {
                 int iid = item.getItem().getItemId();
                 Function<ArrayList<Integer>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -115,8 +103,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> nameContains(String... names) {
+        
+        public static Filter<RSItem> nameContains(String... names) {
             return (RSItem item) -> {
                 String iName = item.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -124,8 +112,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> nameEquals(String... names) {
+        
+        public static Filter<RSItem> nameEquals(String... names) {
             return (RSItem item) -> {
                 String iName = item.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -133,8 +121,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> nameNotContains(String... names) {
+        
+        public static Filter<RSItem> nameNotContains(String... names) {
             return (RSItem item) -> {
                 String iName = item.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -142,8 +130,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSItem> nameNotEquals(String... names) {
+        
+        public static Filter<RSItem> nameNotEquals(String... names) {
             return (RSItem item) -> {
                 String iName = item.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -154,8 +142,8 @@ public interface Filters {
 
     class Objects implements Filters {
 
-        @Override
-        public Filter<RSObject> actionsContains(String... actions) {
+        
+        public static Filter<RSObject> actionsContains(String... actions) {
             return (RSObject object) -> {
                 String[] objectActions = object.getDef().getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -166,8 +154,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> actionsEquals(String... actions) {
+        
+        public static Filter<RSObject> actionsEquals(String... actions) {
             return (RSObject object) -> {
                 String[] objectActions = object.getDef().getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -178,8 +166,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> actionsNotContains(String... actions) {
+        
+        public static Filter<RSObject> actionsNotContains(String... actions) {
             return (RSObject object) -> {
                 String[] objectActions = object.getDef().getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -190,8 +178,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> actionsNotEquals(String... actions) {
+        
+        public static Filter<RSObject> actionsNotEquals(String... actions) {
             return (RSObject object) -> {
                 String[] objectActions = object.getDef().getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -202,8 +190,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> idEquals(int... ids) {
+        
+        public static Filter<RSObject> idEquals(int... ids) {
             return (RSObject object) -> {
                 int oid = object.getID();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -211,8 +199,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> idNotEquals(int... ids) {
+        
+        public static Filter<RSObject> idNotEquals(int... ids) {
             return (RSObject object) -> {
                 int oid = object.getID();
                 Function<ArrayList<Integer>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -220,8 +208,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> nameContains(String... names) {
+        
+        public static Filter<RSObject> nameContains(String... names) {
             return (RSObject object) -> {
                 String oName = object.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -229,8 +217,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> nameEquals(String... names) {
+        
+        public static Filter<RSObject> nameEquals(String... names) {
             return (RSObject object) -> {
                 String oName = object.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -238,8 +226,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> nameNotContains(String... names) {
+        
+        public static Filter<RSObject> nameNotContains(String... names) {
             return (RSObject object) -> {
                 String oName = object.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -247,8 +235,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSObject> nameNotEquals(String... names) {
+        
+        public static Filter<RSObject> nameNotEquals(String... names) {
             return (RSObject object) -> {
                 String oName = object.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -256,7 +244,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSObject> modelIndexCount(int... counts) {
+        public static Filter<RSObject> modelIndexCount(int... counts) {
             return (RSObject object) -> {
                 int oIndexCount = object.getModel().getIndexCount();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -264,7 +252,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSObject> modelVertexCount(int... counts) {
+        public static Filter<RSObject> modelVertexCount(int... counts) {
             return (RSObject object) -> {
                 int oVertexCount = object.getModel().getVertexCount();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -272,7 +260,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSObject> inArea(RSArea area) {
+        public static Filter<RSObject> inArea(RSArea area) {
             return (RSObject object) -> {
                 RSArea oArea = object.getArea();
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
@@ -280,7 +268,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSObject> notInArea(RSArea area) {
+        public static Filter<RSObject> notInArea(RSArea area) {
             return (RSObject object) -> {
                 RSArea oArea = object.getArea();
                 Function<ArrayList<RSArea>, Boolean> operation = e -> !e.get(0).contains(e.get(1).getTileArray());
@@ -288,7 +276,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSObject> tileEquals(Positionable pos) {
+        public static Filter<RSObject> tileEquals(Positionable pos) {
             return (RSObject object) -> {
                 RSTile oTile = object.getLocation();
                 RSTile pTile = pos.getPosition();
@@ -297,7 +285,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSObject> tileNotEquals(Positionable pos) {
+        public static Filter<RSObject> tileNotEquals(Positionable pos) {
             return (RSObject object) -> {
                 RSTile oTile = object.getLocation();
                 RSTile pTile = pos.getPosition();
@@ -311,8 +299,8 @@ public interface Filters {
 
     class NPCs implements Filters {
 
-        @Override
-        public Filter<RSNPC> actionsContains(String... actions) {
+        
+        public static Filter<RSNPC> actionsContains(String... actions) {
             return (RSNPC npc) -> {
                 String[] npcActions = npc.getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -323,8 +311,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> actionsEquals(String... actions) {
+        
+        public static Filter<RSNPC> actionsEquals(String... actions) {
             return (RSNPC npc) -> {
                 String[] npcActions = npc.getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -335,8 +323,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> actionsNotContains(String... actions) {
+        
+        public static Filter<RSNPC> actionsNotContains(String... actions) {
             return (RSNPC npc) -> {
                 String[] npcActions = npc.getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -347,8 +335,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> actionsNotEquals(String... actions) {
+        
+        public static Filter<RSNPC> actionsNotEquals(String... actions) {
             return (RSNPC npc) -> {
                 String[] npcActions = npc.getActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -359,8 +347,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> idEquals(int... ids) {
+        
+        public static Filter<RSNPC> idEquals(int... ids) {
             return (RSNPC npc) -> {
                 int nid = npc.getID();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -368,8 +356,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> idNotEquals(int... ids) {
+        
+        public static Filter<RSNPC> idNotEquals(int... ids) {
             return (RSNPC npc) -> {
                 int nid = npc.getID();
                 Function<ArrayList<Integer>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -377,8 +365,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> nameContains(String... names) {
+        
+        public static Filter<RSNPC> nameContains(String... names) {
             return (RSNPC npc) -> {
                 String nName = npc.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -386,8 +374,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> nameEquals(String... names) {
+        
+        public static Filter<RSNPC> nameEquals(String... names) {
             return (RSNPC npc) -> {
                 String nName = npc.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -395,8 +383,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> nameNotContains(String... names) {
+        
+        public static Filter<RSNPC> nameNotContains(String... names) {
             return (RSNPC npc) -> {
                 String nName = npc.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -404,8 +392,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSNPC> nameNotEquals(String... names) {
+        
+        public static Filter<RSNPC> nameNotEquals(String... names) {
             return (RSNPC npc) -> {
                 String nName = npc.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -413,7 +401,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSNPC> modelIndexCount(int... counts) {
+        public static Filter<RSNPC> modelIndexCount(int... counts) {
             return (RSNPC npc) -> {
                 int nIndexCount = npc.getModel().getIndexCount();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -421,7 +409,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSNPC> modelVertexCount(int... counts) {
+        public static Filter<RSNPC> modelVertexCount(int... counts) {
             return (RSNPC npc) -> {
                 int nVertexCount = npc.getModel().getVertexCount();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -429,7 +417,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSNPC> inArea(RSArea area) {
+        public static Filter<RSNPC> inArea(RSArea area) {
             return (RSNPC npc) -> {
                 RSArea nArea = new RSArea(new RSTile[]{npc.getLocation()});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
@@ -437,7 +425,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSNPC> notInArea(RSArea area) {
+        public static Filter<RSNPC> notInArea(RSArea area) {
             return (RSNPC npc) -> {
                 RSArea nArea = new RSArea(new RSTile[]{npc.getLocation()});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
@@ -445,7 +433,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSNPC> tileEquals(Positionable pos) {
+        public static Filter<RSNPC> tileEquals(Positionable pos) {
             return (RSNPC npc) -> {
                 RSTile nTile = npc.getLocation();
                 RSTile pTile = pos.getPosition();
@@ -454,7 +442,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSNPC> tileNotEquals(Positionable pos) {
+        public static Filter<RSNPC> tileNotEquals(Positionable pos) {
             return (RSNPC npc) -> {
                 RSTile nTile = npc.getLocation();
                 RSTile pTile = pos.getPosition();
@@ -467,39 +455,39 @@ public interface Filters {
     class Players implements Filters {
 
         //Actions might be add-able later
-        @Override
-        public Filter<RSPlayer> actionsContains(String... actions) {
+        
+        public static Filter<RSPlayer> actionsContains(String... actions) {
             return null;
         }
 
-        @Override
-        public Filter<RSPlayer> actionsEquals(String... actions) {
+        
+        public static Filter<RSPlayer> actionsEquals(String... actions) {
             return null;
         }
 
-        @Override
-        public Filter<RSPlayer> actionsNotContains(String... actions) {
+        
+        public static Filter<RSPlayer> actionsNotContains(String... actions) {
             return null;
         }
 
-        @Override
-        public Filter<RSPlayer> actionsNotEquals(String... actions) {
+        
+        public static Filter<RSPlayer> actionsNotEquals(String... actions) {
             return null;
         }
 
         //Players lack ID
-        @Override
-        public Filter<RSPlayer> idEquals(int... ids) {
+        
+        public static Filter<RSPlayer> idEquals(int... ids) {
             return null;
         }
 
-        @Override
-        public Filter<RSPlayer> idNotEquals(int... ids) {
+        
+        public static Filter<RSPlayer> idNotEquals(int... ids) {
             return null;
         }
 
-        @Override
-        public Filter<RSPlayer> nameContains(String... names) {
+        
+        public static Filter<RSPlayer> nameContains(String... names) {
             return (RSPlayer player) -> {
                 String pName = player.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -507,8 +495,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSPlayer> nameEquals(String... names) {
+        
+        public static Filter<RSPlayer> nameEquals(String... names) {
             return (RSPlayer player) -> {
                 String pName = player.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -516,8 +504,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSPlayer> nameNotContains(String... names) {
+        
+        public static Filter<RSPlayer> nameNotContains(String... names) {
             return (RSPlayer player) -> {
                 String nName = player.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -525,8 +513,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSPlayer> nameNotEquals(String... names) {
+        
+        public static Filter<RSPlayer> nameNotEquals(String... names) {
             return (RSPlayer player) -> {
                 String pName = player.getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -534,7 +522,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSPlayer> modelIndexCount(int... counts) {
+        public static Filter<RSPlayer> modelIndexCount(int... counts) {
             return (RSPlayer player) -> {
                 int pIndexCount = player.getModel().getIndexCount();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -542,7 +530,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSPlayer> modelVertexCount(int... counts) {
+        public static Filter<RSPlayer> modelVertexCount(int... counts) {
             return (RSPlayer player) -> {
                 int pVertexCount = player.getModel().getVertexCount();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -550,7 +538,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSPlayer> inArea(RSArea area) {
+        public static Filter<RSPlayer> inArea(RSArea area) {
             return (RSPlayer player) -> {
                 RSArea pArea = new RSArea(new RSTile[]{player.getLocation()});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
@@ -558,7 +546,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSPlayer> notInArea(RSArea area) {
+        public static Filter<RSPlayer> notInArea(RSArea area) {
             return (RSPlayer player) -> {
                 RSArea pArea = new RSArea(new RSTile[]{player.getLocation()});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
@@ -566,7 +554,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSPlayer> tileEquals(Positionable pos) {
+        public static Filter<RSPlayer> tileEquals(Positionable pos) {
             return (RSPlayer player) -> {
                 RSTile playerTile = player.getLocation();
                 RSTile pTile = pos.getPosition();
@@ -575,7 +563,7 @@ public interface Filters {
             };
         }
 
-        public Filter<RSPlayer> tileNotEquals(Positionable pos) {
+        public static Filter<RSPlayer> tileNotEquals(Positionable pos) {
             return (RSPlayer player) -> {
                 RSTile playerTile = player.getLocation();
                 RSTile pTile = pos.getPosition();
@@ -586,8 +574,8 @@ public interface Filters {
     }
 
     class GroundItems implements Filters {
-        @Override
-        public Filter<RSGroundItem> actionsContains(String... actions) {
+        
+        public static Filter<RSGroundItem> actionsContains(String... actions) {
             return (RSGroundItem item) -> {
                 String[] itemActions = item.getItem().getGroundActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -598,8 +586,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> actionsEquals(String... actions) {
+        
+        public static Filter<RSGroundItem> actionsEquals(String... actions) {
             return (RSGroundItem item) -> {
                 String[] itemActions = item.getItem().getGroundActions();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -610,8 +598,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> actionsNotContains(String... actions) {
+        
+        public static Filter<RSGroundItem> actionsNotContains(String... actions) {
             return (RSGroundItem item) -> {
                 String[] itemActions = item.getItem().getGroundActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -622,8 +610,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> actionsNotEquals(String... actions) {
+        
+        public static Filter<RSGroundItem> actionsNotEquals(String... actions) {
             return (RSGroundItem item) -> {
                 String[] itemActions = item.getItem().getGroundActions();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -634,8 +622,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> idEquals(int... ids) {
+        
+        public static Filter<RSGroundItem> idEquals(int... ids) {
             return (RSGroundItem item) -> {
                 int iid = item.getItem().getItem().getItemId();
                 Function<ArrayList<Integer>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -643,8 +631,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> idNotEquals(int... ids) {
+        
+        public static Filter<RSGroundItem> idNotEquals(int... ids) {
             return (RSGroundItem item) -> {
                 int iid = item.getItem().getItem().getItemId();
                 Function<ArrayList<Integer>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
@@ -652,8 +640,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> nameContains(String... names) {
+        
+        public static Filter<RSGroundItem> nameContains(String... names) {
             return (RSGroundItem item) -> {
                 String iName = item.getItem().getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).contains(e.get(1));
@@ -661,8 +649,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> nameEquals(String... names) {
+        
+        public static Filter<RSGroundItem> nameEquals(String... names) {
             return (RSGroundItem item) -> {
                 String iName = item.getItem().getName();
                 Function<ArrayList<String>, Boolean> operation = e -> e.get(0).equals(e.get(1));
@@ -670,8 +658,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> nameNotContains(String... names) {
+        
+        public static Filter<RSGroundItem> nameNotContains(String... names) {
             return (RSGroundItem item) -> {
                 String iName = item.getItem().getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).contains(e.get(1));
@@ -679,8 +667,8 @@ public interface Filters {
             };
         }
 
-        @Override
-        public Filter<RSGroundItem> nameNotEquals(String... names) {
+        
+        public static Filter<RSGroundItem> nameNotEquals(String... names) {
             return (RSGroundItem item) -> {
                 String iName = item.getItem().getName();
                 Function<ArrayList<String>, Boolean> operation = e -> !e.get(0).equals(e.get(1));

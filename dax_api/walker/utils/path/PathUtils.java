@@ -1,5 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.path;
 
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.wrappers.RSTile;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSTile;
@@ -24,8 +26,8 @@ public class PathUtils {
     }
 
     public static RSTile getClosestTileInPath(List<RSTile> path) {
-        RSTile player = Player.getPosition();
-        return path.stream().min(Comparator.comparingDouble(o -> o.distanceToDouble(player))).orElse(null);
+        RSTile player = Web.methods.players.getMyPlayer().getLocation();
+        return path.stream().min(Comparator.comparingDouble(o -> Web.methods.calc.distanceBetween(o, player))).orElse(null);
     }
 
     public static RSTile getFurthestReachableTileInMinimap(List<RSTile> path) {
@@ -34,11 +36,12 @@ public class PathUtils {
 
         DaxPathFinder.Destination[][] map = DaxPathFinder.getMap();
         for (RSTile tile : reversed) {
-            Point point = Projection.tileToMinimap(tile);
+            net.runelite.api.Point rlPoint = Web.methods.calc.tileToMinimap(tile);
+            Point point = new Point(rlPoint.getX(), rlPoint.getY());
             if (point == null) {
                 continue;
             }
-            if (DaxPathFinder.canReach(map, tile) && Projection.isInMinimap(point)) {
+            if (DaxPathFinder.canReach(map, tile) && Web.methods.calc.tileOnMap(new RSTile(point.x, point.y, Web.methods.client.getPlane()))) {
                 return tile;
             }
         }
@@ -51,7 +54,7 @@ public class PathUtils {
 
         DaxPathFinder.Destination[][] map = DaxPathFinder.getMap();
         for (RSTile tile : reversed) {
-            if (DaxPathFinder.canReach(map, tile) && tile.isOnScreen() && tile.isClickable()) {
+            if (DaxPathFinder.canReach(map, tile) && Web.methods.calc.tileOnScreen(tile) && tile.isClickable()) {
                 return tile;
             }
         }
@@ -60,11 +63,11 @@ public class PathUtils {
 
     public static void drawDebug(Graphics graphics, List<RSTile> path) {
         Graphics2D g = (Graphics2D) graphics;
-        RSTile player = Player.getPosition();
+        RSTile player = Web.methods.players.getMyPlayer().getLocation();
 
         g.setColor(new Color(0, 191, 23, 80));
         for (RSTile tile : path) {
-            if (tile.distanceTo(player) > 25) {
+            if (Web.methods.calc.distanceTo(tile) > 25) {
                 continue;
             }
             Polygon polygon = Projection.getTileBoundsPoly(tile, 0);
