@@ -76,6 +76,7 @@ public enum ThirdLetter {
         return Interfaces.get(FairyRing.INTERFACE_MASTER, CLOCKWISE_CHILD);
     }
     private static RSInterface getAntiClockwise() {
-        return Interfaces.get(FairyRing.INTERFACE_MASTER, ANTI_CLOCKWISE_CHILD);
+        return Interfaces
+                .get(FairyRing.INTERFACE_MASTER, ANTI_CLOCKWISE_CHILD);
     }
 }

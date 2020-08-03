@@ -1,10 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.path;
 
-import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.wrappers.RSTile;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.Projection;
-import org.tribot.api2007.types.RSTile;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,7 +11,7 @@ import java.util.List;
 
 public class PathUtils {
 
-    public static RSTile getNextTileInPath(RSTile current, List<RSTile> path) {
+    public static WalkerTile getNextTileInPath(WalkerTile current, List<WalkerTile> path) {
         int index = path.indexOf(current);
 
         if (index == -1) {
@@ -25,49 +22,48 @@ public class PathUtils {
         return next < path.size() ? path.get(next) : null;
     }
 
-    public static RSTile getClosestTileInPath(List<RSTile> path) {
-        RSTile player = Web.methods.players.getMyPlayer().getLocation();
-        return path.stream().min(Comparator.comparingDouble(o -> Web.methods.calc.distanceBetween(o, player))).orElse(null);
+    public static WalkerTile getClosestTileInPath(List<WalkerTile> path) {
+        WalkerTile player = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        return path.stream().min(Comparator.comparingDouble(o -> o.distanceToDouble(player))).orElse(null);
     }
 
-    public static RSTile getFurthestReachableTileInMinimap(List<RSTile> path) {
-        List<RSTile> reversed = new ArrayList<>(path);
+    public static WalkerTile getFurthestReachableTileInMinimap(List<WalkerTile> path) {
+        List<WalkerTile> reversed = new ArrayList<>(path);
         Collections.reverse(reversed);
 
         DaxPathFinder.Destination[][] map = DaxPathFinder.getMap();
-        for (RSTile tile : reversed) {
-            net.runelite.api.Point rlPoint = Web.methods.calc.tileToMinimap(tile);
-            Point point = new Point(rlPoint.getX(), rlPoint.getY());
+        for (WalkerTile tile : reversed) {
+            Point point = Projection.tileToMinimap(tile);
             if (point == null) {
                 continue;
             }
-            if (DaxPathFinder.canReach(map, tile) && Web.methods.calc.tileOnMap(new RSTile(point.x, point.y, Web.methods.client.getPlane()))) {
+            if (DaxPathFinder.canReach(map, tile) && Projection.isInMinimap(point)) {
                 return tile;
             }
         }
         return null;
     }
 
-    public static RSTile getFurthestReachableTileOnScreen(List<RSTile> path) {
-        List<RSTile> reversed = new ArrayList<>(path);
+    public static WalkerTile getFurthestReachableTileOnScreen(List<WalkerTile> path) {
+        List<WalkerTile> reversed = new ArrayList<>(path);
         Collections.reverse(reversed);
 
         DaxPathFinder.Destination[][] map = DaxPathFinder.getMap();
-        for (RSTile tile : reversed) {
-            if (DaxPathFinder.canReach(map, tile) && Web.methods.calc.tileOnScreen(tile) && tile.isClickable()) {
+        for (WalkerTile tile : reversed) {
+            if (DaxPathFinder.canReach(map, tile) && tile.isOnScreen() && tile.isClickable()) {
                 return tile;
             }
         }
         return null;
     }
 
-    public static void drawDebug(Graphics graphics, List<RSTile> path) {
+    public static void drawDebug(Graphics graphics, List<WalkerTile> path) {
         Graphics2D g = (Graphics2D) graphics;
-        RSTile player = Web.methods.players.getMyPlayer().getLocation();
+        WalkerTile player = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
 
         g.setColor(new Color(0, 191, 23, 80));
-        for (RSTile tile : path) {
-            if (Web.methods.calc.distanceTo(tile) > 25) {
+        for (WalkerTile tile : path) {
+            if (tile.distanceTo(player) > 25) {
                 continue;
             }
             Polygon polygon = Projection.getTileBoundsPoly(tile, 0);
@@ -77,7 +73,7 @@ public class PathUtils {
             g.fillPolygon(polygon);
         }
 
-        RSTile closest = getClosestTileInPath(path);
+        WalkerTile closest = getClosestTileInPath(path);
         if (closest != null) {
             Polygon polygon = Projection.getTileBoundsPoly(closest, 0);
             if (polygon != null) {
@@ -91,7 +87,7 @@ public class PathUtils {
             }
         }
 
-        RSTile furthestScreenTile = getFurthestReachableTileOnScreen(path);
+        WalkerTile furthestScreenTile = getFurthestReachableTileOnScreen(path);
         if (furthestScreenTile != null) {
             Polygon polygon = Projection.getTileBoundsPoly(furthestScreenTile, 0);
             if (polygon != null) {
@@ -105,7 +101,7 @@ public class PathUtils {
             }
         }
 
-        RSTile furthestMapTile = getFurthestReachableTileInMinimap(path);
+        WalkerTile furthestMapTile = getFurthestReachableTileInMinimap(path);
         if (furthestMapTile != null) {
             Point p = Projection.tileToMinimap(furthestMapTile);
             if (p != null) {
@@ -119,7 +115,7 @@ public class PathUtils {
             }
         }
 
-        RSTile nextTile = getNextTileInPath(furthestMapTile, path);
+        WalkerTile nextTile = getNextTileInPath(furthestMapTile, path);
         if (nextTile != null) {
             Polygon polygon = Projection.getTileBoundsPoly(nextTile, 0);
             if (polygon != null) {

@@ -1,16 +1,11 @@
 package net.runelite.client.rsb.walker.dax_api.shared.helpers;
 
-import org.tribot.api.input.Mouse;
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.Banking;
-import org.tribot.api2007.ChooseOption;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Inventory;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSGroundItem;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSItemDefinition;
-import org.tribot.api2007.types.RSMenuNode;
+import net.runelite.api.ItemComposition;
+import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.walker.dax_api.Filters;
+import net.runelite.client.rsb.wrappers.RSGroundItem;
+import net.runelite.client.rsb.wrappers.RSItem;
+import net.runelite.client.rsb.wrappers.subwrap.RSMenuNode;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -127,7 +122,7 @@ public class RSItemHelper {
 
 
     public static String[] getItemActions(RSGroundItem rsGroundItem){
-        return getItemActions(rsGroundItem.getDefinition());
+        return rsGroundItem.getItem().getGroundActions();
     }
 
     public static String[] getItemActions(RSItem rsItem){
@@ -136,11 +131,11 @@ public class RSItemHelper {
 
 
     public static String getItemName(int id){
-        return getItemName(RSItemDefinition.get(id));
+        return getItemName(ItemComposition.get(id));
     }
 
     public static String getItemName(RSGroundItem rsGroundItem){
-        return getItemName(rsGroundItem.getDefinition());
+        return getItemName(rsGroundItem.getItem().getDefinition());
     }
 
     public static String getItemName(RSItem rsItem){
@@ -149,17 +144,17 @@ public class RSItemHelper {
 
 
     public static boolean isStackable(int id) {
-        RSItemDefinition definition = RSItemDefinition.get(id);
+        ItemComposition definition = RSItemDefinition.get(id);
         return definition != null && definition.isStackable();
     }
 
 
     public static boolean isStackable(RSItem rsItem) {
-        RSItemDefinition definition = rsItem.getDefinition();
+        ItemComposition definition = rsItem.getDefinition();
         return definition != null && definition.isStackable();
     }
 
-    private static String[] getItemActions(RSItemDefinition rsItemDefinition){
+    private static String[] getItemActions(ItemComposition rsItemDefinition){
         if (rsItemDefinition == null){
             return new String[0];
         }
@@ -167,7 +162,7 @@ public class RSItemHelper {
         return actions != null ? actions : new String[0];
     }
 
-    private static String getItemName(RSItemDefinition definition){
+    private static String getItemName(ItemComposition definition){
         String name = definition.getName();
         return name != null ? name : "null";
     }

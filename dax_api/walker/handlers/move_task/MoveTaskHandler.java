@@ -1,13 +1,11 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task;
 
-import org.tribot.api.Timing;
-import org.tribot.api2007.Player;
-import scripts.dax_api.walker.handlers.passive_action.PassiveAction;
-import scripts.dax_api.walker.models.MoveTask;
-import scripts.dax_api.walker.models.WaitCondition;
-import scripts.dax_api.walker.models.enums.ActionResult;
-import scripts.dax_api.walker.models.enums.MoveActionResult;
-import scripts.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
+import net.runelite.client.rsb.walker.dax_api.walker.models.MoveTask;
+import net.runelite.client.rsb.walker.dax_api.walker.models.WaitCondition;
+import net.runelite.client.rsb.walker.dax_api.walker.models.enums.ActionResult;
+import net.runelite.client.rsb.walker.dax_api.walker.models.enums.MoveActionResult;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 
 import java.util.ArrayList;
 import java.util.List;

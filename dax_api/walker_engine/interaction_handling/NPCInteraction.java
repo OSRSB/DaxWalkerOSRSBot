@@ -81,7 +81,7 @@ public class NPCInteraction implements Loggable {
     }
 
     public static boolean waitForConversationWindow(){
-        RSPlayer player = Player.getRSPlayer();
+        RSPlayer player = Web.methods.players.getMyPlayer();
         RSCharacter rsCharacter = null;
         if (player != null){
             rsCharacter = player.getInteractingCharacter();

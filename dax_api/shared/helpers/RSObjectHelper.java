@@ -1,9 +1,9 @@
 package net.runelite.client.rsb.walker.dax_api.shared.helpers;
 
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
+import net.runelite.api.ObjectComposition;
+import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.wrappers.RSObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,12 +12,12 @@ import java.util.List;
 public class RSObjectHelper {
 
     public static RSObject get(Filter<RSObject> filter){
-        RSObject[] objects = Objects.find(10, filter);
+        RSObject[] objects = Web.methods.objects.getAll(filter);
         return objects.length > 0 ? objects[0] : null;
     }
 
     public static boolean exists(Filter<RSObject> filter){
-        return Objects.find(10, filter).length > 0;
+        return Web.methods.objects.getAll(filter).length > 0;
     }
 
     public static List<String> getActionsList(RSObject object){
@@ -26,7 +26,7 @@ public class RSObjectHelper {
 
     public static String[] getActions(RSObject object){
         String[] emptyActions = new String[0];
-        RSObjectDefinition definition = object.getDefinition();
+        ObjectComposition definition = object.getDef();
         if (definition == null){
             return emptyActions;
         }
@@ -35,7 +35,7 @@ public class RSObjectHelper {
     }
 
     public static String getName(RSObject object){
-        RSObjectDefinition definition = object.getDefinition();
+        ObjectComposition definition = object.getDef();
         if (definition == null){
             return "null";
         }

@@ -1,5 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.camera;
 
+import net.runelite.client.rsb.wrappers.common.Positionable;
 import org.tribot.api.General;
 import org.tribot.api.Screen;
 import org.tribot.api.input.Mouse;

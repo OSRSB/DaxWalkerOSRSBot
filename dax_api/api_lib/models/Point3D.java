@@ -1,16 +1,13 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.types.RSTile;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.common.Positionable;
 
-@DoNotRename
 public class Point3D {
 
 
-    @DoNotRename
     private int x, y, z;
 
     public Point3D(int x, int y, int z) {
@@ -42,26 +39,29 @@ public class Point3D {
 
     public Positionable toPositionable() {
         return new Positionable() {
-            @Override
-            public RSTile getAnimablePosition() {
-                return new RSTile(x, y, z);
+            public WalkerTile getAnimablePosition() {
+                return new WalkerTile(x, y, z);
             }
 
-            @Override
             public boolean adjustCameraTo() {
                 return false;
             }
 
             @Override
-            public RSTile getPosition() {
-                return new RSTile(x, y, z);
+            public WalkerTile getLocation() {
+                return new WalkerTile(x, y, z);
+            }
+
+            @Override
+            public boolean turnTo() {
+                return false;
             }
         };
     }
 
     public static Point3D fromPositionable(Positionable positionable) {
-        RSTile rsTile = positionable.getPosition();
-        return new Point3D(rsTile.getX(), rsTile.getY(), rsTile.getPlane());
+        WalkerTile WalkerTile = positionable.getLocation();
+        return new Point3D(WalkerTile.getX(), WalkerTile.getY(), WalkerTile.getPlane());
     }
 
 }

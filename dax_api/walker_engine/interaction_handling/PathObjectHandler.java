@@ -1,19 +1,21 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling;
 
-import org.tribot.api.General;
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.*;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.*;
-import scripts.dax_api.shared.helpers.RSObjectHelper;
-import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.WalkerEngine;
-import scripts.dax_api.walker_engine.bfs.BFS;
-import scripts.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
-import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
-import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
+import net.runelite.api.ObjectComposition;
+import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.Filters;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSObjectHelper;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WalkerEngine;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.bfs.BFS;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.Reachable;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
+import net.runelite.client.rsb.wrappers.RSArea;
+import net.runelite.client.rsb.wrappers.RSItem;
+import net.runelite.client.rsb.wrappers.RSObject;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -97,67 +99,67 @@ public class PathObjectHandler implements Loggable {
                                 .combine(Filters.Objects.actionsContains("Chop-down"), true)).length > 0;
             }
         }),
-        AVA_BOOKCASE ("Bookcase", "Search", new RSTile(3097, 3359, 0), new SpecialCondition() {
+        AVA_BOOKCASE ("Bookcase", "Search", new WalkerTile(3097, 3359, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getX() >= 3097 && destinationDetails.getAssumed().equals(new RSTile(3097, 3359, 0));
+                return destinationDetails.getDestination().getX() >= 3097 && destinationDetails.getAssumed().equals(new WalkerTile(3097, 3359, 0));
             }
         }),
-        AVA_LEVER ("Lever", "Pull", new RSTile(3096, 3357, 0), new SpecialCondition() {
+        AVA_LEVER ("Lever", "Pull", new WalkerTile(3096, 3357, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new RSTile(3097, 3359, 0));
+                return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new WalkerTile(3097, 3359, 0));
             }
         }),
-        ARDY_DOOR_LOCK_SIDE("Door", "Pick-lock", new RSTile(2565, 3356, 0), new SpecialCondition() {
+        ARDY_DOOR_LOCK_SIDE("Door", "Pick-lock", new WalkerTile(2565, 3356, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Player.getPosition().getX() >= 2565 && Player.getPosition().distanceTo(new RSTile(2565, 3356, 0)) < 3;
+                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getX() >= 2565 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2565, 3356, 0)) < 3;
             }
         }),
-        ARDY_DOOR_UNLOCKED_SIDE("Door", "Open", new RSTile(2565, 3356, 0), new SpecialCondition() {
+        ARDY_DOOR_UNLOCKED_SIDE("Door", "Open", new WalkerTile(2565, 3356, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Player.getPosition().getX() < 2565 && Player.getPosition().distanceTo(new RSTile(2565, 3356, 0)) < 3;
+                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getX() < 2565 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2565, 3356, 0)) < 3;
             }
         }),
-        YANILLE_DOOR_LOCK_SIDE("Door", "Pick-lock", new RSTile(2601, 9482, 0), new SpecialCondition() {
+        YANILLE_DOOR_LOCK_SIDE("Door", "Pick-lock", new WalkerTile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Player.getPosition().getY() <= 9481 && Player.getPosition().distanceTo(new RSTile(2601, 9482, 0)) < 3;
+                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getY() <= 9481 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2601, 9482, 0)) < 3;
             }
         }),
-        YANILLE_DOOR_UNLOCKED_SIDE("Door", "Open", new RSTile(2601, 9482, 0), new SpecialCondition() {
+        YANILLE_DOOR_UNLOCKED_SIDE("Door", "Open", new WalkerTile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Player.getPosition().getY() > 9481 && Player.getPosition().distanceTo(new RSTile(2601, 9482, 0)) < 3;
+                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getY() > 9481 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2601, 9482, 0)) < 3;
             }
         }),
-        EDGEVILLE_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3138, 3516, 0), new SpecialCondition() {
+        EDGEVILLE_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new WalkerTile(3138, 3516, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new RSTile(3138, 3516, 0));
+                return destinationDetails.getAssumed().equals(new WalkerTile(3138, 3516, 0));
             }
         }),
-        VARROCK_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3141, 3513, 0), new SpecialCondition() {
+        VARROCK_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new WalkerTile(3141, 3513, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new RSTile(3141, 3513, 0 ));
+                return destinationDetails.getAssumed().equals(new WalkerTile(3141, 3513, 0 ));
             }
         }),
-        GAMES_ROOM_STAIRS("Stairs", "Climb-down", new RSTile(2899, 3565, 0), new SpecialCondition() {
+        GAMES_ROOM_STAIRS("Stairs", "Climb-down", new WalkerTile(2899, 3565, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getRSTile().equals(new RSTile(2899, 3565, 0)) &&
-                    destinationDetails.getAssumed().equals(new RSTile(2205, 4934, 1));
+                return destinationDetails.getDestination().getWalkerTile().equals(new WalkerTile(2899, 3565, 0)) &&
+                    destinationDetails.getAssumed().equals(new WalkerTile(2205, 4934, 1));
             }
         });
 
         private String name, action;
-        private RSTile location;
+        private WalkerTile location;
         private SpecialCondition specialCondition;
 
-        SpecialObject(String name, String action, RSTile location, SpecialCondition specialCondition){
+        SpecialObject(String name, String action, WalkerTile location, SpecialCondition specialCondition){
             this.name = name;
             this.action = action;
             this.location = location;
@@ -172,7 +174,7 @@ public class PathObjectHandler implements Loggable {
             return action;
         }
 
-        public RSTile getLocation() {
+        public WalkerTile getLocation() {
             return location;
         }
 
@@ -195,7 +197,7 @@ public class PathObjectHandler implements Loggable {
         abstract boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails);
     }
 
-    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, ArrayList<RSTile> path){
+    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, List<WalkerTile> path){
         RealTimeCollisionTile start = destinationDetails.getDestination(), end = destinationDetails.getNextTile();
 
         RSObject[] interactiveObjects = null;
@@ -219,14 +221,14 @@ public class PathObjectHandler implements Loggable {
         }
 
         StringBuilder stringBuilder = new StringBuilder("Sort Order: ");
-        Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getDefinition().getName()).append(" ").append(
-		        Arrays.asList(rsObject.getDefinition().getActions())).append(", "));
+        Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getDef().getName()).append(" ").append(
+		        Arrays.asList(rsObject.getDef().getActions())).append(", "));
         getInstance().log(stringBuilder);
 
         return handle(path, interactiveObjects[0], destinationDetails, action, specialObject);
     }
 
-    private static boolean handle(ArrayList<RSTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
+    private static boolean handle(List<WalkerTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
         PathAnalyzer.DestinationDetails current = PathAnalyzer.furthestReachableTile(path);
 
         if (current == null){
@@ -234,7 +236,7 @@ public class PathObjectHandler implements Loggable {
         }
 
         RealTimeCollisionTile currentFurthest = current.getDestination();
-        if (!Player.isMoving() && (!object.isOnScreen() || !object.isClickable())){
+        if (!Web.methods.players.getMyPlayer().isLocalPlayerMoving() && (!object.isOnScreen() || !object.isClickable())){
             if (!WalkerEngine.getInstance().clickMinimap(destinationDetails.getDestination())){
                 return false;
             }
@@ -251,7 +253,7 @@ public class PathObjectHandler implements Loggable {
                 case WEB:
                     List<RSObject> webs;
                     int iterations = 0;
-                    while ((webs = Arrays.stream(Objects.getAt(object.getPosition()))
+                    while ((webs = Arrays.stream(Objects.getAt(object.getLocation()))
                             .filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
                                     .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
                         RSObject web = webs.get(0);
@@ -261,15 +263,15 @@ public class PathObjectHandler implements Loggable {
                             useBladeOnWeb(web);
                         }
                         if(Game.isUptext("->")){
-                            Walking.blindWalkTo(Player.getPosition());
+                            Walking.blindWalkTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
                         }
-                        if (web.getPosition().distanceTo(Player.getPosition()) <= 1) {
+                        if (web.getLocation().distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) <= 1) {
                             WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
                         } else {
                             WaitFor.milliseconds(2000, 4000);
                         }
                         if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null &&
-                                (webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
+                                (webs = Arrays.stream(Objects.getAt(object.getLocation())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
                                         .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() == 0){
                             successfulClick = true;
                             break;
@@ -285,10 +287,10 @@ public class PathObjectHandler implements Loggable {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){
                             continue;
                         }
-                        if (Player.getPosition().distanceTo(specialObject.getLocation()) > 1){
-                            WaitFor.condition(General.random(3000, 4000), () -> Player.getPosition().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        if (new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) > 1){
+                            WaitFor.condition(General.random(3000, 4000), () -> new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         }
-                        if (Player.getPosition().equals(new RSTile(2564, 3356, 0))){
+                        if (new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).equals(new WalkerTile(2564, 3356, 0))){
                             successfulClick = true;
                             break;
                         }
@@ -300,7 +302,7 @@ public class PathObjectHandler implements Loggable {
                     }
                     successfulClick = true;
                     WaitFor.condition(10000, () ->
-                            SpecialObject.EDGEVILLE_UNDERWALL_TUNNEL.getLocation().equals(Player.getPosition()) ?
+                            SpecialObject.EDGEVILLE_UNDERWALL_TUNNEL.getLocation().equals(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) ?
                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     break;
                 case EDGEVILLE_UNDERWALL_TUNNEL:
@@ -309,7 +311,7 @@ public class PathObjectHandler implements Loggable {
                     }
                     successfulClick = true;
                     WaitFor.condition(10000, () ->
-                            SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(Player.getPosition()) ?
+                            SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) ?
                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     break;
             }
@@ -317,7 +319,7 @@ public class PathObjectHandler implements Loggable {
 
         if (!successfulClick){
             String[] validOptions = action != null ? new String[]{action} : getViableOption(
-		            Arrays.stream(object.getDefinition().getActions()).filter(getInstance().sortedOptions::contains).collect(
+		            Arrays.stream(object.getDef().getActions()).filter(getInstance().sortedOptions::contains).collect(
 				            Collectors.toList()), destinationDetails);
             if (!clickOnObject(object, validOptions)) {
                 return false;
@@ -328,7 +330,7 @@ public class PathObjectHandler implements Loggable {
 
         if (strongholdDoor){
             if (WaitFor.condition(General.random(6700, 7800), () -> {
-                RSTile playerPosition = Player.getPosition();
+                WalkerTile playerPosition = new WalkerTile(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
                 if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), destinationDetails.getNextTile(), 50)) {
                     WaitFor.milliseconds(500, 1000);
                     return WaitFor.Return.SUCCESS;
@@ -356,7 +358,7 @@ public class PathObjectHandler implements Loggable {
             }
             if (current.getNextTile() != null){
                 PathAnalyzer.DestinationDetails hoverDetails = PathAnalyzer.furthestReachableTile(path, current.getNextTile());
-                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getRSTile().distanceTo(Player.getPosition()) > 7 && !strongholdDoor && Player.getPosition().distanceTo(object) <= 2){
+                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getWalkerTile().distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) > 7 && !strongholdDoor && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(object) <= 2){
                     WalkerEngine.getInstance().hoverMinimap(hoverDetails.getDestination());
                 }
             }
@@ -370,12 +372,12 @@ public class PathObjectHandler implements Loggable {
 
     public static RSObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
         RSObject[] objects = Objects.getAll(25, interactiveObjectFilter(x, y, z, destinationDetails));
-        final RSTile base = new RSTile(x, y, z);
+        final WalkerTile base = new WalkerTile(x, y, z);
         Arrays.sort(objects, (o1, o2) -> {
-            int c = Integer.compare(o1.getPosition().distanceTo(base), o2.getPosition().distanceTo(base));
+            int c = Integer.compare(o1.getLocation().distanceTo(base), o2.getLocation().distanceTo(base));
             int assumedZ = destinationDetails.getAssumedZ(), destinationZ = destinationDetails.getDestination().getZ();
-            List<String> actions1 = Arrays.asList(o1.getDefinition().getActions());
-            List<String> actions2 = Arrays.asList(o2.getDefinition().getActions());
+            List<String> actions1 = Arrays.asList(o1.getDef().getActions());
+            List<String> actions2 = Arrays.asList(o2.getDef().getActions());
 
             if (assumedZ > destinationZ){
                 if (actions1.contains("Climb-up")){
@@ -391,7 +393,7 @@ public class PathObjectHandler implements Loggable {
                 if (actions2.contains("Climb-down")){
                     return 1;
                 }
-            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getRSTile()) > 20){
+            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getWalkerTile()) > 20){
                 if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
                     return -1;
                 } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
@@ -405,7 +407,7 @@ public class PathObjectHandler implements Loggable {
             return c;
         });
         StringBuilder a = new StringBuilder("Detected: ");
-        Arrays.stream(objects).forEach(object -> a.append(object.getDefinition().getName()).append(" "));
+        Arrays.stream(objects).forEach(object -> a.append(object.getDef().getName()).append(" "));
         getInstance().log(a);
 
 
@@ -423,11 +425,11 @@ public class PathObjectHandler implements Loggable {
      * @return
      */
     private static Filter<RSObject> interactiveObjectFilter(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-        final RSTile position = new RSTile(x, y, z);
+        final WalkerTile position = new WalkerTile(x, y, z);
         return new Filter<RSObject>() {
             @Override
             public boolean accept(RSObject rsObject) {
-                RSObjectDefinition def = rsObject.getDefinition();
+                ObjectComposition def = rsObject.getDef();
                 if (def == null){
                     return false;
                 }
@@ -438,10 +440,10 @@ public class PathObjectHandler implements Loggable {
                 if (RSObjectHelper.getActionsList(rsObject).stream().anyMatch(s -> getInstance().sortedBlackListOptions.contains(s))){
                     return false;
                 }
-                if (rsObject.getPosition().distanceTo(destinationDetails.getDestination().getRSTile()) > 5) {
+                if (rsObject.getLocation().distanceTo(destinationDetails.getDestination().getWalkerTile()) > 5) {
                     return false;
                 }
-                if (Arrays.stream(rsObject.getAllTiles()).noneMatch(rsTile -> rsTile.distanceTo(position) <= 2)) {
+                if (Arrays.stream(rsObject.getAllTiles()).noneMatch(WalkerTile -> WalkerTile.distanceTo(position) <= 2)) {
                     return false;
                 }
                 List<String> options = Arrays.asList(def.getActions());
@@ -482,7 +484,7 @@ public class PathObjectHandler implements Loggable {
             result = handleTrapDoor(object);
         } else {
             result = InteractionHelper.click(object, options);
-            getInstance().log("Interacting with (" + RSObjectHelper.getName(object) + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
+            getInstance().log("Interacting with (" + RSObjectHelper.getName(object) + ") at " + object.getLocation() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
             WaitFor.milliseconds(250,800);
         }
 
@@ -491,49 +493,61 @@ public class PathObjectHandler implements Loggable {
 
     private static boolean isStrongholdDoor(RSObject object){
         List<String> doorNames = Arrays.asList("Gate of War", "Rickety door", "Oozing barrier", "Portal of Death");
-        return  doorNames.contains(object.getDefinition().getName());
+        return  doorNames.contains(object.getDef().getName());
     }
 
 
 
     private static void handleStrongholdQuestions() {
         NPCInteraction.handleConversation("Use the Account Recovery System.",
-                "Nobody.",
-                "Don't tell them anything and click the 'Report Abuse' button.",
-                "Me.",
-                "Only on the RuneScape website.",
-                "Report the incident and do not click any links.",
-                "Authenticator and two-step login on my registered email.",
-                "No way! You'll just take my gold for your own! Reported!",
-                "No.",
-                "Don't give them the information and send an 'Abuse Report'.",
-                "Don't give them my password.",
-                "The birthday of a famous person or event.",
-                "Through account settings on runescape.com.",
-                "Secure my device and reset my RuneScape password.",
-                "Report the player for phishing.",
-                "Don't click any links, forward the email to reportphishing@jagex.com.",
-                "Inform Jagex by emailing reportphishing@jagex.com.",
-                "Don't give out your password to anyone. Not even close friends.",
-                "Politely tell them no and then use the 'Report Abuse' button.",
-                "Set up 2 step authentication with my email provider.",
-                "No, you should never buy a RuneScape account.",
-                "Do not visit the website and report the player who messaged you.",
-                "Only on the RuneScape website.",
-                "Don't type in my password backwards and report the player.",
-                "Virus scan my device then change my password.",
-                "No, you should never allow anyone to level your account.",
-                "Don't give out your password to anyone. Not even close friends.",
-                "Report the stream as a scam. Real Jagex streams have a 'verified' mark.",
-                "Read the text and follow the advice given.",
-                "No way! I'm reporting you to Jagex!",
-                "Talk to any banker in RuneScape.",
-                "Secure my device and reset my RuneScape password.",
-                "Don't share your information and report the player.");
+            "No, you should never buy an account.",
+            "Nobody.",
+            "Don't tell them anything and click the 'Report Abuse' button.",
+            "Decline the offer and report that player.",
+            "Me.",
+            "Only on the RuneScape website.",
+            "Report the incident and do not click any links.",
+            "Authenticator and two-step login on my registered email.",
+            "No way! You'll just take my gold for your own! Reported!",
+            "No.",
+            "Don't give them the information and send an 'Abuse Report'.",
+            "Don't give them my password.",
+            "The birthday of a famous person or event.",
+            "Through account settings on runescape.com.",
+            "Secure my device and reset my RuneScape password.",
+            "Report the player for phishing.",
+            "Don't click any links, forward the email to reportphishing@jagex.com.",
+            "Inform Jagex by emailing reportphishing@jagex.com.",
+            "Don't give out your password to anyone. Not even close friends.",
+            "Politely tell them no and then use the 'Report Abuse' button.",
+            "Set up 2 step authentication with my email provider.",
+            "No, you should never buy a RuneScape account.",
+            "Do not visit the website and report the player who messaged you.",
+            "Only on the RuneScape website.",
+            "Don't type in my password backwards and report the player.",
+            "Virus scan my device then change my password.",
+            "No, you should never allow anyone to level your account.",
+            "Don't give out your password to anyone. Not even close friends.",
+            "Report the stream as a scam. Real Jagex streams have a 'verified' mark.",
+            "Report the stream as a scam. Real Jagex streams have a 'verified' mark",
+            "Read the text and follow the advice given.",
+            "No way! I'm reporting you to Jagex!",
+            "Talk to any banker in RuneScape.",
+            "Secure my device and reset my RuneScape password.",
+            "Secure my device and reset my password.",
+            "Delete it - it's a fake!",
+            "Use the account management section on the website.",
+            "Politely tell them no and then use the 'Report Abuse' button.",
+            "Through account setting on oldschool.runescape.com",
+            "Through account setting on oldschool.runescape.com.",
+            "Nothing, it's a fake.",
+            "Only on the Old School RuneScape website.",
+            "Don't share your information and report the player.");
     }
 
+
     private static boolean isClosedTrapDoor(RSObject object, String[] options){
-        return  (object.getDefinition().getName().equals("Trapdoor") && Arrays.asList(options).contains("Open"));
+        return  (object.getDef().getName().equals("Trapdoor") && Arrays.asList(options).contains("Open"));
     }
 
     private static boolean handleTrapDoor(RSObject object){
@@ -551,7 +565,7 @@ public class PathObjectHandler implements Loggable {
                 return objects.length > 0 && handleTrapDoor(objects[0]);
             }
         }
-        getInstance().log("Interacting with (" + object.getDefinition().getName() + ") at " + object.getPosition() + " with option: Climb-down");
+        getInstance().log("Interacting with (" + object.getDef().getName() + ") at " + object.getLocation() + " with option: Climb-down");
         return InteractionHelper.click(object, "Climb-down");
     }
 
@@ -560,7 +574,7 @@ public class PathObjectHandler implements Loggable {
         if (object == null){
             return list;
         }
-        RSObjectDefinition objectDefinition = object.getDefinition();
+        ObjectComposition objectDefinition = object.getDef();
         if (objectDefinition == null){
             return list;
         }

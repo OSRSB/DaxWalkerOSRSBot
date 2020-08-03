@@ -2,21 +2,12 @@ package net.runelite.client.rsb.walker.dax_api.walker_engine;
 
 
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.Positionable;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.wrappers.RSCharacter;
 import net.runelite.client.rsb.wrappers.RSGroundItem;
 import net.runelite.client.rsb.wrappers.RSObject;
-import net.runelite.client.rsb.wrappers.RSTile;
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api.interfaces.Clickable07;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSCharacter;
-import org.tribot.api2007.types.RSGroundItem;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSTile;
+import net.runelite.client.rsb.wrappers.common.Clickable07;
+import net.runelite.client.rsb.wrappers.common.Positionable;
 
 import java.util.Random;
 
@@ -26,12 +17,12 @@ public class WaitFor {
 
     public static Condition getNotMovingCondition(){
         return new Condition() {
-            final RSTile initialTile = Web.methods.players.getMyPlayer().getLocation();
+            final WalkerTile initialTile = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
             final long movingDelay = 1300, startTime = System.currentTimeMillis();
 
             @Override
             public Return active() {
-                if (Timing.timeFromMark(startTime) > movingDelay && initialTile.equals(Web.methods.players.getMyPlayer().getLocation())
+                if (Timing.timeFromMark(startTime) > movingDelay && initialTile.equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
                         && !Web.methods.players.getMyPlayer().isLocalPlayerMoving()) {
                     return Return.FAIL;
                 }
@@ -41,7 +32,7 @@ public class WaitFor {
     }
 
     public static int getMovementRandomSleep(Positionable positionable){
-        return getMovementRandomSleep((int) Web.methods.calc.distanceBetween(Web.methods.players.getMyPlayer().getLocation(), positionable.getPosition()));
+        return getMovementRandomSleep((int) Web.methods.calc.distanceBetween(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()), positionable.getPosition()));
     }
 
     public static int getMovementRandomSleep(int distance){
@@ -59,8 +50,8 @@ public class WaitFor {
         Positionable positionable = (Positionable) clickable;
         return WaitFor.condition(getMovementRandomSleep(positionable), () -> (
                 clickable instanceof RSCharacter ? ((RSCharacter) clickable).isOnScreen() :
-                clickable instanceof RSObject ? ((RSObject) clickable).isOnScreen() :
-                clickable instanceof RSGroundItem && ((RSGroundItem) clickable).isOnScreen())
+                        clickable instanceof RSObject ? ((RSObject) clickable).isOnScreen() :
+                                clickable instanceof RSGroundItem && ((RSGroundItem) clickable).isOnScreen())
                 && clickable.isClickable() ? Return.SUCCESS : Return.IGNORE);
     }
 

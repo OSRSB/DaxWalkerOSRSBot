@@ -1,18 +1,17 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding;
 
 
-import net.runelite.api.coords.LocalPoint;
-import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.Positionable;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.BankHelper;
-import net.runelite.client.rsb.wrappers.RSTile;
+import net.runelite.client.rsb.wrappers.common.Positionable;
+
 
 import java.util.*;
 
 public class Reachable {
 
-    private RSTile[][] map;
+    private WalkerTile[][] map;
 
     /**
      * Generates reachable map from player position
@@ -21,33 +20,34 @@ public class Reachable {
         this(null);
     }
 
-    private Reachable(RSTile homeTile) {
-        map = generateMap(homeTile != null ? homeTile : Web.methods.players.getMyPlayer().getLocation());
+    private Reachable(WalkerTile homeTile) {
+        map = generateMap(homeTile != null ? homeTile : new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
     }
 
-    public boolean canReach(RSTile position) {
-        RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        if (playerPosition.getWorldLocation().getX() == position.getWorldLocation().getX() && playerPosition.getWorldLocation().getY() == position.getWorldLocation().getY()) {
+    public boolean canReach(WalkerTile position) {
+        position = position.toWorldTile();
+        WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        if (playerPosition.getX() == position.getX() && playerPosition.getY() == position.getY()) {
             return true;
         }
-        return getParent(new Positionable(position)) != null;
+        return getParent(position.toLocalTile()) != null;
     }
 
     public boolean canReach(int x, int y) {
-        RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        if (playerPosition.getWorldLocation().getX() == x && playerPosition.getWorldLocation().getY() == y) {
+        WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        if (playerPosition.getX() == x && playerPosition.getY() == y) {
             return true;
         }
-        RSTile position = new RSTile(x, y);
-        return getParent(new Positionable(position)) != null;
+        WalkerTile position = convertToLocal(x, y);
+        return getParent(position) != null;
     }
 
-    public RSTile closestTile(Collection<RSTile> tiles) {
-        RSTile closest = null;
+    public WalkerTile closestTile(Collection<WalkerTile> tiles) {
+        WalkerTile closest = null;
         double closestDistance = Integer.MAX_VALUE;
-        RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        for (RSTile positionable : tiles) {
-            double distance = Web.methods.calc.distanceBetween(playerPosition, positionable);
+        WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        for (WalkerTile positionable : tiles) {
+            double distance = playerPosition.distanceToDouble(positionable);
             if (distance < closestDistance) {
                 closestDistance = distance;
                 closest = positionable;
@@ -61,14 +61,17 @@ public class Reachable {
      * @param y
      * @return parent tile of x and y through BFS.
      */
-    public RSTile getParent(int x, int y) {
-        RSTile position = new RSTile(x, y);
-        return getParent(new Positionable(position));
+    public WalkerTile getParent(int x, int y) {
+        WalkerTile position = convertToLocal(x, y);
+        return getParent(position);
     }
 
-    public RSTile getParent(Positionable positionable) {
-        RSTile tile = positionable.getPosition();
-        int x = tile.getLocalLocation(Web.methods).getX(), y = tile.getLocalLocation(Web.methods).getY();
+    public WalkerTile getParent(Positionable positionable) {
+        WalkerTile tile = positionable.getLocation();
+        if (tile.getType() != WalkerTile.TYPES.LOCAL) {
+            tile = tile.toLocalTile();
+        }
+        int x = tile.getX(), y = tile.getY();
         if (x < 0 || y < 0) {
             return null;
         }
@@ -84,16 +87,17 @@ public class Reachable {
      * @return Distance to tile. Max integer value if unreachable. Does not account for positionable behind doors
      */
     public int getDistance(int x, int y) {
-        RSTile position = new RSTile(x, y);
-        return getDistance(new Positionable(position));
+        WalkerTile position = convertToLocal(x, y);
+        return getDistance(position);
     }
 
     /**
      * @param positionable
      * @return path to tile. Does not account for positionable behind doors
      */
-    public ArrayList<RSTile> getPath(Positionable positionable) {
-        int x = positionable.getPosition().getLocalLocation(Web.methods).getX(), y = positionable.getPosition().getLocalLocation(Web.methods).getY();
+    public ArrayList<WalkerTile> getPath(Positionable positionable) {
+        WalkerTile position = convertToLocal(positionable.getLocation().getX(), positionable.getLocation().getY());
+        int x = position.getX(), y = position.getY();
         return getPath(x, y);
     }
 
@@ -102,9 +106,9 @@ public class Reachable {
      * @param y
      * @return null if no path.
      */
-    public ArrayList<RSTile> getPath(int x, int y) {
-        ArrayList<RSTile> path = new ArrayList<>();
-        LocalPoint playerPos = Web.methods.players.getMyPlayer().getLocation().getLocalLocation(Web.methods);
+    public ArrayList<WalkerTile> getPath(int x, int y) {
+        ArrayList<WalkerTile> path = new ArrayList<>();
+        WalkerTile playerPos = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).toLocalTile();
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return path;
         }
@@ -117,17 +121,18 @@ public class Reachable {
         if (map[x][y] == null) {
             return null;
         }
-        RSTile tile = new RSTile(WorldPoint.fromScene(Web.methods.client, x, y, Web.methods.players.getMyPlayer().getLocation().getWorldLocation().getPlane()));
-        while ((tile = map[tile.getLocalLocation(Web.methods).getX()][tile.getLocalLocation(Web.methods).getY()]) != null) {
-            path.add(tile);
+        WalkerTile tile = new WalkerTile(x, y, new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane(), WalkerTile.TYPES.LOCAL);
+        while ((tile = map[tile.getX()][tile.getY()]) != null) {
+            path.add(tile.toWorldTile());
         }
         Collections.reverse(path);
         return path;
     }
 
     public int getDistance(Positionable positionable) {
-        int x = positionable.getPosition().getLocalLocation(Web.methods).getX(), y = positionable.getPosition().getLocalLocation(Web.methods).getY();
-        LocalPoint playerPos = Web.methods.players.getMyPlayer().getLocation().getLocalLocation(Web.methods);
+        WalkerTile position = convertToLocal(positionable.getLocation().getX(), positionable.getLocation().getY());
+        int x = position.getX(), y = position.getY();
+        WalkerTile playerPos = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).toLocalTile();
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return 0;
         }
@@ -141,58 +146,55 @@ public class Reachable {
             return Integer.MAX_VALUE;
         }
         int length = 0;
-        RSTile tile = new RSTile(WorldPoint.fromScene(Web.methods.client, x, y, Web.methods.players.getMyPlayer().getLocation().getWorldLocation().getPlane()));
-        while ((tile = map[tile.getLocalLocation(Web.methods).getX()][tile.getLocalLocation(Web.methods).getY()]) != null) {
+        WalkerTile tile = position;
+        while ((tile = map[tile.getX()][tile.getY()]) != null) {
             length++;
         }
         return length;
     }
 
-    /*
-    private static RSTile convertToLocal(int x, int y) {
-        RSTile position = new RSTile(x, y, Player.getPosition().getPlane(), x >= 104 || y >= 104 ? RSTile.TYPES.WORLD : RSTile.TYPES.LOCAL);
-        if (position.getType() != RSTile.TYPES.LOCAL) {
+    private static WalkerTile convertToLocal(int x, int y) {
+        WalkerTile position = new WalkerTile(x, y, new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane(), x >= 104 || y >= 104 ? WalkerTile.TYPES.WORLD : WalkerTile.TYPES.LOCAL);
+        if (position.getType() != WalkerTile.TYPES.LOCAL) {
             position = position.toLocalTile();
         }
         return position;
     }
 
-     */
-
-    public static RSTile getBestWalkableTile(Positionable positionable, Reachable reachable) {
-        RSTile localPosition = positionable.getPosition();
-        HashSet<RSTile> building = BankHelper.getBuilding(positionable);
+    public static WalkerTile getBestWalkableTile(Positionable positionable, Reachable reachable) {
+        WalkerTile localPosition = positionable.getLocation().toLocalTile();
+        HashSet<WalkerTile> building = BankHelper.getBuilding(positionable);
         boolean[][] traversed = new boolean[104][104];
-        RSTile[][] parentMap = new RSTile[104][104];
-        Queue<RSTile> queue = new LinkedList<>();
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(positionable.getPosition().getWorldLocation().getPlane());
+        WalkerTile[][] parentMap = new WalkerTile[104][104];
+        Queue<WalkerTile> queue = new LinkedList<>();
+        int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
         if(collisionData == null)
             return null;
 
         queue.add(localPosition);
         try {
-            traversed[localPosition.getLocalLocation(Web.methods).getX()][localPosition.getLocalLocation(Web.methods).getY()] = true;
-            parentMap[localPosition.getLocalLocation(Web.methods).getX()][localPosition.getLocalLocation(Web.methods).getY()] = null;
+            traversed[localPosition.getX()][localPosition.getY()] = true;
+            parentMap[localPosition.getX()][localPosition.getY()] = null;
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
 
         while (!queue.isEmpty()) {
-            RSTile currentLocal = queue.poll();
-            int x = currentLocal.getLocalLocation(Web.methods).getX(), y = currentLocal.getLocalLocation(Web.methods).getY();
+            WalkerTile currentLocal = queue.poll();
+            int x = currentLocal.getX(), y = currentLocal.getY();
 
             int currentCollisionFlags = collisionData[x][y];
             if (AStarNode.isWalkable(currentCollisionFlags)) {
-                if (reachable != null && !reachable.canReach(currentLocal.getWorldLocation().getX(), currentLocal.getWorldLocation().getY())) {
+                if (reachable != null && !reachable.canReach(currentLocal.toWorldTile().getX(), currentLocal.toWorldTile().getY())) {
                     continue;
                 }
                 if (building != null && building.size() > 0) {
-                    if (building.contains(currentLocal)) {
-                        return currentLocal;
+                    if (building.contains(currentLocal.toWorldTile())) {
+                        return currentLocal.toWorldTile();
                     }
                     continue; //Next tile because we are now outside of building.
                 } else {
-                    return currentLocal;
+                    return currentLocal.toWorldTile();
                 }
             }
 
@@ -201,8 +203,8 @@ public class Reachable {
                     continue; //Cannot traverse to tile from current.
                 }
 
-                RSTile neighbor = direction.getPointingTile(currentLocal);
-                int destinationX = neighbor.getLocalLocation(Web.methods).getX(), destinationY = neighbor.getLocalLocation(Web.methods).getY();
+                WalkerTile neighbor = direction.getPointingTile(currentLocal);
+                int destinationX = neighbor.getX(), destinationY = neighbor.getY();
                 if (traversed[destinationX][destinationY]) {
                     continue; //Traversed already
                 }
@@ -219,37 +221,37 @@ public class Reachable {
      * @return gets collision map.
      */
     public static Reachable getMap() {
-        return new Reachable(Web.methods.players.getMyPlayer().getLocation());
+        return new Reachable(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
     }
 
-    public static Reachable getMap(RSTile homeTile) {
+    public static Reachable getMap(WalkerTile homeTile) {
         return new Reachable(homeTile);
     }
 
     /**
      * @return local reachable tiles
      */
-    private static RSTile[][] generateMap(RSTile homeTile) {
-        RSTile localPlayerPosition = homeTile;
+    private static WalkerTile[][] generateMap(WalkerTile homeTile) {
+        WalkerTile localPlayerPosition = homeTile.toLocalTile();
         boolean[][] traversed = new boolean[104][104];
-        RSTile[][] parentMap = new RSTile[104][104];
-        Queue<RSTile> queue = new LinkedList<>();
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(homeTile.getWorldLocation().getPlane());
+        WalkerTile[][] parentMap = new WalkerTile[104][104];
+        Queue<WalkerTile> queue = new LinkedList<>();
+        int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
 
         if(collisionData == null)
-            return new RSTile[][]{};
+            return new WalkerTile[][]{};
 
-        queue.add(homeTile);
+        queue.add(localPlayerPosition);
         try {
-            traversed[homeTile.getLocalLocation(Web.methods).getX()][homeTile.getLocalLocation(Web.methods).getY()] = true;
-            parentMap[homeTile.getLocalLocation(Web.methods).getX()][homeTile.getLocalLocation(Web.methods).getY()] = null;
+            traversed[localPlayerPosition.getX()][localPlayerPosition.getY()] = true;
+            parentMap[localPlayerPosition.getX()][localPlayerPosition.getY()] = null;
         } catch (Exception e) {
             return parentMap;
         }
 
         while (!queue.isEmpty()) {
-            RSTile currentLocal = queue.poll();
-            int x = currentLocal.getLocalLocation(Web.methods).getX(), y = currentLocal.getLocalLocation(Web.methods).getY();
+            WalkerTile currentLocal = queue.poll();
+            int x = currentLocal.getX(), y = currentLocal.getY();
 
             int currentCollisionFlags = collisionData[x][y];
             if (!AStarNode.isWalkable(currentCollisionFlags)) {
@@ -261,8 +263,8 @@ public class Reachable {
                     continue; //Cannot traverse to tile from current.
                 }
 
-                RSTile neighbor = direction.getPointingTile(currentLocal);
-                int destinationX = neighbor.getLocalLocation(Web.methods).getX(), destinationY = neighbor.getLocalLocation(Web.methods).getY();
+                WalkerTile neighbor = direction.getPointingTile(currentLocal);
+                int destinationX = neighbor.getX(), destinationY = neighbor.getY();
                 if (traversed[destinationX][destinationY]) {
                     continue; //Traversed already
                 }
@@ -293,9 +295,8 @@ public class Reachable {
             this.y = y;
         }
 
-        public RSTile getPointingTile(RSTile tile) {
-            return new RSTile(WorldPoint.fromLocal(Web.methods.client,
-                    tile.getLocalLocation(Web.methods).getX() + x, tile.getLocalLocation(Web.methods).getY() + y, tile.getWorldLocation().getPlane()));
+        public WalkerTile getPointingTile(WalkerTile tile) {
+            return tile.translate(x, y);
         }
 
         public boolean isValidDirection(int x, int y, int[][] collisionData) {

@@ -1,8 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision;
 
-import net.runelite.api.coords.WorldPoint;
-import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.wrappers.RSTile;
+import org.tribot.api2007.PathFinding;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.types.WalkerTile;
 
 
 public class CollisionDataCollector {
@@ -10,37 +10,36 @@ public class CollisionDataCollector {
     public static void generateRealTimeCollision(){
         RealTimeCollisionTile.clearMemory();
 
-        RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(playerPosition.getWorldLocation().getPlane());
+        WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        int[][] collisionData = PathFinding.getCollisionData();
 
         if (collisionData == null) {
             return;
         }
 
-        for (int x = 0; x < collisionData.length; x++) {
-            for (int y = 0; y < collisionData[x].length; y++) {
-                RSTile worldTile = new RSTile(WorldPoint.fromScene(Web.methods.client, x, y, playerPosition.getWorldLocation().getPlane()));
-                RealTimeCollisionTile.create(worldTile.getWorldLocation().getX(), worldTile.getWorldLocation().getY(), worldTile.getWorldLocation().getPlane(), collisionData[x][y]);
+        for (int i = 0; i < collisionData.length; i++) {
+            for (int j = 0; j < collisionData[i].length; j++) {
+                WalkerTile localTile = new WalkerTile(i, j, playerPosition.getPlane(), WalkerTile.TYPES.LOCAL);
+                WalkerTile worldTile = localTile.toWorldTile();
+                RealTimeCollisionTile.create(worldTile.getX(), worldTile.getY(), worldTile.getPlane(), collisionData[i][j]);
             }
         }
     }
 
     public static void updateRealTimeCollision(){
-        RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(playerPosition.getWorldLocation().getPlane());
+        WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        int[][] collisionData = PathFinding.getCollisionData();
         if(collisionData == null)
             return;
-        for (int x = 0; x < collisionData.length; x++) {
-            for (int y = 0; y < collisionData[x].length; x++) {
-                //RSTile localTile = new RSTile(i, j, playerPosition.getWorldLocation().getPlane(), RSTile.TYPES.LOCAL);
-                RSTile worldTile = new RSTile(WorldPoint.fromScene(Web.methods.client, x, y, playerPosition.getWorldLocation().getPlane()));
-                RealTimeCollisionTile realTimeCollisionTile = RealTimeCollisionTile.get(worldTile.getWorldLocation().getX(),
-                        worldTile.getWorldLocation().getY(), worldTile.getWorldLocation().getPlane());
+        for (int i = 0; i < collisionData.length; i++) {
+            for (int j = 0; j < collisionData[i].length; j++) {
+                WalkerTile localTile = new WalkerTile(i, j, playerPosition.getPlane(), WalkerTile.TYPES.LOCAL);
+                WalkerTile worldTile = localTile.toWorldTile();
+                RealTimeCollisionTile realTimeCollisionTile = RealTimeCollisionTile.get(worldTile.getX(), worldTile.getY(), worldTile.getPlane());
                 if (realTimeCollisionTile != null){
-                    realTimeCollisionTile.setCollisionData(collisionData[x][y]);
+                    realTimeCollisionTile.setCollisionData(collisionData[i][j]);
                 } else {
-                    RealTimeCollisionTile.create(worldTile.getWorldLocation().getX(), worldTile.getWorldLocation().getY(), worldTile.getWorldLocation().getPlane(),
-                            collisionData[x][y]);
+                    RealTimeCollisionTile.create(worldTile.getX(), worldTile.getY(), worldTile.getPlane(), collisionData[i][j]);
                 }
             }
         }

@@ -1,12 +1,19 @@
 package net.runelite.client.rsb.walker.dax_api.teleports;
 
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.Filters;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSItemHelper;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.NPCInteraction;
+import net.runelite.client.rsb.wrappers.RSItem;
 import org.tribot.api.General;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.WalkerTile;
 import scripts.dax_api.shared.helpers.RSItemHelper;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
@@ -60,12 +67,12 @@ public class WearableItemTeleport {
 		}
 
 		RSItem teleportItem = items.get(0);
-		final RSTile startingPosition = Player.getPosition();
+		final WalkerTile startingPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
 
 		return RSItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") && WaitFor.condition(
 				General.random(3800, 4600), () -> {
 					NPCInteraction.handleConversationRegex(regex);
-					if (startingPosition.distanceTo(Player.getPosition()) > 5) {
+					if (startingPosition.distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) > 5) {
 						return WaitFor.Return.SUCCESS;
 					}
 					return WaitFor.Return.IGNORE;

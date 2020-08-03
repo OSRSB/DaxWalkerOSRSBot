@@ -1,6 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils;
 
-import org.tribot.api2007.types.*;
+import net.runelite.api.ItemComposition;
+import net.runelite.api.ObjectComposition;
+import net.runelite.client.rsb.wrappers.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,19 +13,19 @@ public class TribotUtil {
         if (o == null) return null;
 
         if (o instanceof RSObject) {
-            RSObjectDefinition definition = ((RSObject) o).getDefinition();
+            ObjectComposition definition = ((RSObject) o).getDef();
             if (definition == null) return null;
             return definition.getName();
         }
 
         if (o instanceof RSItem) {
-            RSItemDefinition definition = ((RSItem) o).getDefinition();
+            ItemComposition definition = ((RSItem) o).getDefinition();
             if (definition == null) return null;
             return definition.getName();
         }
 
         if (o instanceof RSGroundItem) {
-            RSItemDefinition definition = ((RSGroundItem) o).getDefinition();
+            ItemComposition definition = ((RSGroundItem) o).getItem().getDefinition();
             if (definition == null) return null;
             return definition.getName();
         }
@@ -43,21 +45,21 @@ public class TribotUtil {
         if (o == null) return null;
 
         if (o instanceof RSObject) {
-            RSObjectDefinition definition = ((RSObject) o).getDefinition();
+            ObjectComposition definition = ((RSObject) o).getDef();
             if (definition == null) return null;
             return Arrays.asList(definition.getActions());
         }
 
         if (o instanceof RSItem) {
-            RSItemDefinition definition = ((RSItem) o).getDefinition();
+            ItemComposition definition = ((RSItem) o).getDefinition();
             if (definition == null) return null;
-            return Arrays.asList(definition.getActions());
+            return Arrays.asList(definition.getInventoryActions());
         }
 
         if (o instanceof RSGroundItem) {
-            RSItemDefinition definition = ((RSGroundItem) o).getDefinition();
+            ItemComposition definition = ((RSGroundItem) o).getItem().getDefinition();
             if (definition == null) return null;
-            return Arrays.asList(definition.getActions());
+            return Arrays.asList(((RSGroundItem) o).getItem().getGroundActions());
         }
 
         throw new IllegalStateException("Unknown object. Must be qualifying TriBot Object.");

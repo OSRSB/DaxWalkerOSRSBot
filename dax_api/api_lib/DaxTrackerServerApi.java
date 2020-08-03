@@ -4,9 +4,10 @@ import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
-import scripts.dax_api.api_lib.models.*;
-import scripts.dax_api.api_lib.utils.IOHelper;
-import scripts.dax_api.walker_engine.Loggable;
+import net.runelite.client.rsb.walker.dax_api.api_lib.models.*;
+import net.runelite.client.rsb.walker.dax_api.api_lib.utils.IOHelper;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
+
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

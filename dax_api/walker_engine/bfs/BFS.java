@@ -1,13 +1,13 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.bfs;
 
 
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.NodeInfo;
 import net.runelite.client.rsb.walker.dax_api.shared.PathFindingNode;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
-import net.runelite.client.rsb.wrappers.RSTile;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class BFS {
@@ -15,15 +15,15 @@ public class BFS {
     private static final int DEFAULT_OFFSET = 12;
     public static int OFFSET_SEARCH = DEFAULT_OFFSET;
 
-    public static PathFindingNode bfsClosestToPath(ArrayList<RSTile> path, PathFindingNode start){
+    public static PathFindingNode bfsClosestToPath(List<WalkerTile> path, PathFindingNode start){
         return bfsClosestToPath(path, start, -1);
     }
 
-    public static PathFindingNode bfsClosestToPath(ArrayList<RSTile> path, PathFindingNode start, int limit){
+    public static PathFindingNode bfsClosestToPath(List<WalkerTile> path, PathFindingNode start, int limit){
         if (path == null || start == null){
             return null;
         }
-        if (path.contains(start.getRSTile())) {
+        if (path.contains(start.getWalkerTile())) {
             return start;
         }
         NodeInfo.clearMemory(start.getClass());
@@ -44,7 +44,7 @@ public class BFS {
                     continue;
                 }
                 nodeInfo.traversed = true;
-                if (path.contains(neighbor.getRSTile())){
+                if (path.contains(neighbor.getWalkerTile())){
                     return neighbor;
                 }
                 queue.add(neighbor);

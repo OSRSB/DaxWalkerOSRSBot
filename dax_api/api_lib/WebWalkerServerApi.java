@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import scripts.dax_api.api_lib.json.Json;
-import scripts.dax_api.api_lib.json.JsonValue;
-import scripts.dax_api.api_lib.json.ParseException;
-import scripts.dax_api.api_lib.models.*;
-import scripts.dax_api.api_lib.utils.IOHelper;
-import scripts.dax_api.walker_engine.Loggable;
+import net.runelite.client.rsb.walker.dax_api.api_lib.json.Json;
+import net.runelite.client.rsb.walker.dax_api.api_lib.json.JsonValue;
+import net.runelite.client.rsb.walker.dax_api.api_lib.json.ParseException;
+import net.runelite.client.rsb.walker.dax_api.api_lib.models.*;
+import net.runelite.client.rsb.walker.dax_api.api_lib.utils.IOHelper;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.DataOutputStream;

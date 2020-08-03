@@ -1,14 +1,11 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.path;
 
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.PathFinding;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.Projection;
-import org.tribot.api2007.types.RSCharacter;
-import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.walker_engine.local_pathfinding.AStarNode;
-import scripts.dax_api.walker_engine.local_pathfinding.Reachable;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.AStarNode;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.Reachable;
+import net.runelite.client.rsb.wrappers.RSCharacter;
+import net.runelite.client.rsb.wrappers.common.Positionable;
 
 import java.awt.*;
 import java.util.List;
@@ -21,21 +18,21 @@ import java.util.*;
 public class DaxPathFinder {
 
     public static class Destination {
-        private RSTile tile;
+        private WalkerTile tile;
         private Destination parent;
         private int distance;
 
-        public Destination(RSTile tile, Destination parent, int distance) {
+        public Destination(WalkerTile tile, Destination parent, int distance) {
             this.tile = tile;
             this.parent = parent;
             this.distance = distance;
         }
 
-        public RSTile getLocalTile() {
+        public WalkerTile getLocalTile() {
             return tile;
         }
 
-        public RSTile getWorldTile() {
+        public WalkerTile getWorldTile() {
             return tile.toWorldTile();
         }
 
@@ -47,7 +44,7 @@ public class DaxPathFinder {
             return distance;
         }
 
-        public List<RSTile> getPath() {
+        public List<WalkerTile> getPath() {
             return DaxPathFinder.getPath(this);
         }
     }
@@ -57,7 +54,7 @@ public class DaxPathFinder {
      *
      * @return The path your character is following.
      */
-    public static List<RSTile> getWalkingQueue() {
+    public static List<WalkerTile> getWalkingQueue() {
         return getWalkingQueue(getMap());
     }
 
@@ -67,8 +64,8 @@ public class DaxPathFinder {
      * @param map
      * @return The path your character is following.
      */
-    public static List<RSTile> getWalkingQueue(Destination[][] map) {
-        RSTile destination = Game.getDestination();
+    public static List<WalkerTile> getWalkingQueue(Destination[][] map) {
+        WalkerTile destination = new WalkerTile(Web.methods.walking.getDestination());
         if (destination == null) {
             destination = getNextWalkingTile();
         }
@@ -82,8 +79,8 @@ public class DaxPathFinder {
      * @param tile
      * @return true if your character is walking or will walk to that tile in the next game tick.
      */
-    public static boolean isWalkingTowards(RSTile tile){
-        RSTile tile1 = getNextWalkingTile();
+    public static boolean isWalkingTowards(WalkerTile tile){
+        WalkerTile tile1 = getNextWalkingTile();
         return tile1 != null && tile1.equals(tile);
     }
 
@@ -93,9 +90,9 @@ public class DaxPathFinder {
      *
      * @return The next tile that your character is walking to
      */
-    public static RSTile getNextWalkingTile(){
-        ArrayList<RSTile> tiles = getWalkingHistory();
-        return tiles.size() > 0 && !tiles.get(0).equals(Player.getPosition()) ? tiles.get(0) : null;
+    public static WalkerTile getNextWalkingTile(){
+        ArrayList<WalkerTile> tiles = getWalkingHistory();
+        return tiles.size() > 0 && !tiles.get(0).equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) ? tiles.get(0) : null;
     }
 
     /**
@@ -104,11 +101,11 @@ public class DaxPathFinder {
      * @return Distance to a tile accounting for collision. Integer.MAX_VALUE if not reachable.
      */
     public static int distance(Positionable tile) {
-        return distance(getMap(), tile.getPosition());
+        return distance(getMap(), tile.getLocation());
     }
 
     public static int distance(Destination[][] map, Positionable tile) {
-        RSTile worldTile = tile.getPosition().toLocalTile();
+        WalkerTile worldTile = tile.getLocation().toLocalTile();
         int x = worldTile.getX(), y = worldTile.getY();
 
         if (!validLocalBounds(tile)) {
@@ -119,13 +116,13 @@ public class DaxPathFinder {
         return destination == null ? Integer.MAX_VALUE : destination.distance;
     }
 
-    public static boolean canReach(RSTile tile) {
+    public static boolean canReach(WalkerTile tile) {
         return canReach(getMap(), tile);
     }
 
-    public static boolean canReach(Destination[][] map, RSTile tile) {
-        if (tile.getPlane() != Player.getPosition().getPlane()) return false;
-        RSTile worldTile = tile.getType() != RSTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
+    public static boolean canReach(Destination[][] map, WalkerTile tile) {
+        if (tile.getPlane() != new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane()) return false;
+        WalkerTile worldTile = tile.getType() != WalkerTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
         int x = worldTile.getX(), y = worldTile.getY();
         if (!validLocalBounds(tile) || x > map.length || y > map[x].length) {
             return false;
@@ -134,22 +131,22 @@ public class DaxPathFinder {
         return destination != null;
     }
 
-    public static List<RSTile> getPath(RSTile tile) {
+    public static List<WalkerTile> getPath(WalkerTile tile) {
         return getPath(getMap(), tile);
     }
 
-    public static List<RSTile> getPath(Destination destination) {
-        Stack<RSTile> rsTiles = new Stack<>();
+    public static List<WalkerTile> getPath(Destination destination) {
+        Stack<WalkerTile> WalkerTiles = new Stack<>();
         Destination parent = destination;
         while (parent != null) {
-            rsTiles.add(parent.getWorldTile());
+            WalkerTiles.add(parent.getWorldTile());
             parent = parent.parent;
         }
-        return new ArrayList<>(rsTiles);
+        return new ArrayList<>(WalkerTiles);
     }
 
-    public static List<RSTile> getPath(Destination[][] map, RSTile tile) {
-        RSTile worldTile = tile.getType() != RSTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
+    public static List<WalkerTile> getPath(Destination[][] map, WalkerTile tile) {
+        WalkerTile worldTile = tile.getType() != WalkerTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
         int x = worldTile.getX(), y = worldTile.getY();
 
         Destination destination = map[x][y];
@@ -162,9 +159,9 @@ public class DaxPathFinder {
     }
 
     public static Destination[][] getMap() {
-        final RSTile home = Player.getPosition().toLocalTile();
+        final WalkerTile home = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).toLocalTile();
         Destination[][] map = new Destination[104][104];
-        int[][] collisionData = PathFinding.getCollisionData();
+        int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
         if(collisionData == null || collisionData.length < home.getX() || collisionData[home.getX()].length < home.getY()){
             return map;
         }
@@ -184,7 +181,7 @@ public class DaxPathFinder {
                     continue; //Cannot traverse to tile from current.
                 }
 
-                RSTile neighbor = direction.getPointingTile(currentLocal.getLocalTile());
+                WalkerTile neighbor = direction.getPointingTile(currentLocal.getLocalTile());
                 int destinationX = neighbor.getX(), destinationY = neighbor.getY();
 
                 if (!AStarNode.isWalkable(collisionData[destinationX][destinationY])) {
@@ -205,12 +202,12 @@ public class DaxPathFinder {
 
     public static void drawQueue(Destination[][] map, Graphics graphics) {
         Graphics2D g = (Graphics2D) graphics;
-        List<RSTile> path = getWalkingQueue(map);
+        List<WalkerTile> path = getWalkingQueue(map);
         if (path == null) {
             return;
         }
 
-        RSTile previousTile = path.get(0);
+        WalkerTile previousTile = path.get(0);
         for (int i = 1; i < path.size(); i++) {
             Point point1 = Projection.tileToScreen(path.get(i), 0);
             Point point2 = Projection.tileToScreen(previousTile, 0);
@@ -234,8 +231,8 @@ public class DaxPathFinder {
                     continue;
                 }
 
-                RSTile tile = destination.getWorldTile();
-                RSTile parent = destination.getParent().getWorldTile();
+                WalkerTile tile = destination.getWorldTile();
+                WalkerTile parent = destination.getParent().getWorldTile();
 
                 if (!tile.isOnScreen() && !parent.isOnScreen()) {
                     continue;
@@ -256,23 +253,23 @@ public class DaxPathFinder {
     }
 
     private static boolean validLocalBounds(Positionable positionable) {
-        RSTile tile = positionable.getPosition().getType() == RSTile.TYPES.LOCAL ? positionable.getPosition() : positionable.getPosition().toLocalTile();
+        WalkerTile tile = positionable.getLocation().getType() == WalkerTile.TYPES.LOCAL ? positionable.getLocation() : positionable.getLocation().toLocalTile();
         return tile.getX() >= 0 && tile.getX() < 104 && tile.getY() >= 0 && tile.getY() < 104;
     }
 
-    private static ArrayList<RSTile> getWalkingHistory(){
-        return getWalkingHistory(Player.getRSPlayer());
+    private static ArrayList<WalkerTile> getWalkingHistory(){
+        return getWalkingHistory(Web.methods.players.getMyPlayer());
     }
 
-    private static ArrayList<RSTile> getWalkingHistory(RSCharacter rsCharacter){
-        ArrayList<RSTile> walkingQueue = new ArrayList<>();
+    private static ArrayList<WalkerTile> getWalkingHistory(RSCharacter rsCharacter){
+        ArrayList<WalkerTile> walkingQueue = new ArrayList<>();
         if (rsCharacter == null){
             return walkingQueue;
         }
-        int plane = rsCharacter.getPosition().getPlane();
-        int[] xIndex = rsCharacter.getWalkingQueueX(), yIndex = rsCharacter.getWalkingQueueY();
+        int plane = rsCharacter.getLocation().getWorldLocation().getPlane();
+        int[] xIndex = rsCharacter.getPathX(), yIndex = rsCharacter.getPathY();
         for (int i = 0; i < xIndex.length && i < yIndex.length; i++) {
-            walkingQueue.add(new RSTile(xIndex[i], yIndex[i], plane, RSTile.TYPES.LOCAL).toWorldTile());
+            walkingQueue.add(new WalkerTile(xIndex[i], yIndex[i], plane, WalkerTile.TYPES.LOCAL).toWorldTile());
         }
         return walkingQueue;
     }

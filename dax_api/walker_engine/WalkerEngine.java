@@ -1,8 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine;
 
 
-import net.runelite.api.GameState;
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.PathFindingNode;
 import net.runelite.client.rsb.walker.dax_api.teleports.Teleport;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
@@ -16,8 +16,6 @@ import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.Nav
 import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.ShipUtils;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import net.runelite.client.rsb.wrappers.RSTile;
-import net.runelite.api.Point;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class WalkerEngine implements Loggable{
     private int attemptsForAction;
     private final int failThreshold;
     private boolean navigating;
-    private ArrayList<RSTile> currentPath;
+    private List<WalkerTile> currentPath;
 
     private WalkerEngine(){
         attemptsForAction = 0;
@@ -43,11 +41,11 @@ public class WalkerEngine implements Loggable{
         return walkerEngine != null ? walkerEngine : (walkerEngine = new WalkerEngine());
     }
 
-    public boolean walkPath(ArrayList<RSTile> path){
+    public boolean walkPath(List<WalkerTile> path){
         return walkPath(path, null);
     }
 
-    public ArrayList<RSTile> getCurrentPath() {
+    public List<WalkerTile> getCurrentPath() {
         return currentPath;
     }
 
@@ -57,7 +55,7 @@ public class WalkerEngine implements Loggable{
      * @param walkingCondition
      * @return
      */
-    public boolean walkPath(ArrayList<RSTile> path, WalkingCondition walkingCondition){
+    public boolean walkPath(List<WalkerTile> path, WalkingCondition walkingCondition){
         if (path.size() == 0) {
             log("Path is empty");
             return false;
@@ -78,7 +76,7 @@ public class WalkerEngine implements Loggable{
 
             while (true) {
 
-                if (Web.methods.game.getClientState() != GameState.LOGGED_IN){
+                if (Login.getLoginState() != Login.STATE.INGAME){
                     return false;
                 }
 
@@ -104,14 +102,14 @@ public class WalkerEngine implements Loggable{
                 }
 
                 RealTimeCollisionTile currentNode = destinationDetails.getDestination();
-                RSTile assumedNext = destinationDetails.getAssumed();
+                WalkerTile assumedNext = destinationDetails.getAssumed();
 
                 if (destinationDetails.getState() != PathAnalyzer.PathState.FURTHEST_CLICKABLE_TILE) {
                     log(destinationDetails.toString());
                 }
 
                 final RealTimeCollisionTile destination = currentNode;
-                if (Web.methods.calc.tileOnMap(new RSTile(destination.getX(), destination.getY(), destination.getZ()))) {
+                if (!Projection.isInMinimap(Projection.tileToMinimap(new WalkerTile(destination.getX(), destination.getY(), destination.getZ())))) {
                     log("Closest tile in path is not in minimap: " + destination);
                     failedAttempt();
                     continue;
@@ -120,11 +118,11 @@ public class WalkerEngine implements Loggable{
                 CustomConditionContainer conditionContainer = new CustomConditionContainer(walkingCondition);
                 switch (destinationDetails.getState()) {
                     case DISCONNECTED_PATH:
-                        if (currentNode.getRSTile().distanceTo(Web.methods.players.getMyPlayer().getLocation()) > 10){
+                        if (currentNode.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 10){
                             clickMinimap(currentNode);
                             WaitFor.milliseconds(1200, 3400);
                         }
-                        NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getRSTile()),
+                        NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getWalkerTile()),
                                 specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
                         if (specialLocation != null && specialLocationDestination != null) {
                             log("[SPECIAL LOCATION] We are at " + specialLocation + " and our destination is " + specialLocationDestination);
@@ -137,7 +135,7 @@ public class WalkerEngine implements Loggable{
                         }
 
                         Charter.LocationProperty
-                                locationProperty = Charter.LocationProperty.getLocation(currentNode.getRSTile()),
+                                locationProperty = Charter.LocationProperty.getLocation(currentNode.getWalkerTile()),
                                 destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
                         if (locationProperty != null && destinationProperty != null) {
                             log("Chartering to: " + destinationProperty);
@@ -150,7 +148,7 @@ public class WalkerEngine implements Loggable{
                         }
                         //DO NOT BREAK OUT
                     case OBJECT_BLOCKING:
-                        RSTile walkingTile = Reachable.getBestWalkableTile(destination.getRSTile(), new Reachable());
+                        WalkerTile walkingTile = Reachable.getBestWalkableTile(destination.getWalkerTile(), new Reachable());
                         if (isDestinationClose(destination) || (walkingTile != null ? AccurateMouse.clickMinimap(walkingTile) : clickMinimap(destination))) {
                             log("Handling Object...");
                             if (!PathObjectHandler.handle(destinationDetails, path)) {
@@ -164,7 +162,7 @@ public class WalkerEngine implements Loggable{
 
                     case FURTHEST_CLICKABLE_TILE:
                         if (clickMinimap(currentNode)) {
-                            long offsetWalkingTimeout = System.currentTimeMillis() + Web.methods.web.random(2500, 4000);
+                            long offsetWalkingTimeout = System.currentTimeMillis() + General.random(2500, 4000);
                             WaitFor.condition(10000, () -> {
                                 switch (conditionContainer.trigger()) {
                                     case EXIT_OUT_WALKER_SUCCESS:
@@ -179,7 +177,7 @@ public class WalkerEngine implements Loggable{
                                     failedAttempt();
                                     return WaitFor.Return.FAIL;
                                 }
-                                int indexCurrentDestination = path.indexOf(currentDestination.getRSTile());
+                                int indexCurrentDestination = path.indexOf(currentDestination.getWalkerTile());
 
                                 PathFindingNode closestToPlayer = PathAnalyzer.closestTileInPathToPlayer(path);
                                 if (closestToPlayer == null) {
@@ -187,12 +185,12 @@ public class WalkerEngine implements Loggable{
                                     failedAttempt();
                                     return WaitFor.Return.FAIL;
                                 }
-                                int indexCurrentPosition = path.indexOf(closestToPlayer.getRSTile());
+                                int indexCurrentPosition = path.indexOf(closestToPlayer.getWalkerTile());
                                 if (furthestReachable == null) {
                                     System.out.println("Furthest reachable is null/");
                                     return WaitFor.Return.FAIL;
                                 }
-                                int indexNextDestination = path.indexOf(furthestReachable.getDestination().getRSTile());
+                                int indexNextDestination = path.indexOf(furthestReachable.getDestination().getWalkerTile());
                                 if (indexNextDestination - indexCurrentDestination > 5 || indexCurrentDestination - indexCurrentPosition < 5) {
                                     return WaitFor.Return.SUCCESS;
                                 }
@@ -230,16 +228,15 @@ public class WalkerEngine implements Loggable{
     }
 
     boolean isDestinationClose(PathFindingNode pathFindingNode){
-        final RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        return new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()).isClickable()
-                && playerPosition.distanceTo(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
-                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getWorldLocation().getX(), playerPosition.getWorldLocation().getY(),
-                playerPosition.getWorldLocation().getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 200));
+        final WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        return new WalkerTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()).isClickable()
+                && playerPosition.distanceTo(new WalkerTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
+                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 200));
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
-        final RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        if (playerPosition.distanceTo(pathFindingNode.getRSTile()) <= 1){
+        final WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        if (playerPosition.distanceTo(pathFindingNode.getWalkerTile()) <= 1){
             return true;
         }
         PathFindingNode randomNearby = BFS.getRandomTileNearby(pathFindingNode);
@@ -250,15 +247,15 @@ public class WalkerEngine implements Loggable{
         }
 
         log("Randomize(" + pathFindingNode.getX() + "," + pathFindingNode.getY() + "," + pathFindingNode.getZ() + ") -> (" + randomNearby.getX() + "," + randomNearby.getY() + "," + randomNearby.getZ() + ")");
-        return AccurateMouse.clickMinimap(new RSTile(randomNearby.getX(), randomNearby.getY(), randomNearby.getZ())) || AccurateMouse.clickMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
+        return AccurateMouse.clickMinimap(new WalkerTile(randomNearby.getX(), randomNearby.getY(), randomNearby.getZ())) || AccurateMouse.clickMinimap(new WalkerTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
     }
 
     public void hoverMinimap(PathFindingNode pathFindingNode){
         if (pathFindingNode == null){
             return;
         }
-        Point point = Web.methods.calc.tileToMinimap(new RSTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
-        Web.methods.mouse.move(point);
+        Point point = Projection.tileToMinimap(new WalkerTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
+        Mouse.move(point);
     }
 
     private boolean resetAttempts(){
@@ -271,11 +268,11 @@ public class WalkerEngine implements Loggable{
     }
 
     private void failedAttempt(){
-        if (Web.methods.camera.getPitch() < 90) {
-            Web.methods.camera.setPitch(Web.methods.web.random(90, 100));
+        if (Camera.getCameraAngle() < 90) {
+            Camera.setCameraAngle(General.random(90, 100));
         }
         if (++attemptsForAction > 1) {
-            Web.methods.camera.setAngle(Web.methods.web.random(0, 360));
+            Camera.setCameraRotation(General.random(0, 360));
         }
         log("Failed attempt on action.");
         WaitFor.milliseconds(450 * (attemptsForAction + 1), 850 * (attemptsForAction + 1));
@@ -307,20 +304,20 @@ public class WalkerEngine implements Loggable{
         return "Walker Engine";
     }
 
-    private boolean handleTeleports(List<RSTile> path) {
-        RSTile startPosition = path.get(0);
-        RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
+    private boolean handleTeleports(List<WalkerTile> path) {
+        WalkerTile startPosition = path.get(0);
+        WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
         if(startPosition.equals(playerPosition))
             return true;
-        if(Web.methods.bank.isOpen())
-            Web.methods.bank.close();
+        if(Banking.isBankScreenOpen())
+            Banking.close();
         for (Teleport teleport : Teleport.values()) {
             if (!teleport.getRequirement().satisfies()) continue;
             if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
                 log("Using teleport method: " + teleport);
                 teleport.trigger();
-                return WaitFor.condition(Web.methods.web.random(3000, 20000),
-                    () -> startPosition.distanceTo(Web.methods.players.getMyPlayer().getLocation()) < 10 ?
+                return WaitFor.condition(General.random(3000, 20000),
+                    () -> startPosition.distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) < 10 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             }
         }

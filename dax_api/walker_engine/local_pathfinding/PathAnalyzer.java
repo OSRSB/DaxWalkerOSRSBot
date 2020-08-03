@@ -1,63 +1,62 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding;
 
-import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.PathFindingNode;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.bfs.BFS;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import net.runelite.client.rsb.wrappers.RSTile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PathAnalyzer {
 
     public static RealTimeCollisionTile closestToPlayer = null, furthestReachable = null;
 
-    public static RealTimeCollisionTile closestTileInPathToPlayer(ArrayList<RSTile> path) {
+    public static RealTimeCollisionTile closestTileInPathToPlayer(List<WalkerTile> path) {
         CollisionDataCollector.generateRealTimeCollision();
-        final RSTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
-        closestToPlayer = (RealTimeCollisionTile) BFS.bfsClosestToPath(path, RealTimeCollisionTile.get(playerPosition.getWorldLocation().getX(), playerPosition.getWorldLocation().getY(),
-                playerPosition.getWorldLocation().getPlane()));
+        final WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        closestToPlayer = (RealTimeCollisionTile) BFS.bfsClosestToPath(path, RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()));
         return closestToPlayer;
     }
 
 
-    public static DestinationDetails furthestReachableTile(ArrayList<RSTile> path){
+    public static DestinationDetails furthestReachableTile(List<WalkerTile> path){
         return furthestReachableTile(path, closestTileInPathToPlayer(path));
     }
 
 
-    public static DestinationDetails furthestReachableTile(ArrayList<RSTile> path, PathFindingNode currentPosition){
+    public static DestinationDetails furthestReachableTile(List<WalkerTile> path, PathFindingNode currentPosition){
         if (path == null || currentPosition == null){
             System.out.println("PathAnalyzer attempt to find closest tile in path: " + currentPosition + " " + path);
             return null;
         }
         outside:
-        for (int i = path.indexOf(currentPosition.getRSTile()); i < path.size() && i >= 0; i++) {
-            RSTile currentNode = path.get(i);
-            RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getWorldLocation().getX(), currentNode.getWorldLocation().getY(), currentNode.getWorldLocation().getPlane());
+        for (int i = path.indexOf(currentPosition.getWalkerTile()); i < path.size() && i >= 0; i++) {
+            WalkerTile currentNode = path.get(i);
+            RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getX(), currentNode.getY(), currentNode.getPlane());
             if (current == null){
                 return null;
             }
             if (i + 1 >= path.size()){
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
-            RSTile nextNode = path.get(i + 1);
-            if(!isLoaded(nextNode) && Web.methods.calc.tileOnScreen(nextNode)){
+            WalkerTile nextNode = path.get(i + 1);
+            if(!isLoaded(nextNode) && nextNode.isOnScreen()){
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
-            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getWorldLocation().getX(), nextNode.getWorldLocation().getY(), nextNode.getWorldLocation().getPlane());
-            Direction direction = directionTo(current.getRSTile(), nextNode);
+            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+            Direction direction = directionTo(current.getWalkerTile(), nextNode);
             if (direction == Direction.UNKNOWN){
                 furthestReachable = current;
-                return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getWorldLocation().getX(), nextNode.getWorldLocation().getY(), nextNode.getWorldLocation().getPlane());
+                return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
             }
             if (!direction.confirmTileMovable(RealTimeCollisionTile.get(current.getX(), current.getY(), current.getZ()))){
 
                 for (int j = 2; j < 6 && j + i < path.size(); j++) {
-                    RSTile nextInPath = path.get(i + j);
-                    RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getWorldLocation().getX(), nextInPath.getWorldLocation().getY(), nextInPath.getWorldLocation().getPlane());
+                    WalkerTile nextInPath = path.get(i + j);
+                    RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
                         if (BFS.isReachable(current, nextInPathCollision, 360)) {
                             i += j-1;
@@ -70,26 +69,26 @@ public class PathAnalyzer {
                 if (next != null) {
                     return new DestinationDetails(PathState.OBJECT_BLOCKING, current, next);
                 }
-                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getWorldLocation().getX(), nextNode.getWorldLocation().getY(), nextNode.getWorldLocation().getPlane());
+                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
             }
-            if (Web.methods.calc.tileOnMap(new RSTile(nextNode.getWorldLocation().getX(), nextNode.getWorldLocation().getY(), nextNode.getWorldLocation().getPlane()))){
+            if (!Projection.isInMinimap(Projection.tileToMinimap(new WalkerTile(nextNode.getX(), nextNode.getY(), nextNode.getPlane())))){
                 furthestReachable = current;
                 if (next != null) {
                     return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current, next);
                 }
                 return new DestinationDetails(
-		                PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getWorldLocation().getX(), nextNode.getWorldLocation().getY(), nextNode.getWorldLocation().getPlane());
+		                PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
             }
         }
         return null;
     }
 
-    public static Direction directionTo(RSTile fromNode, RSTile toNode){
-        if (fromNode.getWorldLocation().getPlane() != toNode.getWorldLocation().getPlane()){
+    public static Direction directionTo(WalkerTile fromNode, WalkerTile toNode){
+        if (fromNode.getPlane() != toNode.getPlane()){
             return Direction.UNKNOWN;
         }
         for (Direction direction : Direction.values()){
-            if (fromNode.getWorldLocation().getX() + direction.x == toNode.getWorldLocation().getX() && fromNode.getWorldLocation().getY() + direction.y == toNode.getWorldLocation().getY()){
+            if (fromNode.getX() + direction.x == toNode.getX() && fromNode.getY() + direction.y == toNode.getY()){
                 return direction;
             }
         }
@@ -129,8 +128,8 @@ public class PathAnalyzer {
             return state;
         }
 
-        public RSTile getAssumed(){
-            return new RSTile(assumedX, assumedY, assumedZ);
+        public WalkerTile getAssumed(){
+            return new WalkerTile(assumedX, assumedY, assumedZ);
         }
 
 
@@ -219,8 +218,9 @@ public class PathAnalyzer {
         }
     }
 
-    private static boolean isLoaded(RSTile tile){
-        return tile.getLocalLocation(Web.methods).getX() >= 0 && tile.getLocalLocation(Web.methods).getX() < 104 && tile.getLocalLocation(Web.methods).getY() >= 0 && tile.getLocalLocation(Web.methods).getY() < 104;
+    private static boolean isLoaded(WalkerTile tile){
+        final WalkerTile local = tile.toLocalTile();
+        return local.getX() >= 0 && local.getX() < 104 && local.getY() >= 0 && local.getY() < 104;
     }
 
 }

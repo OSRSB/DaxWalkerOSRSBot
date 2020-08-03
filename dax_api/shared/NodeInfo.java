@@ -1,6 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.shared;
 
-import scripts.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
 
 import java.util.HashMap;
 

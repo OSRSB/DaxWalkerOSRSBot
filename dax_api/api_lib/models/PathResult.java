@@ -1,24 +1,19 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import org.tribot.api2007.types.RSTile;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@DoNotRename
 public class PathResult {
 
-    @DoNotRename
     private PathStatus pathStatus;
 
-    @DoNotRename
     private List<Point3D> path;
 
-    @DoNotRename
     private int cost;
 
     private PathResult () {
@@ -59,13 +54,13 @@ public class PathResult {
         this.cost = cost;
     }
 
-    public ArrayList<RSTile> toRSTilePath() {
+    public ArrayList<WalkerTile> toWalkerTilePath() {
         if (getPath() == null) {
             return new ArrayList<>();
         }
-        ArrayList<RSTile> path = new ArrayList<>();
+        ArrayList<WalkerTile> path = new ArrayList<>();
         for (Point3D point3D : getPath()) {
-            path.add(point3D.toPositionable().getPosition());
+            path.add(point3D.toPositionable().getLocation());
         }
         return path;
     }

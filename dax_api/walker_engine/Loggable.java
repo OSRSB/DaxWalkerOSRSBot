@@ -1,6 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine;
 
 import net.runelite.client.rsb.walker.dax_api.api_lib.DaxConfigs;
+
 public interface Loggable {
 
     enum Level {

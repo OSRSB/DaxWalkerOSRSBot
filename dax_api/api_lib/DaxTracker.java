@@ -1,5 +1,10 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib;
 
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.api_lib.models.*;
+import net.runelite.client.rsb.walker.dax_api.api_lib.utils.DaxTrackerProperty;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
+import net.runelite.client.rsb.wrappers.RSPlayer;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Player;
@@ -17,15 +22,6 @@ public class DaxTracker implements Loggable {
         DaxTrackerServerApi.getInstance().setDaxCredentialsProvider(daxCredentialsProvider);
     }
 
-    /**
-     *
-     * @param propertyName
-     * @param period
-     * @return Accounts online belonging to the tribot user
-     */
-    public static ListSearch accountsOnline(String propertyName, Period period) {
-        return DaxTrackerServerApi.getInstance().sourcesOnline(propertyName, General.getTRiBotUsername(), period);
-    }
 
     /**
      *
@@ -40,26 +36,8 @@ public class DaxTracker implements Loggable {
         return getStats(null, propertyName);
     }
 
-    /**
-     * @param accountName
-     * @param propertyName
-     * @return Total accumulated stats for the tribot user.
-     *         If accountName is supplied, only return stats from that runescape account.
-     */
-    public static PropertyStats getStats(String accountName, String propertyName) {
-        return DaxTrackerServerApi.getInstance().getStats(General.getTRiBotUsername(), accountName, propertyName);
-    }
-
 
     /**
-     *
-     * @param propertyName
-     * @param period Only show results within time period.
-     * @return High score for Accounts owned by the user for a tracked property.
-     */
-    public static SourceHighScore getAccountsHighScore(String propertyName, Period period) {
-        return DaxTrackerServerApi.getInstance().topSources(General.getTRiBotUsername(), propertyName, period);
-    }
 
     /**
      *
@@ -146,10 +124,10 @@ public class DaxTracker implements Loggable {
     }
 
     private static void log(String propertyName, double value) {
-        RSPlayer player = Player.getRSPlayer();
+        RSPlayer player = Web.methods.players.getMyPlayer();
         String accountName = player != null ? player.getName().replaceAll("[^a-zA-Z0-9]", " ") : null;
         DaxTrackerServerApi.getInstance().log(
-                General.getTRiBotUsername(),
+                "NULL",
                 accountName,
                 propertyName,
                 value

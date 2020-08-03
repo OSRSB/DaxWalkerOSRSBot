@@ -67,8 +67,8 @@ public class JSONParser {
 	/**
 	 * @return The position of the beginning of the current token.
 	 */
-	public int getPosition(){
-		return lexer.getPosition();
+	public int getLocation(){
+		return lexer.getLocation();
 	}
 	
 	public Object parse(String s) throws ParseException {
@@ -143,7 +143,7 @@ public class JSONParser {
 					if(token.type== Yytoken.TYPE_EOF)
 						return valueStack.removeFirst();
 					else
-						throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+						throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 					
 				case S_IN_OBJECT:
 					switch(token.type){
@@ -251,10 +251,10 @@ public class JSONParser {
 					}//inner switch
 					break;
 				case S_IN_ERROR:
-					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+					throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}//switch
 				if(status==S_IN_ERROR){
-					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+					throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}
 			}while(token.type!= Yytoken.TYPE_EOF);
 		}
@@ -262,7 +262,7 @@ public class JSONParser {
 			throw ie;
 		}
 		
-		throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+		throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 	}
 	
 	private void nextToken() throws ParseException, IOException {
@@ -380,7 +380,7 @@ public class JSONParser {
 					}
 					else{
 						status = S_IN_ERROR;
-						throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+						throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 					}
 			
 				case S_IN_OBJECT:
@@ -503,10 +503,10 @@ public class JSONParser {
 					return;
 					
 				case S_IN_ERROR:
-					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+					throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}//switch
 				if(status==S_IN_ERROR){
-					throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+					throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 				}
 			}while(token.type!= Yytoken.TYPE_EOF);
 		}
@@ -528,6 +528,6 @@ public class JSONParser {
 		}
 		
 		status = S_IN_ERROR;
-		throw new ParseException(getPosition(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
+		throw new ParseException(getLocation(), ParseException.ERROR_UNEXPECTED_TOKEN, token);
 	}
 }

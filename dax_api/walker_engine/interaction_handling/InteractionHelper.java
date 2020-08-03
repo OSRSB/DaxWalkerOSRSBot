@@ -39,7 +39,7 @@ public class InteractionHelper {
             return clickable.click(actions) && (condition == null || WaitFor.condition(General.random(7000, 8000), condition) == WaitFor.Return.SUCCESS);
         }
 
-        RSTile position = ((Positionable) clickable).getPosition();
+        WalkerTile position = ((Positionable) clickable).getLocation();
 
         if (!isOnScreenAndClickable(clickable)){
             Walking.blindWalkTo(position);
@@ -100,9 +100,9 @@ public class InteractionHelper {
         if (isOnScreenAndClickable(clickable)){
             return true;
         }
-        RSTile tile = ((Positionable) clickable).getPosition();
+        WalkerTile tile = ((Positionable) clickable).getLocation();
         Camera.turnToTile(tile);
-        Camera.setCameraAngle(100 - (tile.distanceTo(Player.getPosition()) * 4));
+        Camera.setCameraAngle(100 - (tile.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) * 4));
         return isOnScreenAndClickable(clickable);
     }
 

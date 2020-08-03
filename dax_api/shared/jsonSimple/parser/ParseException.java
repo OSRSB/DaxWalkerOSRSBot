@@ -40,11 +40,11 @@ public class ParseException extends Exception {
 	}
 	
 	/**
-	 * @see org.json.simple.parser.JSONParser#getPosition()
+	 * @see org.json.simple.parser.JSONParser#getLocation()
 	 * 
 	 * @return The character position (starting with 0) of the input where the error occurs.
 	 */
-	public int getPosition() {
+	public int getLocation() {
 		return position;
 	}
 	

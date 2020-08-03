@@ -1,30 +1,27 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils;
 
-import org.tribot.api.General;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSArea;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
+import net.runelite.client.rsb.walker.dax_api.Filters;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
+import net.runelite.client.rsb.wrappers.RSArea;
+import net.runelite.client.rsb.wrappers.RSObject;
+
 
 
 public class ShipUtils {
 
-    private static final RSTile[] SPECIAL_CASES = new RSTile[]{new RSTile(2663, 2676, 1)};
+    private static final WalkerTile[] SPECIAL_CASES = new WalkerTile[]{new WalkerTile(2663, 2676, 1)};
 
     public static boolean isOnShip() {
-        RSTile playerPos = Player.getPosition();
-        for (RSTile specialCase : SPECIAL_CASES){
+        WalkerTile playerPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        for (WalkerTile specialCase : SPECIAL_CASES){
             if (new RSArea(specialCase, 5).contains(playerPos)){
                 return true;
             }
         }
         return getGangplank() != null
-                && Player.getPosition().getPlane() == 1
+                && new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane() == 1
                 && Objects.getAll(10, Filters.Objects.nameEquals("Ship's wheel", "Ship's ladder", "Anchor")).length > 0;
     }
 

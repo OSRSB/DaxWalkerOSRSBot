@@ -1,8 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker;
 
-import net.runelite.api.coords.LocalPoint;
-import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl.DefaultObjectHandler;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl.DefaultWalkHandler;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
@@ -14,11 +13,12 @@ import net.runelite.client.rsb.walker.dax_api.walker.models.enums.MoveActionResu
 import net.runelite.client.rsb.walker.dax_api.walker.models.enums.Situation;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.path.DaxPathFinder;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.path.PathUtils;
-import net.runelite.client.rsb.wrappers.RSTile;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.runelite.client.rsb.walker.dax_api.walker.models.enums.Situation.*;
 
 public class DaxWalkerEngine implements DaxLogger {
 
@@ -36,7 +36,7 @@ public class DaxWalkerEngine implements DaxLogger {
         return passiveActions;
     }
 
-    public boolean walkPath(List<RSTile> path) {
+    public boolean walkPath(List<WalkerTile> path) {
         int failAttempts = 0;
 
         while (failAttempts < 3) {
@@ -53,17 +53,13 @@ public class DaxWalkerEngine implements DaxLogger {
         return false;
     }
 
-    private boolean reachedEnd(List<RSTile> path) {
+    private boolean reachedEnd(List<WalkerTile> path) {
         if (path == null || path.size() == 0) return true;
-        RSTile tile = null;
-        LocalPoint localPoint =  Web.methods.client.getLocalDestinationLocation();
-        if (localPoint != null) {
-            tile = new RSTile(WorldPoint.fromLocal(Web.methods.client, localPoint));
-        }
+        WalkerTile tile = new WalkerTile(Web.methods.walking.getDestination());
         return tile != null && tile.equals(path.get(path.size() - 1));
     }
 
-    private MoveActionResult walkNext(List<RSTile> path) {
+    private MoveActionResult walkNext(List<WalkerTile> path) {
         MoveTask moveTask = determineNextAction(path);
         debug("Move task: " + moveTask);
 
@@ -89,13 +85,13 @@ public class DaxWalkerEngine implements DaxLogger {
         }
     }
 
-    private MoveTask determineNextAction(List<RSTile> path) {
-        RSTile furthestClickable = PathUtils.getFurthestReachableTileInMinimap(path);
+    private MoveTask determineNextAction(List<WalkerTile> path) {
+        WalkerTile furthestClickable = PathUtils.getFurthestReachableTileInMinimap(path);
         if (furthestClickable == null) {
             return new MoveTask(Situation.PATH_TOO_FAR, null, null);
         }
 
-        RSTile next;
+        WalkerTile next;
         try {
             next = PathUtils.getNextTileInPath(furthestClickable, path);
         } catch (PathUtils.NotInPathException e) {
@@ -108,7 +104,7 @@ public class DaxWalkerEngine implements DaxLogger {
             }
 
             if (!DaxPathFinder.canReach(next)) {
-                return new MoveTask(Situation.COLLISION_BLOCKING, furthestClickable, next);
+                return new MoveTask(COLLISION_BLOCKING, furthestClickable, next);
             }
         }
 

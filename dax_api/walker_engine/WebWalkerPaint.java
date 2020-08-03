@@ -1,16 +1,16 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine;
 
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.NodeInfo;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import net.runelite.client.rsb.wrappers.RSTile;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,7 +23,7 @@ public class WebWalkerPaint {
 
     private final Point mapCenter;
     private final ExecutorService service;
-    private RSTile playerPosition;
+    private WalkerTile playerPosition;
     private int lastChange;
 
 
@@ -56,10 +56,10 @@ public class WebWalkerPaint {
         if (!WalkerEngine.getInstance().isNavigating()){
             return;
         }
-        if (playerPosition == null || !playerPosition.equals(Web.methods.players.getMyPlayer().getLocation()) || lastChange != RealTimeCollisionTile.getAllInitialized().size()) {
+        if (playerPosition == null || !playerPosition.equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) || lastChange != RealTimeCollisionTile.getAllInitialized().size()) {
             lastChange = RealTimeCollisionTile.getAllInitialized().size();
-            playerPosition = Web.methods.players.getMyPlayer().getLocation();
-            final int playerX = playerPosition.getWorldLocation().getX(), playerY = playerPosition.getWorldLocation().getY();
+            playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+            final int playerX = playerPosition.getX(), playerY = playerPosition.getY();
             service.submit(() -> {
                 nonDisplayableMapImageGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
                 nonDisplayableMapImageGraphics.fillRect(0, 0, REGION_SIZE * TILE_WIDTH, REGION_SIZE * TILE_WIDTH);
@@ -68,10 +68,10 @@ public class WebWalkerPaint {
                 nonDisplayableMapImageGraphics.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
 
                 int previousLocalX = -1, previousLocalY = -1;
-                ArrayList<RSTile> path = WalkerEngine.getInstance().getCurrentPath();
+                List<WalkerTile> path = WalkerEngine.getInstance().getCurrentPath();
                 if (path != null) {
-                    for (RSTile node : path) {
-                        int relativeX = node.getWorldLocation().getX() - playerX, relativeY = playerY - node.getWorldLocation().getY();
+                    for (WalkerTile node : path) {
+                        int relativeX = node.getX() - playerX, relativeY = playerY - node.getY();
                         int localX = (relativeX + REGION_SIZE / 2) * TILE_WIDTH, localY = (relativeY + REGION_SIZE / 2) * TILE_WIDTH;
 
 //                    nonDisplayableMapImageGraphics.fillRect(localX, localY, TILE_WIDTH, TILE_WIDTH);
@@ -82,7 +82,7 @@ public class WebWalkerPaint {
                             continue;
                         }
 
-                        switch (node.getWorldLocation().getPlane()){
+                        switch (node.getPlane()){
                             case 1:
                                 nonDisplayableMapImageGraphics.setColor(new Color(0, 224, 255));
                                 break;
@@ -173,7 +173,7 @@ public class WebWalkerPaint {
         }
         Graphics2D graphics2D = (Graphics2D) graphics;
         AffineTransform affineTransform = new AffineTransform();
-        affineTransform.rotate(Math.toRadians(Web.methods.camera.getAngle()), mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2, mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2);
+        affineTransform.rotate(Math.toRadians(Camera.getCameraRotation()), mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2, mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2);
 //        affineTransform.rotate(Game.getMinimapRotation(), mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2, mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH) + (REGION_SIZE/2 * TILE_WIDTH) + TILE_WIDTH/2);
         affineTransform.translate(mapCenter.x - (REGION_SIZE/2 * TILE_WIDTH), mapCenter.y -(REGION_SIZE/2 * TILE_WIDTH));
         graphics2D.drawImage(mapDisplay, affineTransform, null);

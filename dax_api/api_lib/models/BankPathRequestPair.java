@@ -1,12 +1,10 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
 
-@DoNotRename
+
 public class BankPathRequestPair {
-    @DoNotRename
+
     private Point3D start;
-    @DoNotRename
     private RunescapeBank bank;
 
     public BankPathRequestPair(Point3D start, RunescapeBank bank) {

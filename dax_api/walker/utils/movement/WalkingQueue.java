@@ -1,48 +1,43 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.movement;
 
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.wrappers.RSCharacter;
-import net.runelite.client.rsb.wrappers.RSNPC;
-import net.runelite.client.rsb.wrappers.RSTile;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSCharacter;
-import org.tribot.api2007.types.RSTile;
 
 import java.util.ArrayList;
 
 
 public class WalkingQueue {
 
-    public static boolean isWalkingTowards(RSTile tile){
-        RSTile tile1 = getWalkingTowards();
+    public static boolean isWalkingTowards(WalkerTile tile){
+        WalkerTile tile1 = getWalkingTowards();
         return tile1 != null && tile1.equals(tile);
     }
 
-    public static RSTile getWalkingTowards(){
-        ArrayList<RSTile> tiles = getWalkingQueue();
-        return tiles.size() > 0 && !tiles.get(0).equals(Web.methods.players.getMyPlayer().getLocation()) ? tiles.get(0) : null;
+    public static WalkerTile getWalkingTowards(){
+        ArrayList<WalkerTile> tiles = getWalkingQueue();
+        return tiles.size() > 0 && !tiles.get(0).equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) ? tiles.get(0) : null;
     }
 
-    public static ArrayList<RSTile> getWalkingQueue(){
+    public static ArrayList<WalkerTile> getWalkingQueue(){
         return getWalkingQueue(Web.methods.players.getMyPlayer());
     }
 
-    public static RSTile getWalkingTowards(RSCharacter rsCharacter){
-        ArrayList<RSTile> tiles = getWalkingQueue(rsCharacter);
+    public static WalkerTile getWalkingTowards(RSCharacter rsCharacter){
+        ArrayList<WalkerTile> tiles = getWalkingQueue(rsCharacter);
         return tiles.size() > 0 && !tiles.get(0).equals(rsCharacter.getLocation()) ? tiles.get(0) : null;
     }
 
-    public static ArrayList<RSTile> getWalkingQueue(RSCharacter rsCharacter){
-        ArrayList<RSTile> walkingQueue = new ArrayList<>();
+    public static ArrayList<WalkerTile> getWalkingQueue(RSCharacter rsCharacter){
+        ArrayList<WalkerTile> walkingQueue = new ArrayList<>();
         if (rsCharacter == null){
             return walkingQueue;
         }
-        int[] xIndex = ((RSNPC) rsCharacter)
-                //..getWalkingQueueX(), yIndex = rsCharacter.getWalkingQueueY();
-        int plane = rsCharacter.getPosition().getPlane();
+        int[] xIndex = rsCharacter.getPathX(), yIndex = rsCharacter.getPathY();
+        int plane = rsCharacter.getLocation().getWorldLocation().getPlane();
 
         for (int i = 0; i < xIndex.length && i < yIndex.length; i++) {
-            walkingQueue.add(new RSTile(xIndex[i], yIndex[i], plane, RSTile.TYPES.LOCAL).toWorldTile());
+            walkingQueue.add(new WalkerTile(xIndex[i], yIndex[i], plane, WalkerTile.TYPES.LOCAL).toWorldTile());
         }
         return walkingQueue;
     }

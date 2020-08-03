@@ -1,6 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.shared.helpers;
 
-import org.tribot.api2007.types.RSNPC;
+import net.runelite.client.rsb.wrappers.RSNPC;
 
 
 public class RSNPCHelper {

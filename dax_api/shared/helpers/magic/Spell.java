@@ -1,7 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.shared.helpers.magic;
 
 import net.runelite.api.Skill;
-import net.runelite.client.rsb.methods.Magic;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.shared.Pair;
 

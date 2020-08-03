@@ -1,21 +1,19 @@
 package net.runelite.client.rsb.walker.dax_api.shared;
 
-
-import net.runelite.client.rsb.walker.dax_api.api_lib.json.Json;
-import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONObject;
-import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONValue;
-import net.runelite.client.rsb.wrappers.RSTile;
+import org.tribot.api2007.types.WalkerTile;
+import scripts.dax_api.shared.jsonSimple.JSONObject;
+import scripts.dax_api.shared.jsonSimple.JSONValue;
 
 import java.util.ArrayList;
 
-
+@Deprecated
 public class GetPathResponseContainer {
 
     private Status status;
     private String response;
     private ArrayList<String> path;
     private PlayerInformation playerInformation;
-    private ArrayList<RSTile> rstilePath;
+    private ArrayList<WalkerTile> WalkerTilePath;
 
     public static GetPathResponseContainer CLIENT_ERROR = new GetPathResponseContainer(Status.CLIENT_ERROR, "No problem with server. Client issue.", new ArrayList<>(), null, true);
 
@@ -67,17 +65,17 @@ public class GetPathResponseContainer {
         }
     }
 
-    public ArrayList<RSTile> getRSTilePath(){
-        if (rstilePath != null){
-            return rstilePath;
+    public ArrayList<WalkerTile> getWalkerTilePath(){
+        if (WalkerTilePath != null){
+            return WalkerTilePath;
         }
-        rstilePath = new ArrayList<>();
+        WalkerTilePath = new ArrayList<>();
         for (String tile : path){
             String[] coords = tile.split(" ");
             int x = Integer.parseInt(coords[0]), y = Integer.parseInt(coords[1]), z = Integer.parseInt(coords[2]);
-            rstilePath.add(new RSTile(x, y, z));
+            WalkerTilePath.add(new WalkerTile(x, y, z));
         }
-        return rstilePath;
+        return WalkerTilePath;
     }
 
     public static GetPathResponseContainer fromJSONString(String s){

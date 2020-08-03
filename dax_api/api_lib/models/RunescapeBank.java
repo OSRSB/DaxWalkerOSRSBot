@@ -1,9 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
-import org.tribot.api2007.types.RSTile;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 
-@DoNotRename
 public enum RunescapeBank {
     AL_KHARID(3269, 3167, 0),
     ARCEUUS(1624, 3745, 0),
@@ -62,12 +60,12 @@ public enum RunescapeBank {
     ZANARIS(2383, 4458, 0),
     ZEAH_SAND_BANK(1719, 3465, 0)
     ;
-    RSTile position;
+    WalkerTile position;
     RunescapeBank(int x, int y, int z){
-        this.position = new RSTile(x,y,z);
+        this.position = new WalkerTile(x,y,z);
     }
 
-    public RSTile getPosition(){
+    public WalkerTile getLocation(){
         return this.position;
     }
 }

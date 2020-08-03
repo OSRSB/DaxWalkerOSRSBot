@@ -1,14 +1,15 @@
 package net.runelite.client.rsb.walker.dax_api.walker.models;
 
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker.models.enums.Situation;
-import net.runelite.client.rsb.wrappers.RSTile;
+
 
 public class MoveTask {
 
     private Situation situation;
-    private RSTile destination, next;
+    private WalkerTile destination, next;
 
-    public MoveTask(Situation situation, RSTile destination, RSTile next) {
+    public MoveTask(Situation situation, WalkerTile destination, WalkerTile next) {
         this.situation = situation;
         this.destination = destination;
         this.next = next;
@@ -22,7 +23,7 @@ public class MoveTask {
      *
      * @return Tile we can walk to.
      */
-    public RSTile getDestination() {
+    public WalkerTile getDestination() {
         return destination;
     }
 
@@ -30,7 +31,7 @@ public class MoveTask {
      *
      * @return Tile we want to walk to after reaching destination.
      */
-    public RSTile getNext() {
+    public WalkerTile getNext() {
         return next;
     }
 

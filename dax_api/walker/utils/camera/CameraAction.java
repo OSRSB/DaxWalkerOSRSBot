@@ -1,11 +1,16 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.camera;
 
 
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.movement.WalkingQueue;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.wrappers.RSCharacter;
+import net.runelite.client.rsb.wrappers.common.Positionable;
 import org.tribot.api.General;
 import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.types.RSCharacter;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.WalkerTile;
 import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.walker.utils.movement.WalkingQueue;
 import scripts.dax_api.walker_engine.WaitFor;
@@ -25,7 +30,7 @@ public class CameraAction {
     }
 
     public static boolean focusCamera(Positionable positionable){
-        RSTile tile = positionable.getPosition();
+        WalkerTile tile = positionable.getLocation();
         if (tile.isOnScreen() && tile.isClickable()){
             return true;
         }
@@ -47,8 +52,8 @@ public class CameraAction {
             return true;
         }
 
-        RSTile destination = rsCharacter.getPosition();
-        RSTile newDestination = WalkingQueue.getWalkingTowards(rsCharacter);
+        WalkerTile destination = new WalkerTile(rsCharacter.getLocation());
+        WalkerTile newDestination = WalkingQueue.getWalkingTowards(rsCharacter);
         if (newDestination != null){
             destination = newDestination;
         }

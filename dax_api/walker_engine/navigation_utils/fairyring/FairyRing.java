@@ -1,5 +1,14 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring;
 
+import net.runelite.client.rsb.methods.Interfaces;
+import net.runelite.client.rsb.walker.dax_api.Filters;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.SecondLetter;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.ThirdLetter;
+import net.runelite.client.rsb.wrappers.RSObject;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Interfaces;
@@ -8,7 +17,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.WalkerTile;
 import org.tribot.api2007.types.RSVarBit;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
@@ -52,8 +61,8 @@ public class FairyRing {
 				return false;
 			}
 		}
-		final RSTile myPos = Player.getPosition();
-		return location.turnTo() && pressTeleport() && Timing.waitCondition(() -> myPos.distanceTo(Player.getPosition()) > 20,8000);
+		final WalkerTile myPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+		return location.turnTo() && pressTeleport() && Timing.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
 	}
 
 	private static boolean hasInterface(){
@@ -66,9 +75,9 @@ public class FairyRing {
 	}
 
 	private static boolean takeLastDestination(Locations location){
-		final RSTile myPos = Player.getPosition();
+		final WalkerTile myPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
 		return InteractionHelper.click(ring[0],"Last-destination (" + location + ")") &&
-				Timing.waitCondition(() -> myPos.distanceTo(Player.getPosition()) > 20,8000);
+				Timing.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
 	}
 
 	private static boolean pressTeleport(){

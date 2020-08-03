@@ -1,12 +1,15 @@
 package net.runelite.client.rsb.walker.dax_api.teleports.teleport_utils;
 
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.RSItem;
+import net.runelite.client.rsb.wrappers.common.Clickable07;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Clickable07;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.WalkerTile;
 import org.tribot.api2007.types.RSVarBit;
 
 import java.util.Arrays;
@@ -41,8 +44,8 @@ public class MasterScrollBook {
 		
 		private int varbit;
 		private String name;
-		private RSTile destination;
-		Teleports(int varbit, String name, RSTile destination){
+		private WalkerTile destination;
+		Teleports(int varbit, String name, WalkerTile destination){
 			this.varbit = varbit;
 			this.name = name;
 			this.destination = destination;
@@ -60,7 +63,7 @@ public class MasterScrollBook {
 		}
 		
 		//Returns the destination that the teleport will take you to.
-		public RSTile getDestination(){
+		public WalkerTile getDestination(){
 			return destination;
 		}
 		
@@ -245,7 +248,7 @@ public class MasterScrollBook {
 			@Override
 			public boolean getAsBoolean() {
 				General.sleep(50,200);
-				return location.getDestination().distanceTo(Player.getPosition()) < 10;
+				return location.getDestination().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10;
 			}
 			
 		}, 8000);

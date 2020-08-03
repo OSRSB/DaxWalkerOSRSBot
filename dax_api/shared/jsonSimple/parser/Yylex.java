@@ -266,7 +266,7 @@ class Yylex {
   /* user code: */
 private StringBuffer sb=new StringBuffer();
 
-int getPosition(){
+int getLocation(){
 	return yychar;
 }
 

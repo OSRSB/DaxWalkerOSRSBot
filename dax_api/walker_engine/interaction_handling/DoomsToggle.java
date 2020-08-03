@@ -1,5 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling;
 
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.InterfaceHelper;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.types.RSInterface;
 import scripts.dax_api.shared.helpers.InterfaceHelper;

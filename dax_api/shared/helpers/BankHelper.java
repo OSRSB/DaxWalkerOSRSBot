@@ -1,15 +1,13 @@
 package net.runelite.client.rsb.walker.dax_api.shared.helpers;
 
-import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.rsb.internal.wrappers.Filter;
-import net.runelite.client.rsb.methods.Bank;
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.Positionable;
+import net.runelite.client.rsb.walker.dax_api.Filters;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
-import net.runelite.client.rsb.wrappers.RSCharacter;
-import net.runelite.client.rsb.wrappers.RSNPC;
 import net.runelite.client.rsb.wrappers.RSObject;
-import net.runelite.client.rsb.wrappers.RSTile;
+import net.runelite.client.rsb.wrappers.common.Positionable;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Banking;
@@ -18,7 +16,7 @@ import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.WalkerTile;
 import scripts.dax_api.walker_engine.WaitFor;
 import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 
@@ -31,7 +29,7 @@ public class BankHelper {
             .combine(Filters.Objects.actionsContains("Bank"), true);
 
     public static boolean isInBank(){
-        return isInBank(Player.getPosition());
+        return isInBank(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
     }
 
     public static boolean isInBank(Positionable positionable){
@@ -40,8 +38,8 @@ public class BankHelper {
             return false;
         }
         RSObject bankObject = bankObjects[0];
-        HashSet<RSTile> building = getBuilding(bankObject);
-        return building.contains(positionable.getPosition()) || (building.size() == 0 && positionable.getPosition().distanceTo(bankObject) < 5);
+        HashSet<WalkerTile> building = getBuilding(bankObject);
+        return building.contains(positionable.getLocation()) || (building.size() == 0 && positionable.getLocation().distanceTo(bankObject) < 5);
     }
 
     /**
@@ -64,13 +62,13 @@ public class BankHelper {
         return InteractionHelper.click(object, "Bank") && waitForBankScreen(object);
     }
 
-    public static HashSet<RSTile> getBuilding(Positionable positionable){
+    public static HashSet<WalkerTile> getBuilding(Positionable positionable){
         return computeBuilding(positionable, Game.getSceneFlags(), new HashSet<>());
     }
 
-    private static HashSet<RSTile> computeBuilding(Positionable positionable, byte[][][] sceneFlags, HashSet<RSTile> tiles){
+    private static HashSet<WalkerTile> computeBuilding(Positionable positionable, byte[][][] sceneFlags, HashSet<WalkerTile> tiles){
         try {
-            RSTile local = positionable.getPosition().toLocalTile();
+            WalkerTile local = positionable.getLocation().toLocalTile();
             int localX = local.getX(), localY = local.getY(), localZ = local.getPlane();
             if (localX < 0 || localY < 0 || localZ < 0){
                 return tiles;
@@ -84,26 +82,25 @@ public class BankHelper {
             if (!tiles.add(local.toWorldTile())){ //Already computed
                 return tiles;
             }
-            computeBuilding(new RSTile(localX, localY + 1, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-            computeBuilding(new RSTile(localX + 1, localY, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-            computeBuilding(new RSTile(localX, localY - 1, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-            computeBuilding(new RSTile(localX - 1, localY, localZ, RSTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX, localY + 1, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX + 1, localY, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX, localY - 1, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX - 1, localY, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
         } catch (ArrayIndexOutOfBoundsException e) {
 
         }
         return tiles;
     }
 
-    private static boolean isInBuilding(RSTile localRSTile, byte[][][] sceneFlags) {
-        return !(sceneFlags.length <= localRSTile.getPlane()
-                || sceneFlags[localRSTile.getPlane()].length <= localRSTile.getX()
-                || sceneFlags[localRSTile.getPlane()][localRSTile.getX()].length <= localRSTile.getY())
-                && sceneFlags[localRSTile.getPlane()][localRSTile.getX()][localRSTile.getY()] >= 4;
+    private static boolean isInBuilding(WalkerTile localWalkerTile, byte[][][] sceneFlags) {
+        return !(sceneFlags.length <= localWalkerTile.getPlane()
+                    || sceneFlags[localWalkerTile.getPlane()].length <= localWalkerTile.getX()
+                    || sceneFlags[localWalkerTile.getPlane()][localWalkerTile.getX()].length <= localWalkerTile.getY())
+                && sceneFlags[localWalkerTile.getPlane()][localWalkerTile.getX()][localWalkerTile.getY()] >= 4;
     }
 
     private static boolean waitForBankScreen(RSObject object){
         return WaitFor.condition(WaitFor.getMovementRandomSleep(object), ((WaitFor.Condition) () -> Banking.isBankScreenOpen() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE).combine(WaitFor.getNotMovingCondition())) == WaitFor.Return.SUCCESS;
     }
 
-}
 }

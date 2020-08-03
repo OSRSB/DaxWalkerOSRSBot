@@ -1,8 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.special_cases;
 
-import scripts.dax_api.walker.handlers.special_cases.impl.SecurityStrongholdHandler;
-import scripts.dax_api.walker.handlers.special_cases.impl.ShantyPassHandler;
-import scripts.dax_api.walker.models.MoveTask;
+import net.runelite.client.rsb.walker.dax_api.walker.handlers.special_cases.impl.SecurityStrongholdHandler;
+import net.runelite.client.rsb.walker.dax_api.walker.handlers.special_cases.impl.ShantyPassHandler;
+import net.runelite.client.rsb.walker.dax_api.walker.models.MoveTask;
 
 import java.util.Arrays;
 import java.util.Collections;

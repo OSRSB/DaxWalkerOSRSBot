@@ -1,6 +1,18 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl;
 
+import net.runelite.api.ObjectComposition;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.MoveTaskHandler;
+import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
+import net.runelite.client.rsb.walker.dax_api.walker.models.DaxLogger;
+import net.runelite.client.rsb.walker.dax_api.walker.models.MoveTask;
+import net.runelite.client.rsb.walker.dax_api.walker.models.enums.ActionResult;
 import net.runelite.client.rsb.walker.dax_api.walker.models.enums.MoveActionResult;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.TribotUtil;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.camera.DaxCamera;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.path.DaxPathFinder;
+import net.runelite.client.rsb.wrappers.RSObject;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
@@ -83,13 +95,13 @@ public class DefaultObjectHandler implements MoveTaskHandler, DaxLogger {
                     .toArray(RSObject[]::new);
         }
 
-        Arrays.sort(objects, Comparator.comparingDouble(o -> o.getPosition().distanceToDouble(moveTask.getDestination())));
+        Arrays.sort(objects, Comparator.comparingDouble(o -> new WalkerTile(o.getLocation()).distanceToDouble(moveTask.getDestination())));
         return objects;
     }
 
     private Predicate<RSObject> filter() {
         return rsObject -> {
-            RSObjectDefinition definition = rsObject.getDefinition();
+            ObjectComposition definition = rsObject.getDef();
             return Stream.of(definition).anyMatch(rsObjectDefinition ->
                     Arrays.stream(rsObjectDefinition.getActions()).anyMatch(MATCHES::contains)
                                                  );
@@ -122,7 +134,7 @@ public class DefaultObjectHandler implements MoveTaskHandler, DaxLogger {
     }
 
     private Direction getDirection(MoveTask moveTask) {
-        int playerPlane = Player.getPosition().getPlane();
+        int playerPlane = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane();
         int plane = moveTask.getNext() != null ? moveTask.getNext().getPlane() : playerPlane;
         if (plane > playerPlane) return Direction.UP;
         if (plane < playerPlane) return Direction.DOWN;

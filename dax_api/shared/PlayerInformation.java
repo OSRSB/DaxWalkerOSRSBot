@@ -1,6 +1,5 @@
 package net.runelite.client.rsb.walker.dax_api.shared;
 
-import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONObject;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSPlayer;
@@ -11,7 +10,7 @@ import scripts.dax_api.shared.jsonSimple.JSONValue;
 
 import java.util.HashMap;
 
-
+@Deprecated
 public class PlayerInformation {
 
     private static final int[] SETTINGS = {176, 32, 71, 273, 144, 63, 179, 145, 68, 655, 10, 964, 399, 869, 314, 794,
@@ -25,7 +24,7 @@ public class PlayerInformation {
 
     public static PlayerInformation generatePlayerInformation(){
         try {
-            RSPlayer rsPlayer = Player.getRSPlayer();
+            RSPlayer rsPlayer = Web.methods.players.getMyPlayer();
             return new PlayerInformation(
                     WorldHelper.isMember(WorldHopper.getWorld()),
                     rsPlayer.getCombatLevel(),

@@ -1,14 +1,12 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils;
 
-import org.tribot.api.General;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSTile;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
+import net.runelite.client.rsb.methods.Interfaces;
+import net.runelite.client.rsb.walker.dax_api.Filters;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.InterfaceHelper;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
+
 
 import java.util.Arrays;
 
@@ -36,8 +34,8 @@ public class GnomeGlider {
         public String getName() {
             return name;
         }
-        public RSTile getRSTile(){
-            return new RSTile(x, y, z);
+        public WalkerTile getWalkerTile(){
+            return new WalkerTile(x, y, z);
         }
 
         public int getX() {
@@ -72,7 +70,7 @@ public class GnomeGlider {
             return false;
         }
 
-        if (WaitFor.condition(General.random(5400, 6500), () -> location.getRSTile().distanceTo(Player.getPosition()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(General.random(5400, 6500), () -> location.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(250, 500);
             return true;
         }

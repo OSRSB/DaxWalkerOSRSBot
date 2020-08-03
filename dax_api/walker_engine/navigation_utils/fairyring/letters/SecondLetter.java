@@ -1,5 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters;
 
+import net.runelite.client.rsb.methods.Interfaces;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Interfaces;
