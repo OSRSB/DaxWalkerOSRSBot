@@ -5,13 +5,6 @@ import net.runelite.client.rsb.walker.dax_api.api_lib.models.*;
 import net.runelite.client.rsb.walker.dax_api.api_lib.utils.DaxTrackerProperty;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
 import net.runelite.client.rsb.wrappers.RSPlayer;
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSPlayer;
-import scripts.dax_api.api_lib.models.*;
-import scripts.dax_api.api_lib.utils.DaxTrackerProperty;
-import scripts.dax_api.walker_engine.Loggable;
 
 import java.util.ArrayList;
 import java.util.List;

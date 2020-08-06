@@ -1,12 +1,13 @@
 package net.runelite.client.rsb.walker.dax_api.shared;
 
-import org.tribot.api2007.*;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSPlayer;
-import org.tribot.api2007.types.RSVarBit;
-import scripts.dax_api.shared.helpers.WorldHelper;
-import scripts.dax_api.shared.jsonSimple.JSONObject;
-import scripts.dax_api.shared.jsonSimple.JSONValue;
+import net.runelite.api.Skill;
+import net.runelite.client.rsb.methods.Skills;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.WorldHelper;
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONObject;
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONValue;
+import net.runelite.client.rsb.wrappers.RSItem;
+import net.runelite.client.rsb.wrappers.RSPlayer;
 
 import java.util.HashMap;
 
@@ -28,10 +29,10 @@ public class PlayerInformation {
             return new PlayerInformation(
                     WorldHelper.isMember(WorldHopper.getWorld()),
                     rsPlayer.getCombatLevel(),
-                    Skills.SKILLS.values(),
+                    Skill.values(),
                     grabSettings(),
-                    Inventory.getAll(),
-                    Equipment.getItems());
+                    Web.methods.inventory.getItems(),
+                    Web.methods.equipment.getItems());
         } catch (Exception e){
             System.out.println("No Player Information to grab.");
             return null;
@@ -41,18 +42,18 @@ public class PlayerInformation {
     private static HashMap<Integer, Integer> grabSettings(){
         HashMap<Integer, Integer> settingsMap = new HashMap<>();
         for (int setting : SETTINGS){
-            settingsMap.put(setting, Game.getSetting(setting));
+            settingsMap.put(setting, Web.methods.settings.getSetting(setting));
         }
         for (int varbit : VARBITS){
-            settingsMap.put(varbit, RSVarBit.get(varbit).getValue());
+            settingsMap.put(varbit, Web.methods.client.getVarbitValue(varbit));
         }
         return settingsMap;
     }
 
-    private static HashMap<String, Integer> skillsConversion(Skills.SKILLS[] skills){
+    private static HashMap<String, Integer> skillsConversion(Skill[] skills){
         HashMap<String, Integer> skillsMap = new HashMap<>();
-        for (Skills.SKILLS skill : skills){
-            skillsMap.put(skill.toString(), skill.getActualLevel());
+        for (Skill skill : skills){
+            skillsMap.put(skill.toString(), Web.methods.skills.getRealLevel(Skills.getIndex(skill.toString())));
         }
         return skillsMap;
     }
@@ -61,15 +62,15 @@ public class PlayerInformation {
         HashMap<Integer, Integer> itemsMap = new HashMap<>();
         for (RSItem item : items){
             if (itemsMap.containsKey(item.getID())){
-                itemsMap.put(item.getID(), itemsMap.get(item.getID()) + item.getStack());
+                itemsMap.put(item.getID(), itemsMap.get(item.getID()) + item.getStackSize());
             } else {
-                itemsMap.put(item.getID(), item.getStack());
+                itemsMap.put(item.getID(), item.getStackSize());
             }
         }
         return itemsMap;
     }
 
-    private PlayerInformation(boolean member, int combatLevel, Skills.SKILLS[] skills, HashMap<Integer, Integer> gameSettings, RSItem[] inventoryItems, RSItem[] equipItems){
+    private PlayerInformation(boolean member, int combatLevel, Skill[] skills, HashMap<Integer, Integer> gameSettings, RSItem[] inventoryItems, RSItem[] equipItems){
         this.member = member;
         this.combatLevel = combatLevel;
         this.skills = skillsConversion(skills);
@@ -111,7 +112,7 @@ public class PlayerInformation {
         return itemAmount != null && Integer.parseInt(itemAmount.toString()) >= amount;
     }
 
-    public boolean skillRequirement(Skills.SKILLS skill, int level){
+    public boolean skillRequirement(Skill skill, int level){
         if (skills == null){
             return false;
         }

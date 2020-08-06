@@ -1,5 +1,14 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling;
 
+import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.wrappers.*;
+import net.runelite.client.rsb.wrappers.common.Clickable07;
+import net.runelite.client.rsb.wrappers.common.Positionable;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Clickable07;
@@ -36,13 +45,20 @@ public class InteractionHelper {
         }
 
         if (clickable instanceof RSItem){
-            return clickable.click(actions) && (condition == null || WaitFor.condition(General.random(7000, 8000), condition) == WaitFor.Return.SUCCESS);
+            boolean b = false;
+            for (String action : actions) {
+                b = clickable.doAction(action) && (condition == null || WaitFor.condition(StdRandom.uniform(7000, 8000), condition) == WaitFor.Return.SUCCESS);
+                if (b) {
+                    break;
+                }
+            }
+            return b;
         }
 
         WalkerTile position = ((Positionable) clickable).getLocation();
 
         if (!isOnScreenAndClickable(clickable)){
-            Walking.blindWalkTo(position);
+            Web.methods.walking.walkTo(Web.methods.walking.randomizeTile(position, 10, 10));
         }
 
         WaitFor.Return result = WaitFor.condition(WaitFor.getMovementRandomSleep(position), new WaitFor.Condition() {
@@ -52,7 +68,7 @@ public class InteractionHelper {
                 if (isOnScreenAndClickable(clickable)){
                     return WaitFor.Return.SUCCESS;
                 }
-                if (Timing.timeFromMark(startTime) > 2000 && !Player.isMoving()){
+                if (Timing.timeFromMark(startTime) > 2000 && !Web.methods.players.getMyPlayer().isLocalPlayerMoving()){
                     return WaitFor.Return.FAIL;
                 }
                 return WaitFor.Return.IGNORE;
@@ -64,33 +80,30 @@ public class InteractionHelper {
         }
 
         if (!AccurateMouse.click(clickable, actions)){
-            if (Camera.getCameraAngle() < 90){
-                Camera.setCameraAngle(General.random(90, 100));
+            if (Web.methods.camera.getAngle() < 90){
+                Web.methods.camera.setPitch(StdRandom.uniform(90, 100));
             }
             return false;
         }
 
-        return condition == null || WaitFor.condition(General.random(7000, 8500), condition) == WaitFor.Return.SUCCESS;
+        return condition == null || WaitFor.condition(StdRandom.uniform(7000, 8500), condition) == WaitFor.Return.SUCCESS;
     }
 
     public static RSItem getRSItem(Filter<RSItem> filter){
-        RSItem[] rsItems = Inventory.find(filter);
+        RSItem[] rsItems = Web.methods.inventory.find(filter);
         return rsItems.length > 0 ? rsItems[0] : null;
     }
 
     public static RSNPC getRSNPC(Filter<RSNPC> filter){
-        RSNPC[] rsnpcs = NPCs.findNearest(filter);
-        return rsnpcs.length > 0 ? rsnpcs[0] : null;
+        return Web.methods.npcs.getNearest(filter);
     }
 
     public static RSObject getRSObject(Filter<RSObject> filter){
-        RSObject[] objects = Objects.findNearest(15, filter);
-        return objects.length > 0 ? objects[0] : null;
+        return Web.methods.objects.getNearest(filter);
     }
 
     public static RSGroundItem getRSGroundItem(Filter<RSGroundItem> filter){
-        RSGroundItem[] groundItems = GroundItems.findNearest(filter);
-        return groundItems.length > 0 ? groundItems[0] : null;
+        return Web.methods.groundItems.getNearest(filter);
     }
 
     public static boolean focusCamera(Clickable07 clickable){
@@ -101,8 +114,8 @@ public class InteractionHelper {
             return true;
         }
         WalkerTile tile = ((Positionable) clickable).getLocation();
-        Camera.turnToTile(tile);
-        Camera.setCameraAngle(100 - (tile.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) * 4));
+        Web.methods.camera.turnTo(tile);
+        Web.methods.camera.setPitch(100 - (tile.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) * 4));
         return isOnScreenAndClickable(clickable);
     }
 

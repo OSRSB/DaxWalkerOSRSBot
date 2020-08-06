@@ -1,19 +1,15 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.camera;
 
 
+import net.runelite.api.Varbits;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.movement.WalkingQueue;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.wrappers.RSCharacter;
 import net.runelite.client.rsb.wrappers.common.Positionable;
-import org.tribot.api.General;
-import org.tribot.api.input.Mouse;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.types.RSCharacter;
-import org.tribot.api2007.types.WalkerTile;
-import org.tribot.api2007.types.RSVarBit;
-import scripts.dax_api.walker.utils.movement.WalkingQueue;
-import scripts.dax_api.walker_engine.WaitFor;
 
 import java.awt.*;
 
@@ -40,10 +36,13 @@ public class CameraAction {
             return tile.isOnScreen() && tile.isClickable();
         } else {
             AsynchronousCamera.focus(tile);
-            if (!HOVER_BOX.contains(Mouse.getPos())) {
-                Mouse.moveBox(HOVER_BOX);
+            Point currentMousePosition = new Point (Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
+            if (!HOVER_BOX.contains(currentMousePosition)) {
+                if (!HOVER_BOX.contains(currentMousePosition)) {
+                    Web.methods.mouse.move(AccurateMouse.getRandomPoint(HOVER_BOX));
+                }
             }
-            return WaitFor.condition(General.random(3000, 5000), () -> tile.isOnScreen() && tile.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            return WaitFor.condition(StdRandom.uniform(3000, 5000), () -> tile.isOnScreen() && tile.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }
     }
 
@@ -63,16 +62,19 @@ public class CameraAction {
             return rsCharacter.isOnScreen() && rsCharacter.isClickable();
         } else {
             AsynchronousCamera.focus(destination);
-            if (!HOVER_BOX.contains(Mouse.getPos())) {
-                Mouse.moveBox(HOVER_BOX);
+            Point currentMousePosition = new Point (Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
+            if (!HOVER_BOX.contains(currentMousePosition)) {
+                if (!HOVER_BOX.contains(currentMousePosition)) {
+                    Web.methods.mouse.move(AccurateMouse.getRandomPoint(HOVER_BOX));
+                }
             }
-            return WaitFor.condition(General.random(3000, 5000), () -> rsCharacter.isOnScreen() && rsCharacter.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            return WaitFor.condition(StdRandom.uniform(3000, 5000), () -> rsCharacter.isOnScreen() && rsCharacter.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }
     }
 
 
     public static boolean isMiddleMouseCameraOn() {
-        return RSVarBit.get(4134).getValue() == 0;
+        return Web.methods.client.getVarbitValue(4134) == 0;
     }
 
 }

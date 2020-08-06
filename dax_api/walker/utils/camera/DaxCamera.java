@@ -1,15 +1,13 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.camera;
 
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
 import net.runelite.client.rsb.wrappers.common.Positionable;
-import org.tribot.api.General;
-import org.tribot.api.Screen;
-import org.tribot.api.input.Mouse;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Camera;
 
 import java.awt.*;
 
-import static scripts.dax_api.walker.utils.camera.CameraCalculations.distanceBetweenTwoAngles;
+import static net.runelite.client.rsb.walker.dax_api.walker.utils.camera.CameraCalculations.distanceBetweenTwoAngles;
 
 
 public class DaxCamera {
@@ -25,7 +23,7 @@ public class DaxCamera {
         if (!CameraAction.isMiddleMouseCameraOn()){
             return;
         }
-        int currentAngle = Camera.getCameraAngle(), currentRotation = Camera.getCameraRotation();
+        int currentAngle = Web.methods.camera.getPitch(), currentRotation = Web.methods.camera.getAngle();
 
         int cameraAngleDifference = angle - currentAngle;
         int cameraRotationDifference =  distanceBetweenTwoAngles(currentRotation, rotation), rotationDirection;
@@ -34,12 +32,13 @@ public class DaxCamera {
         } else {
             rotationDirection = 1;
         }
-
-        if (!getGameScreen().contains(Mouse.getPos())){
-            Mouse.moveBox(Screen.getViewport());
+        Point point = new java.awt.Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
+        if (!getGameScreen().contains(point)){
+            Web.methods.mouse.move(AccurateMouse.getRandomPoint((getGameScreen())));
         }
 
-        Point startingPoint = Mouse.getPos();
+        point = new java.awt.Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
+        Point startingPoint = point;
         Point endingPoint = new Point(startingPoint);
 
         int dx = rotationDirection * cameraRotationDifference;
@@ -47,9 +46,8 @@ public class DaxCamera {
 
         endingPoint.translate(rotationToPixel(dx), angleToPixel(dy));
 
-        Mouse.sendPress(startingPoint, 2);
-        Mouse.move(endingPoint);
-        Mouse.sendRelease(endingPoint, 2);
+
+        Web.methods.mouse.drag((int) endingPoint.getX(), (int) endingPoint.getY());
 
     }
 
@@ -66,6 +64,6 @@ public class DaxCamera {
     }
 
     private static Point generatePoint(Rectangle rectangle){
-        return new Point(General.random(rectangle.x, rectangle.x + rectangle.width), General.random(rectangle.y, rectangle.y + rectangle.height));
+        return new Point(StdRandom.uniform(rectangle.x, rectangle.x + rectangle.width), StdRandom.uniform(rectangle.y, rectangle.y + rectangle.height));
     }
 }

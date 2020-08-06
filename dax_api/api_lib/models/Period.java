@@ -1,8 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
 
-@DoNotRename
+
+
 public enum Period {
     PAST_HOUR,
     PAST_6_HOURS,

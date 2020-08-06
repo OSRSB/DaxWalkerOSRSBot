@@ -1,18 +1,18 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
+
 import com.google.gson.Gson;
 
-@DoNotRename
+
 public class ServerResponse {
 
-    @DoNotRename
+
     private boolean success;
 
-    @DoNotRename
+
     private int code;
 
-    @DoNotRename
+
     private String contents;
 
     public ServerResponse(boolean success, int code, String contents) {

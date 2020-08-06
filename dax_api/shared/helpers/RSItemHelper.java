@@ -2,9 +2,11 @@ package net.runelite.client.rsb.walker.dax_api.shared.helpers;
 
 import net.runelite.api.ItemComposition;
 import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.Filters;
 import net.runelite.client.rsb.wrappers.RSGroundItem;
 import net.runelite.client.rsb.wrappers.RSItem;
+import net.runelite.client.rsb.wrappers.subwrap.ChooseOption;
 import net.runelite.client.rsb.wrappers.subwrap.RSMenuNode;
 
 import java.awt.*;
@@ -58,7 +60,7 @@ public class RSItemHelper {
         if (action == null){
             action = "";
         }
-        List<RSItem> list = Arrays.stream(Inventory.find(filter)).collect(Collectors.toList());
+        List<RSItem> list = Arrays.stream(Web.methods.inventory.find(filter)).collect(Collectors.toList());
         if (one) {
             RSItem closest = getClosestToMouse(list);
             return closest != null && closest.click(action);
@@ -77,8 +79,8 @@ public class RSItemHelper {
     }
 
     public static boolean click(RSItem item, String action){
-        if (Banking.isBankScreenOpen()){
-            Banking.close();
+        if (Web.methods.bank.isOpen()){
+            Web.methods.bank.close();
         }
         return action != null ? item.click(action) : item.click();
     }
@@ -90,8 +92,8 @@ public class RSItemHelper {
         if (Game.getItemSelectionState() == 1 && name != null && rsItemDefinition != null && (itemName = rsItemDefinition.getName()) != null && name.equals(itemName)){
             return true;
         } else if (Game.getItemSelectionState() == 1){
-            Mouse.click(3);
-            ChooseOption.select("Cancel");
+            Web.methods.mouse.click(false);
+            Web.methods.chooseOption.select("Cancel");
         }
         return RSItemHelper.click(itemID, "Use");
     }
@@ -108,7 +110,7 @@ public class RSItemHelper {
 
 
     public static RSItem getItem(Filter<RSItem> filter){
-        return getClosestToMouse(Arrays.stream(Inventory.find(filter)).collect(Collectors.toList()));
+        return getClosestToMouse(Arrays.stream(Web.methods.inventory.find(filter)).collect(Collectors.toList()));
     }
 
     public static boolean isNoted(RSItem item) {
@@ -116,7 +118,7 @@ public class RSItemHelper {
     }
 
     public static boolean isNoted(int id) {
-        RSItemDefinition definition = RSItemDefinition.get(id);
+        ItemComposition definition = RSItemDefinition.get(id);
         return definition != null && definition.isNoted();
     }
 
@@ -168,11 +170,11 @@ public class RSItemHelper {
     }
 
     public static int distanceToMouse(RSItem item){
-        Rectangle rectangle = item.getArea();
+        Rectangle rectangle = item.getItem().getArea();
         if (rectangle == null){
             return Integer.MAX_VALUE;
         }
-        return (int) Mouse.getPos().distance(rectangle.x + rectangle.width, rectangle.y + rectangle.height);
+        return (int) Web.methods.mouse.getLocation().distanceTo(new net.runelite.api.Point(rectangle.x + rectangle.width, rectangle.y + rectangle.height));
     }
 
 

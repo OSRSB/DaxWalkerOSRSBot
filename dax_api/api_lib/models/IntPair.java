@@ -1,20 +1,20 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
+
 import scripts.dax_api.api_lib.json.JsonArray;
 import scripts.dax_api.api_lib.json.JsonObject;
 
 import java.util.Collection;
 import java.util.Objects;
 
-@DoNotRename
+
 public class IntPair {
 
 
-    @DoNotRename
+
     private int key;
 
-    @DoNotRename
+
     private int value;
 
     public IntPair() {

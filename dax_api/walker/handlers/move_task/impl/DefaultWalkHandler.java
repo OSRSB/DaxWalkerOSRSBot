@@ -1,5 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl;
 
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.MoveTaskHandler;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
 import net.runelite.client.rsb.walker.dax_api.walker.models.MoveTask;
@@ -29,7 +31,7 @@ public class DefaultWalkHandler implements MoveTaskHandler {
     }
 
     private int getDistanceOffset() {
-        return Options.isRunEnabled() ? General.randomSD(3, 10, 7, 2) : General.randomSD(2, 10, 5, 2);
+        return  Web.methods.walking.isRunEnabled() ? (int) StdRandom.gaussian(3, 10, 7, 2) : (int) StdRandom.gaussian(2, 10, 5, 2);
     }
 
 }

@@ -5,10 +5,6 @@ import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.wrappers.RSCharacter;
 import net.runelite.client.rsb.wrappers.common.Positionable;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Camera;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSCharacter;
 
 public class CameraCalculations {
 
@@ -30,42 +26,43 @@ public class CameraCalculations {
     }
 
     public static int getRotationToTile(RSCharacter target) {
-        RSCharacter.DIRECTION direction = target.getWalkingDirection();
-        int cameraRotation = Camera.getTileAngle(target);
+        WalkerTile location = new WalkerTile(target.getLocation());
+        RSCharacter.DIRECTION direction = target.getDirectionFacing();
+        int cameraRotation = Web.methods.camera.getCharacterAngle(target);
         switch (direction) {
             case N:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(0, 1));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(0, 1));
                 break;
             case E:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(1, 0));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(1, 0));
                 break;
             case S:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(0, -1));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(0, -1));
                 break;
             case W:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(-1, 0));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(-1, 0));
                 break;
             case NE:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(1, 1));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(1, 1));
                 break;
             case NW:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(-1, 1));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(-1, 1));
                 break;
             case SE:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(1, -1));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(1, -1));
                 break;
             case SW:
-                cameraRotation = Camera.getTileAngle(target.getLocation().translate(-1, -1));
+                cameraRotation = Web.methods.camera.getTileAngle(location.translate(-1, -1));
                 break;
 
         }
-        int currentCameraRotation = Camera.getCameraRotation();
+        int currentCameraRotation = Web.methods.camera.getAngle();
         return cameraRotation + (distanceBetweenTwoAngles(cameraRotation + 45, currentCameraRotation) < distanceBetweenTwoAngles(cameraRotation - 45, currentCameraRotation) ? 45 : -45);
     }
 
     public static int getRotationToTile(Positionable target) {
-        int cameraRotation = Camera.getTileAngle(target);
-        int currentCameraRotation = Camera.getCameraRotation();
+        int cameraRotation = Web.methods.camera.getTileAngle(target.getLocation());
+        int currentCameraRotation = Web.methods.camera.getAngle();
         return cameraRotation + (distanceBetweenTwoAngles(cameraRotation + 45, currentCameraRotation) < distanceBetweenTwoAngles(cameraRotation - 45, currentCameraRotation) ? 45 : -45);
     }
 

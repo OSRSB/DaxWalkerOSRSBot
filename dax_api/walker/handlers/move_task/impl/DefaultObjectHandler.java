@@ -1,6 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl;
 
 import net.runelite.api.ObjectComposition;
+import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.MoveTaskHandler;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
@@ -13,20 +14,7 @@ import net.runelite.client.rsb.walker.dax_api.walker.utils.TribotUtil;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.camera.DaxCamera;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.path.DaxPathFinder;
 import net.runelite.client.rsb.wrappers.RSObject;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
-import scripts.dax_api.walker.handlers.move_task.MoveTaskHandler;
-import scripts.dax_api.walker.handlers.passive_action.PassiveAction;
-import scripts.dax_api.walker.models.DaxLogger;
-import scripts.dax_api.walker.models.MoveTask;
-import scripts.dax_api.walker.models.enums.ActionResult;
-import scripts.dax_api.walker.models.enums.MoveActionResult;
-import scripts.dax_api.walker.utils.AccurateMouse;
-import scripts.dax_api.walker.utils.TribotUtil;
-import scripts.dax_api.walker.utils.camera.DaxCamera;
-import scripts.dax_api.walker.utils.path.DaxPathFinder;
+
 
 import java.util.Arrays;
 import java.util.Comparator;

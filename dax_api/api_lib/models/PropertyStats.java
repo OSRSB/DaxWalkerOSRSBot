@@ -1,24 +1,24 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
 
-import com.allatori.annotations.DoNotRename;
+
 import com.google.gson.Gson;
 
 import java.util.List;
 
-@DoNotRename
+
 public class PropertyStats {
 
-    @DoNotRename
+
     private Period period;
 
-    @DoNotRename
+
     private String propertyName;
 
-    @DoNotRename
+
     private double total;
 
-    @DoNotRename
+
     private List<DataSnapshot> dataSnapshots;
 
     public PropertyStats() {

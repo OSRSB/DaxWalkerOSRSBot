@@ -471,7 +471,7 @@ public class AccurateMouse {
         return true;
     }
 
-    private static Point getRandomPoint(Rectangle rectangle) {
+    public static Point getRandomPoint(Rectangle rectangle) {
         return new Point(getRandomInteger(rectangle.x, rectangle.x + rectangle.width), getRandomInteger(rectangle.y, rectangle.y + rectangle.height));
     }
 

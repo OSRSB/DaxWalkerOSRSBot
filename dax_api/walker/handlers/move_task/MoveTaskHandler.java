@@ -1,5 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task;
 
+import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
 import net.runelite.client.rsb.walker.dax_api.walker.models.MoveTask;
 import net.runelite.client.rsb.walker.dax_api.walker.models.WaitCondition;
@@ -27,7 +28,7 @@ public interface MoveTaskHandler {
         long startTime = System.currentTimeMillis();
         AtomicLong lastMoved = new AtomicLong(System.currentTimeMillis());
         passiveActionList.add(() -> {
-            if (Player.isMoving() || Timing.timeFromMark(startTime) < 1750) {
+            if (Web.methods.players.getMyPlayer().isLocalPlayerMoving() || Timing.timeFromMark(startTime) < 1750) {
                 lastMoved.set(System.currentTimeMillis());
                 return ActionResult.CONTINUE;
             }

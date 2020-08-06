@@ -1,6 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action;
 
-import scripts.dax_api.walker.models.enums.ActionResult;
+import net.runelite.client.rsb.walker.dax_api.walker.models.enums.ActionResult;
 
 public interface PassiveAction {
 

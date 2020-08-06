@@ -1,11 +1,9 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.generator;
 
-import org.tribot.api2007.Game;
-import org.tribot.api2007.PathFinding;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.WalkerTile;
-import org.tribot.util.Util;
-import scripts.dax_api.walker_engine.local_pathfinding.AStarNode;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.GlobalConfiguration;
+import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.AStarNode;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,14 +15,14 @@ public class CollisionFileMaker {
 
     public static void getCollisionData(){
         try {
-            int[][] collisionData = PathFinding.getCollisionData();
+            int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
             if(collisionData == null)
                 return;
-            int baseX = Game.getBaseX();
-            int baseY = Game.getBaseY();
+            int baseX = Web.methods.game.getBaseX();
+            int baseY = Web.methods.game.getBaseY();
             int baseZ = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane();
 
-            File file = new File(Util.getWorkingDirectory().getAbsolutePath() + File.separator + baseX + "x" + baseY + "x" + baseZ + ".cdata");
+            File file = new File(GlobalConfiguration.Paths.getSettingsDirectory() + File.separator + baseX + "x" + baseY + "x" + baseZ + ".cdata");
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
             for (int x = 0; x < collisionData.length; x++) {
                 for (int y = 0; y < collisionData[x].length; y++) {

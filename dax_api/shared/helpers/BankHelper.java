@@ -8,17 +8,6 @@ import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import net.runelite.client.rsb.wrappers.RSObject;
 import net.runelite.client.rsb.wrappers.common.Positionable;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.Banking;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.WalkerTile;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
 
 import java.util.HashSet;
 
@@ -33,11 +22,11 @@ public class BankHelper {
     }
 
     public static boolean isInBank(Positionable positionable){
-        RSObject[] bankObjects = Objects.findNearest(15, BANK_OBJECT_FILTER);
-        if (bankObjects.length == 0){
+        RSObject bankObjects = Web.methods.objects.getNearest(BANK_OBJECT_FILTER);
+        if (bankObjects == null){
             return false;
         }
-        RSObject bankObject = bankObjects[0];
+        RSObject bankObject = bankObjects;
         HashSet<WalkerTile> building = getBuilding(bankObject);
         return building.contains(positionable.getLocation()) || (building.size() == 0 && positionable.getLocation().distanceTo(bankObject) < 5);
     }
@@ -47,7 +36,7 @@ public class BankHelper {
      * @return whether if the action succeeded
      */
     public static boolean openBank() {
-        return Banking.isBankScreenOpen() || InteractionHelper.click(InteractionHelper.getRSObject(BANK_OBJECT_FILTER), "Bank");
+        return Web.methods.bank.isOpen() || InteractionHelper.click(InteractionHelper.getRSObject(BANK_OBJECT_FILTER), "Bank");
     }
 
     /**
@@ -55,7 +44,7 @@ public class BankHelper {
      * @return bank screen is open
      */
     public static boolean openBankAndWait(){
-        if (Banking.isBankScreenOpen()){
+        if (Web.methods.bank.isOpen()){
             return true;
         }
         RSObject object = InteractionHelper.getRSObject(BANK_OBJECT_FILTER);
@@ -100,7 +89,7 @@ public class BankHelper {
     }
 
     private static boolean waitForBankScreen(RSObject object){
-        return WaitFor.condition(WaitFor.getMovementRandomSleep(object), ((WaitFor.Condition) () -> Banking.isBankScreenOpen() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE).combine(WaitFor.getNotMovingCondition())) == WaitFor.Return.SUCCESS;
+        return WaitFor.condition(WaitFor.getMovementRandomSleep(object), ((WaitFor.Condition) () -> Web.methods.bank.isOpen() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE).combine(WaitFor.getNotMovingCondition())) == WaitFor.Return.SUCCESS;
     }
 
 }

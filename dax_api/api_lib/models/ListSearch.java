@@ -1,18 +1,17 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 
 import java.util.List;
 
 
-@DoNotRename
+
 public class ListSearch {
 
-    @DoNotRename
+
     private int amount;
 
-    @DoNotRename
+
     private List<String> list;
 
     public ListSearch() {
