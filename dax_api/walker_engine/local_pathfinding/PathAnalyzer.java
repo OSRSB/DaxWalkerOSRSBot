@@ -1,5 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding;
 
+import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.PathFindingNode;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.bfs.BFS;
@@ -70,7 +71,7 @@ public class PathAnalyzer {
                 }
                 return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
             }
-            if (!Projection.isInMinimap(Projection.tileToMinimap(new WalkerTile(nextNode.getX(), nextNode.getY(), nextNode.getPlane())))){
+            if (!Web.methods.calc.tileOnMap(new WalkerTile(nextNode.getX(), nextNode.getY(), nextNode.getPlane()))){
                 furthestReachable = current;
                 if (next != null) {
                     return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current, next);

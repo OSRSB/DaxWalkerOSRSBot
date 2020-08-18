@@ -4,24 +4,13 @@ import net.runelite.api.NPC;
 import net.runelite.client.rsb.internal.wrappers.Filter;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.InterfaceHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.wrappers.RSCharacter;
 import net.runelite.client.rsb.wrappers.RSNPC;
 import net.runelite.client.rsb.wrappers.RSPlayer;
-import org.tribot.api.General;
-import org.tribot.api.input.Keyboard;
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.NPCs;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSCharacter;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSPlayer;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
-import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.wrappers.RSWidget;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -103,7 +92,7 @@ public class NPCInteraction implements Loggable {
     }
 
     public static boolean isConversationWindowUp(){
-        return Arrays.stream(ALL_WINDOWS).anyMatch(Interfaces::isInterfaceValid);
+        return Arrays.stream(ALL_WINDOWS).anyMatch(Web.methods.interfaces::isValid);
     };
 
     public static void handleConversationRegex(String regex){
@@ -117,7 +106,7 @@ public class NPCInteraction implements Loggable {
                 continue;
             }
 
-            List<RSInterface> selectableOptions = getAllOptions(regex);
+            List<RSWidget> selectableOptions = getAllOptions(regex);
             if (selectableOptions == null || selectableOptions.size() == 0){
                 WaitFor.milliseconds(100);
                 continue;
@@ -125,7 +114,7 @@ public class NPCInteraction implements Loggable {
 
             Web.methods.web.sleep((int) StdRandom.gaussian(350, 2250, 775, 350));
             getInstance().log("Replying with option: " + selectableOptions.get(0).getText());
-            Keyboard.typeString(selectableOptions.get(0).getIndex() + "");
+            Web.methods.keyboard.sendText(selectableOptions.get(0).getIndex() + "", true);
             waitForNextOption();
         }
     }
@@ -146,20 +135,20 @@ public class NPCInteraction implements Loggable {
                 continue;
             }
 
-            List<RSInterface> selectableOptions = getAllOptions(options);
+            List<RSWidget> selectableOptions = getAllOptions(options);
             if (selectableOptions == null || selectableOptions.size() == 0){
                 WaitFor.milliseconds(150);
                 continue;
             }
 
-            for (RSInterface selected : selectableOptions){
+            for (RSWidget selected : selectableOptions){
                 if(blackList.contains(selected.getText())){
                     continue;
                 }
                 Web.methods.web.sleep((int) StdRandom.gaussian(350, 2250, 775, 350));
                 getInstance().log("Replying with option: " + selected.getText());
                 blackList.add(selected.getText());
-                Keyboard.typeString(selected.getIndex() + "");
+                Web.methods.keyboard.sendText(selected.getIndex() + "", true);
                 waitForNextOption();
                 limit = 0;
                 break;
@@ -175,12 +164,12 @@ public class NPCInteraction implements Loggable {
      *
      * @return Click here to continue conversation interface
      */
-    private static RSInterface getClickHereToContinue(){
-        List<RSInterface> list = getConversationDetails();
+    private static RSWidget getClickHereToContinue(){
+        List<RSWidget> list = getConversationDetails();
         if (list == null){
             return null;
         }
-        Optional<RSInterface> optional = list.stream().filter(rsInterface -> rsInterface.getText().equals("Click here to continue")).findAny();
+        Optional<RSWidget> optional = list.stream().filter(rsInterface -> rsInterface.getText().equals("Click here to continue")).findAny();
         return optional.isPresent() ? optional.get() : null;
     }
 
@@ -189,7 +178,7 @@ public class NPCInteraction implements Loggable {
      */
     private static void clickHereToContinue(){
         getInstance().log("Clicking continue.");
-        Keyboard.typeKeys(' ');
+        Web.methods.keyboard.sendText(" ", true);
         waitForNextOption();
     }
 
@@ -197,9 +186,9 @@ public class NPCInteraction implements Loggable {
      * Waits for chat conversation text change.
      */
     private static void waitForNextOption(){
-        List<String> interfaces = getAllInterfaces().stream().map(RSInterface::getText).collect(Collectors.toList());
+        List<String> interfaces = getAllInterfaces().stream().map(RSWidget::getText).collect(Collectors.toList());
         WaitFor.condition(5000, () -> {
-            if (!interfaces.equals(getAllInterfaces().stream().map(RSInterface::getText).collect(Collectors.toList()))){
+            if (!interfaces.equals(getAllInterfaces().stream().map(RSWidget::getText).collect(Collectors.toList()))){
                return WaitFor.Return.SUCCESS;
             }
             return WaitFor.Return.IGNORE;
@@ -210,17 +199,17 @@ public class NPCInteraction implements Loggable {
      *
      * @return List of all reply-able interfaces that has valid text.
      */
-    private static List<RSInterface> getConversationDetails(){
+    private static List<RSWidget> getConversationDetails(){
         for (int window : ALL_WINDOWS){
-            List<RSInterface> details = InterfaceHelper.getAllInterfaces(window).stream().filter(rsInterfaceChild -> {
-                if (rsInterfaceChild.getTextureID() != -1) {
+            List<RSWidget> details = InterfaceHelper.getAllInterfaces(window).stream().filter(rsInterfaceChild -> {
+                if (rsInterfaceChild.getSpriteId() != -1) {
                     return false;
                 }
                 String text = rsInterfaceChild.getText();
                 return text != null && text.length() > 0;
             }).collect(Collectors.toList());
             if (details.size() > 0) {
-                getInstance().log("Conversation Options: [" + details.stream().map(RSInterface::getText).collect(
+                getInstance().log("Conversation Options: [" + details.stream().map(RSWidget::getText).collect(
 		                Collectors.joining(", ")) + "]");
                 return details;
             }
@@ -232,8 +221,8 @@ public class NPCInteraction implements Loggable {
      *
      * @return List of all Chat interfaces
      */
-    private static List<RSInterface> getAllInterfaces(){
-        ArrayList<RSInterface> interfaces = new ArrayList<>();
+    private static List<RSWidget> getAllInterfaces(){
+        ArrayList<RSWidget> interfaces = new ArrayList<>();
         for (int window : ALL_WINDOWS) {
             interfaces.addAll(InterfaceHelper.getAllInterfaces(window));
         }
@@ -245,8 +234,8 @@ public class NPCInteraction implements Loggable {
      * @param regex
      * @return list of conversation clickable options that matches {@code regex}
      */
-    private static List<RSInterface> getAllOptions(String regex){
-        List<RSInterface> list = getConversationDetails();
+    private static List<RSWidget> getAllOptions(String regex){
+        List<RSWidget> list = getConversationDetails();
         return list != null ? list.stream().filter(rsInterface -> rsInterface.getText().matches(regex)).collect(
 		        Collectors.toList()) : null;
     }
@@ -256,9 +245,9 @@ public class NPCInteraction implements Loggable {
      * @param options
      * @return list of conversation clickable options that is contained in options.
      */
-    private static List<RSInterface> getAllOptions(String... options){
+    private static List<RSWidget> getAllOptions(String... options){
         final List<String> optionList = Arrays.stream(options).map(String::toLowerCase).collect(Collectors.toList());
-        List<RSInterface> list = getConversationDetails();
+        List<RSWidget> list = getConversationDetails();
         return list != null ? list.stream().filter(rsInterface -> optionList.contains(rsInterface.getText().trim().toLowerCase())).collect(
 		        Collectors.toList()) : null;
     }

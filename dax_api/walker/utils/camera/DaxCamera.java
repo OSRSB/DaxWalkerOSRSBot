@@ -32,12 +32,12 @@ public class DaxCamera {
         } else {
             rotationDirection = 1;
         }
-        Point point = new java.awt.Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
+        Point point = new Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
         if (!getGameScreen().contains(point)){
             Web.methods.mouse.move(AccurateMouse.getRandomPoint((getGameScreen())));
         }
 
-        point = new java.awt.Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
+        point = new Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
         Point startingPoint = point;
         Point endingPoint = new Point(startingPoint);
 

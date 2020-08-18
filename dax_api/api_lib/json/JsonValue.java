@@ -396,7 +396,7 @@ public abstract class JsonValue implements Serializable {
    * Writes the JSON representation of this value to the given writer in its minimal form, without
    * any additional whitespace.
    * <p>
-   * Writing performance can be improved by using a {@link java.io.BufferedWriter BufferedWriter}.
+   * Writing performance can be improved by using a {@link BufferedWriter BufferedWriter}.
    * </p>
    *
    * @param writer
@@ -411,7 +411,7 @@ public abstract class JsonValue implements Serializable {
   /**
    * Writes the JSON representation of this value to the given writer using the given formatting.
    * <p>
-   * Writing performance can be improved by using a {@link java.io.BufferedWriter BufferedWriter}.
+   * Writing performance can be improved by using a {@link BufferedWriter BufferedWriter}.
    * </p>
    *
    * @param writer

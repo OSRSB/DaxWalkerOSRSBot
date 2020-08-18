@@ -34,7 +34,7 @@ public enum RuneElement {
         }
         RSItem[] items = Web.methods.inventory.find(new Filter<RSItem>() {
             @Override
-            public boolean accept(RSItem rsItem) {
+            public boolean test(RSItem rsItem) {
                 String name = getItemName(rsItem).toLowerCase();
 
                 if (!name.contains("rune")) {
@@ -55,7 +55,7 @@ public enum RuneElement {
     private boolean haveStaff() {
         return Web.methods.equipment.find(new Filter<RSItem>() {
             @Override
-            public boolean accept(RSItem rsItem) {
+            public boolean test(RSItem rsItem) {
                 String name = getItemName(rsItem).toLowerCase();
                 if (!name.contains("staff")) {
                     return false;

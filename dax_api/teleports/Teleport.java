@@ -615,19 +615,24 @@ public enum Teleport {
 	}
 
 	private static boolean inMembersWorld() {
-		return WorldHelper.isMember(WorldHopper.getWorld());
+		return WorldHelper.isMember(Web.methods.worldHopper.getWorld());
 	}
 
 	private static Predicate<RSItem> notNotedFilter() {
-		return rsItem -> rsItem.getDefinition() != null && !rsItem.getDefinition().isNoted();
+		return rsItem -> rsItem.getDefinition() != null && rsItem.getDefinition().getNote() != 799;
 	}
 
 	private static boolean itemAction(String name, String... actions) {
-		RSItem[] items = Web.methods.inventory.find(name);
+		RSItem[] items = Web.methods.inventory.getItems(Web.methods.inventory.getItemID(name));
 		if (items.length == 0) {
 			return false;
 		}
-		return items[0].doAction(actions);
+		for (String action : actions) {
+			if (items[0].doAction(action)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
@@ -662,8 +667,8 @@ public enum Teleport {
 			return false;
 		for(RSWidget child:children){
 			String txt = child.getText();
-			if(txt != null && General.stripFormatting(txt).matches(regex)){
-				Keyboard.typeString(General.stripFormatting(txt).substring(0,1));
+			if(txt != null && Web.methods.menu.stripFormatting(txt).matches(regex)){
+				Web.methods.keyboard.sendText(Web.methods.menu.stripFormatting(txt).substring(0,1), true);
 				return true;
 			}
 		}

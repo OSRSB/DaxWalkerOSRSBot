@@ -64,7 +64,7 @@ public class MasterScrollBook {
 		
 		//Sets the teleport as the default left-click option of the book.
 		public boolean setAsDefault(){
-			if(NPCChat.getOptions() != null){
+			if(Web.methods.npcChat.getOptions() != null){
 				String text = getDefaultTeleportText();
 				if(text.contains(this.getName())){
 					return Web.methods.npcChat.selectOption("Yes", true);

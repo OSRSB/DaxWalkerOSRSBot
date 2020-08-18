@@ -69,7 +69,7 @@ public class DefaultObjectHandler implements MoveTaskHandler, DaxLogger {
     }
 
     private RSObject[] getValid(MoveTask moveTask) {
-        RSObject[] objects = Objects.findNearest(15, filter());
+        RSObject[] objects = new RSObject[]{Web.methods.objects.getNearest(filter())};
 
         if (getDirection(moveTask) == Direction.UP) {
             log("This object is leading us upwards.");

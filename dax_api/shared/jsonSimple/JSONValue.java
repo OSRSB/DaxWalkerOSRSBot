@@ -4,8 +4,9 @@
  */
 package net.runelite.client.rsb.walker.dax_api.shared.jsonSimple;
 
-import scripts.dax_api.shared.jsonSimple.parser.JSONParser;
-import scripts.dax_api.shared.jsonSimple.parser.ParseException;
+
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.parser.JSONParser;
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.parser.ParseException;
 
 import java.io.*;
 import java.util.Collection;

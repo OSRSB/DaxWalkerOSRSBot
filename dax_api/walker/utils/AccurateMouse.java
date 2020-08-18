@@ -412,13 +412,13 @@ public class AccurateMouse {
             }
             polygons.add(Web.methods.calc.getTileBoundsPoly(new WalkerTile(tile), 0));
             polygons.addAll(
-                    Arrays.stream(Web.methods.objects.getAllAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(java.util.Objects::nonNull).map(RSModel::getConvexHull).filter(java.util.Objects::nonNull).collect(
+                    Arrays.stream(Web.methods.objects.getAllAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(Objects::nonNull).map(RSModel::getConvexHull).filter(Objects::nonNull).collect(
                             Collectors.toList()));
             polygons.addAll(
-                    Arrays.stream(Web.methods.groundItems.getAllAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(java.util.Objects::nonNull).map(RSModel::getConvexHull).filter(java.util.Objects::nonNull).collect(
+                    Arrays.stream(Web.methods.groundItems.getAllAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(Objects::nonNull).map(RSModel::getConvexHull).filter(Objects::nonNull).collect(
                             Collectors.toList()));
             polygons.addAll(
-                    Arrays.stream(Web.methods.npcs.getAll(Filters.NPCs.tileEquals(new WalkerTile(tile)))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(java.util.Objects::nonNull).map(RSModel::getConvexHull).filter(java.util.Objects::nonNull).collect(
+                    Arrays.stream(Web.methods.npcs.getAll(Filters.NPCs.tileEquals(new WalkerTile(tile)))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(Objects::nonNull).map(RSModel::getConvexHull).filter(Objects::nonNull).collect(
                             Collectors.toList()));
         }
 

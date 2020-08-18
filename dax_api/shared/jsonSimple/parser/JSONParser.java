@@ -4,8 +4,10 @@
  */
 package net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.parser;
 
-import scripts.dax_api.shared.jsonSimple.JSONArray;
-import scripts.dax_api.shared.jsonSimple.JSONObject;
+
+
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONArray;
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONObject;
 
 import java.io.IOException;
 import java.io.Reader;

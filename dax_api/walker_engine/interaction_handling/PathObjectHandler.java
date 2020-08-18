@@ -2,7 +2,9 @@ package net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handlin
 
 import net.runelite.api.ObjectComposition;
 import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.methods.Calculations;
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.Filters;
 import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSObjectHelper;
@@ -48,55 +50,55 @@ public class PathObjectHandler implements Loggable {
         WEB("Web", "Slash", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Web"), true)
-                                .combine(Filters.Objects.actionsContains("Slash"), true)).length > 0;
+                                .combine(Filters.Objects.actionsContains("Slash"), true)).isClickable();
             }
         }),
         ROCKFALL("Rockfall", "Mine", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Rockfall"), true)
-                                .combine(Filters.Objects.actionsContains("Mine"), true)).length > 0;
+                                .combine(Filters.Objects.actionsContains("Mine"), true)).isClickable();
             }
         }),
         ROOTS("Roots", "Chop", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Roots"), true)
-                                .combine(Filters.Objects.actionsContains("Chop"), true)).length > 0;
+                                .combine(Filters.Objects.actionsContains("Chop"), true)).isClickable();
             }
         }),
         ROCK_SLIDE("Rockslide", "Climb-over", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Rockslide"), true)
-                                .combine(Filters.Objects.actionsContains("Climb-over"), true)).length > 0;
+                                .combine(Filters.Objects.actionsContains("Climb-over"), true)).isClickable();
             }
         }),
         ROOT("Root", "Step-over", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Root"), true)
-                                .combine(Filters.Objects.actionsContains("Step-over"), true)).length > 0;
+                                .combine(Filters.Objects.actionsContains("Step-over"), true)).isClickable();
             }
         }),
         BRIMHAVEN_VINES("Vines", "Chop-down", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Vines"), true)
-                                .combine(Filters.Objects.actionsContains("Chop-down"), true)).length > 0;
+                                .combine(Filters.Objects.actionsContains("Chop-down"), true)).isClickable();
             }
         }),
         AVA_BOOKCASE ("Bookcase", "Search", new WalkerTile(3097, 3359, 0), new SpecialCondition() {
@@ -213,7 +215,7 @@ public class PathObjectHandler implements Loggable {
             Filter<RSObject> specialObjectFilter = Filters.Objects.nameEquals(specialObject.getName())
                     .combine(Filters.Objects.actionsContains(specialObject.getAction()), true)
                     .combine(Filters.Objects.inArea(new RSArea(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)), true);
-            interactiveObjects = Objects.findNearest(15, specialObjectFilter);
+            interactiveObjects = Web.methods.objects.getAll(specialObjectFilter);
         }
 
         if (interactiveObjects.length == 0) {
@@ -241,7 +243,7 @@ public class PathObjectHandler implements Loggable {
                 return false;
             }
         }
-        if (WaitFor.condition(General.random(5000, 8000), () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+        if (WaitFor.condition(StdRandom.uniform(5000, 8000), () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
             return false;
         }
 
@@ -253,7 +255,7 @@ public class PathObjectHandler implements Loggable {
                 case WEB:
                     List<RSObject> webs;
                     int iterations = 0;
-                    while ((webs = Arrays.stream(Objects.getAt(object.getLocation()))
+                    while ((webs = Arrays.stream(Web.methods.objects.getAllAt(object.getLocation()))
                             .filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
                                     .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
                         RSObject web = webs.get(0);
@@ -263,15 +265,15 @@ public class PathObjectHandler implements Loggable {
                             useBladeOnWeb(web);
                         }
                         if(Web.methods.chooseOption.getHoverText().contains("->")){
-                            Walking.blindWalkTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
+                            Web.methods.walking.walkTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
                         }
                         if (web.getLocation().distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) <= 1) {
-                            WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
+                            WaitFor.milliseconds((int) StdRandom.gaussian(50, 800, 250, 150));
                         } else {
                             WaitFor.milliseconds(2000, 4000);
                         }
                         if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null &&
-                                (webs = Arrays.stream(Objects.getAt(object.getLocation())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
+                                (webs = Arrays.stream(Web.methods.objects.getAllAt(object.getLocation())).filter(object1 -> Arrays.stream(RSObjectHelper.getActions(object1))
                                         .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() == 0){
                             successfulClick = true;
                             break;
@@ -283,12 +285,12 @@ public class PathObjectHandler implements Loggable {
                     break;
                 case ARDY_DOOR_LOCK_SIDE:
                 case YANILLE_DOOR_LOCK_SIDE:
-                    for (int i = 0; i < General.random(15, 25); i++) {
+                    for (int i = 0; i < StdRandom.uniform(15, 25); i++) {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){
                             continue;
                         }
                         if (new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) > 1){
-                            WaitFor.condition(General.random(3000, 4000), () -> new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                            WaitFor.condition(StdRandom.uniform(3000, 4000), () -> new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         }
                         if (new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).equals(new WalkerTile(2564, 3356, 0))){
                             successfulClick = true;
@@ -329,7 +331,7 @@ public class PathObjectHandler implements Loggable {
         boolean strongholdDoor = isStrongholdDoor(object);
 
         if (strongholdDoor){
-            if (WaitFor.condition(General.random(6700, 7800), () -> {
+            if (WaitFor.condition(StdRandom.uniform(6700, 7800), () -> {
                 WalkerTile playerPosition = new WalkerTile(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
                 if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), destinationDetails.getNextTile(), 50)) {
                     WaitFor.milliseconds(500, 1000);
@@ -345,7 +347,7 @@ public class PathObjectHandler implements Loggable {
             }
         }
 
-        WaitFor.condition(General.random(8500, 11000), () -> {
+        WaitFor.condition(StdRandom.uniform(8500, 11000), () -> {
             DoomsToggle.handleToggle();
             PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
             if (NPCInteraction.isConversationWindowUp()) {
@@ -365,13 +367,13 @@ public class PathObjectHandler implements Loggable {
             return WaitFor.Return.IGNORE;
         });
         if (strongholdDoor){
-            General.sleep(800, 1200);
+            Web.methods.web.sleep(StdRandom.uniform(800, 1200));
         }
         return true;
     }
 
     public static RSObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-        RSObject[] objects = Objects.getAll(25, interactiveObjectFilter(x, y, z, destinationDetails));
+        RSObject[] objects = Web.methods.objects.getAll(interactiveObjectFilter(x, y, z, destinationDetails));
         final WalkerTile base = new WalkerTile(x, y, z);
         Arrays.sort(objects, (o1, o2) -> {
             int c = Integer.compare(o1.getLocation().distanceTo(base), o2.getLocation().distanceTo(base));
@@ -428,7 +430,7 @@ public class PathObjectHandler implements Loggable {
         final WalkerTile position = new WalkerTile(x, y, z);
         return new Filter<RSObject>() {
             @Override
-            public boolean accept(RSObject rsObject) {
+            public boolean test(RSObject rsObject) {
                 ObjectComposition def = rsObject.getDef();
                 if (def == null){
                     return false;
@@ -443,7 +445,7 @@ public class PathObjectHandler implements Loggable {
                 if (rsObject.getLocation().distanceTo(destinationDetails.getDestination().getWalkerTile()) > 5) {
                     return false;
                 }
-                if (Arrays.stream(rsObject.getAllTiles()).noneMatch(WalkerTile -> WalkerTile.distanceTo(position) <= 2)) {
+                if (Arrays.stream(rsObject.getArea().getTileArray()).noneMatch(WalkerTile -> Web.methods.calc.distanceBetween(WalkerTile, position) <= 2)) {
                     return false;
                 }
                 List<String> options = Arrays.asList(def.getActions());
@@ -553,7 +555,7 @@ public class PathObjectHandler implements Loggable {
     private static boolean handleTrapDoor(RSObject object){
         if (getActions(object).contains("Open")){
             if (!InteractionHelper.click(object, "Open", () -> {
-                RSObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").combine(Filters.Objects.inArea(new RSArea(object, 2)), true));
+                RSObject[] objects = new RSObject[]{Web.methods.objects.getNearest(Filters.Objects.actionsContains("Climb-down").combine(Filters.Objects.inArea(new RSArea(object, 2)), true))};
                 if (objects.length > 0 && getActions(objects[0]).contains("Climb-down")){
                     return WaitFor.Return.SUCCESS;
                 }
@@ -561,7 +563,7 @@ public class PathObjectHandler implements Loggable {
             })){
                 return false;
             } else {
-                RSObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").combine(Filters.Objects.inArea(new RSArea(object, 2)), true));
+                RSObject[] objects = new RSObject[] {Web.methods.objects.getNearest(Filters.Objects.actionsContains("Climb-down").combine(Filters.Objects.inArea(new RSArea(object, 2)), true))};
                 return objects.length > 0 && handleTrapDoor(objects[0]);
             }
         }
@@ -593,16 +595,15 @@ public class PathObjectHandler implements Loggable {
     private static List<Integer> SLASH_WEAPONS = new ArrayList<>(Arrays.asList(1,4,9,10,12,17,20,21));
 
     private static boolean canLeftclickWeb(){
-        RSVarBit weaponType = RSVarBit.get(357);
-        return (weaponType != null && SLASH_WEAPONS.contains(weaponType.getValue())) || Inventory.find("Knife").length > 0;
+        return (SLASH_WEAPONS.contains(Web.methods.client.getVarbitValue(357))) || Web.methods.inventory.getItems(Web.methods.inventory.getItemID("Knife")).length > 0;
     }
     private static boolean useBladeOnWeb(RSObject web){
         if(!Web.methods.chooseOption.getHoverText().contains("->")){
-            RSItem[] slashable = Inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
-            if(slashable.length == 0 || !slashable[0].click("Use"))
+            RSItem[] slashable = Web.methods.inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
+            if(slashable.length == 0 || !slashable[0].doAction("Use"))
                 return false;
         }
-        return InteractionHelper.click(web, Game.getUptext());
+        return InteractionHelper.click(web, Web.methods.chooseOption.getHoverText());
     }
 
 }

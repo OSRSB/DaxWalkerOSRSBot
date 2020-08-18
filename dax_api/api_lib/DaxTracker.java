@@ -1,6 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib;
 
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.Timer;
 import net.runelite.client.rsb.walker.dax_api.api_lib.models.*;
 import net.runelite.client.rsb.walker.dax_api.api_lib.utils.DaxTrackerProperty;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
@@ -24,11 +25,6 @@ public class DaxTracker implements Loggable {
     public static ListSearch usersOnline(Period period) {
         return DaxTrackerServerApi.getInstance().usersOnline(null, period);
     }
-
-    public static PropertyStats getStats(String propertyName) {
-        return getStats(null, propertyName);
-    }
-
 
     /**
 
@@ -68,7 +64,7 @@ public class DaxTracker implements Loggable {
     }
 
     public boolean update() {
-        if (Timing.timeFromMark(lastUpdated) < 10000) {
+        if (Timer.timeFromMark(lastUpdated) < 10000) {
             return false;
         }
 
@@ -99,7 +95,7 @@ public class DaxTracker implements Loggable {
         new Thread(() -> {
            while (!isStopped()) {
                update();
-               General.sleep(15000);
+               Web.methods.web.sleep(15000);
            }
         }).start();
 
