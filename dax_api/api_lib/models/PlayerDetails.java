@@ -6,8 +6,6 @@ import com.google.gson.JsonElement;
 import net.runelite.api.Skill;
 import net.runelite.client.rsb.methods.Skills;
 import net.runelite.client.rsb.methods.Web;
-import org.tribot.api2007.*;
-import org.tribot.api2007.types.RSVarBit;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,32 +50,32 @@ public class PlayerDetails {
 				        Collectors.toList());
 
         return new PlayerDetails(
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.ATTACK.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.DEFENCE.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.STRENGTH.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.HITPOINTS.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.RANGED.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.PRAYER.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.MAGIC.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.COOKING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.WOODCUTTING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FLETCHING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FISHING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FIREMAKING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.CRAFTING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.SMITHING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.MINING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.HERBLORE.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.AGILITY.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.THIEVING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.SLAYER.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FARMING.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.RUNECRAFT.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.HUNTER.getName()),
-                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.CONSTRUCTION.getName()),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.ATTACK.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.DEFENCE.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.STRENGTH.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.HITPOINTS.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.RANGED.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.PRAYER.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.MAGIC.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.COOKING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.WOODCUTTING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FLETCHING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FISHING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FIREMAKING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.CRAFTING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.SMITHING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.MINING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.HERBLORE.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.AGILITY.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.THIEVING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.SLAYER.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.FARMING.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.RUNECRAFT.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.HUNTER.getName())),
+                Web.methods.skills.getRealLevel(Skills.getIndex(Skill.CONSTRUCTION.getName())),
                 settings,
                 varbit,
-                WorldHopper.isMembers(WorldHopper.getWorld()),
+                Web.methods.worldHopper.isCurrentWorldMembers(),
                 equipment,
                 inventory
         );

@@ -1,7 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.path;
 
+import net.runelite.client.rsb.methods.Calculations;
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.AStarNode;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.Reachable;
 import net.runelite.client.rsb.wrappers.RSCharacter;
@@ -209,8 +210,8 @@ public class DaxPathFinder {
 
         WalkerTile previousTile = path.get(0);
         for (int i = 1; i < path.size(); i++) {
-            Point point1 = Projection.tileToScreen(path.get(i), 0);
-            Point point2 = Projection.tileToScreen(previousTile, 0);
+            Point point1 = Calculations.convertRLPointToAWTPoint(Web.methods.calc.tileToScreen(path.get(i), 0));
+            Point point2 = Calculations.convertRLPointToAWTPoint(Web.methods.calc.tileToScreen(previousTile, 0));
             if (point1 == null || point1.x == -1 || point2 == null || point2.x == -1) {
                 continue;
             }
@@ -238,8 +239,8 @@ public class DaxPathFinder {
                     continue;
                 }
 
-                Point point1 = Projection.tileToScreen(tile, 0);
-                Point point2 = Projection.tileToScreen(parent, 0);
+                Point point1 = Calculations.convertRLPointToAWTPoint(Web.methods.calc.tileToScreen(tile, 0));
+                Point point2 = Calculations.convertRLPointToAWTPoint(Web.methods.calc.tileToScreen(parent, 0));
 
                 if (point1 == null || point1.x == -1 || point2 == null || point2.x == -1) {
                     continue;

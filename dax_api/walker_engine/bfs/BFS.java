@@ -1,7 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.bfs;
 
 
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.NodeInfo;
 import net.runelite.client.rsb.walker.dax_api.shared.PathFindingNode;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;

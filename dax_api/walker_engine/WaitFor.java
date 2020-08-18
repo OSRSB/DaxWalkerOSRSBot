@@ -2,7 +2,9 @@ package net.runelite.client.rsb.walker.dax_api.walker_engine;
 
 
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.util.Timer;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.wrappers.RSCharacter;
 import net.runelite.client.rsb.wrappers.RSGroundItem;
 import net.runelite.client.rsb.wrappers.RSObject;
@@ -22,7 +24,7 @@ public class WaitFor {
 
             @Override
             public Return active() {
-                if (Timing.timeFromMark(startTime) > movingDelay && initialTile.equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
+                if (Timer.timeFromMark(startTime) > movingDelay && initialTile.equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
                         && !Web.methods.players.getMyPlayer().isLocalPlayerMoving()) {
                     return Return.FAIL;
                 }
@@ -32,17 +34,17 @@ public class WaitFor {
     }
 
     public static int getMovementRandomSleep(Positionable positionable){
-        return getMovementRandomSleep((int) Web.methods.calc.distanceBetween(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()), positionable.getPosition()));
+        return getMovementRandomSleep((int) Web.methods.calc.distanceBetween(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()), positionable.getLocation()));
     }
 
     public static int getMovementRandomSleep(int distance){
-        final double multiplier =  Game.isRunOn() ? 0.3 : 0.6;
+        final double multiplier =  Web.methods.walking.isRunEnabled() ? 0.3 : 0.6;
         final int base = random(1800, 2400);
         if (distance > 25){
             return base;
         }
         int sleep = (int) (multiplier * distance);
-        return (int)General.randomSD(base * .8, base * 1.2, base, base * 0.1) + sleep;
+        return (int) StdRandom.gaussian(base * .8, base * 1.2, base, base * 0.1) + sleep;
     }
 
 

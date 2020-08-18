@@ -1,12 +1,11 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters;
 
 import net.runelite.client.rsb.methods.Interfaces;
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSVarBit;
-import scripts.dax_api.walker_engine.navigation_utils.fairyring.FairyRing;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.util.Timer;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.FairyRing;
+import net.runelite.client.rsb.wrappers.RSWidget;
 
 public enum FirstLetter {
     A(0),
@@ -30,7 +29,7 @@ public enum FirstLetter {
             ANTI_CLOCKWISE_CHILD = 20;
 
     private static int get(){
-        return RSVarBit.get(VARBIT).getValue();
+        return Web.methods.client.getVarbitValue(VARBIT);
     }
 
     public boolean isSelected(){
@@ -45,7 +44,7 @@ public enum FirstLetter {
         int diff = current - target;
         int abs = Math.abs(diff);
         if(abs == 2){
-            return General.randomBoolean() ? turnClockwise(2) : turnAntiClockwise(2);
+            return StdRandom.uniform(0, 1) > .50 ? turnClockwise(2) : turnAntiClockwise(2);
         } else if(diff == 3 || diff == -1){
             return turnClockwise(1);
         } else {
@@ -56,27 +55,27 @@ public enum FirstLetter {
     public static boolean turnClockwise(int rotations){
         if(rotations == 0)
             return true;
-        RSInterface iface = getClockwise();
+        RSWidget iface = getClockwise();
         final int value = get();
-        return iface != null && iface.click()
-                && Timing.waitCondition(() -> get() != value ,2500)
+        return iface != null && iface.doClick()
+                && Timer.waitCondition(() -> get() != value ,2500)
                 && turnClockwise(--rotations);
     }
 
     public static boolean turnAntiClockwise(int rotations){
         if(rotations == 0)
             return true;
-        RSInterface iface = getAntiClockwise();
+        RSWidget iface = getAntiClockwise();
         final int value = get();
-        return iface != null && iface.click()
-                && Timing.waitCondition(() -> get() != value ,2500)
+        return iface != null && iface.doClick()
+                && Timer.waitCondition(() -> get() != value ,2500)
                 && turnAntiClockwise(--rotations);
     }
 
-    private static RSInterface getClockwise() {
-        return Interfaces.get(FairyRing.INTERFACE_MASTER, CLOCKWISE_CHILD);
+    private static RSWidget getClockwise() {
+        return Web.methods.interfaces.get(FairyRing.INTERFACE_MASTER, CLOCKWISE_CHILD);
     }
-    private static RSInterface getAntiClockwise() {
-        return Interfaces.get(FairyRing.INTERFACE_MASTER, ANTI_CLOCKWISE_CHILD);
+    private static RSWidget getAntiClockwise() {
+        return Web.methods.interfaces.get(FairyRing.INTERFACE_MASTER, ANTI_CLOCKWISE_CHILD);
     }
 }

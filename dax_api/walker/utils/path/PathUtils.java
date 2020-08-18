@@ -1,6 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.path;
 
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.methods.Calculations;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 
 
 import java.awt.*;
@@ -33,11 +35,11 @@ public class PathUtils {
 
         DaxPathFinder.Destination[][] map = DaxPathFinder.getMap();
         for (WalkerTile tile : reversed) {
-            Point point = Projection.tileToMinimap(tile);
+            Point point = Calculations.convertRLPointToAWTPoint(Web.methods.calc.tileToMinimap(tile));
             if (point == null) {
                 continue;
             }
-            if (DaxPathFinder.canReach(map, tile) && Projection.isInMinimap(point)) {
+            if (DaxPathFinder.canReach(map, tile) && Web.methods.calc.tileOnMap(tile)) {
                 return tile;
             }
         }
@@ -66,7 +68,7 @@ public class PathUtils {
             if (tile.distanceTo(player) > 25) {
                 continue;
             }
-            Polygon polygon = Projection.getTileBoundsPoly(tile, 0);
+            Polygon polygon = Web.methods.calc.getTileBoundsPoly(tile, 0);
             if (polygon == null) {
                 continue;
             }
@@ -75,7 +77,7 @@ public class PathUtils {
 
         WalkerTile closest = getClosestTileInPath(path);
         if (closest != null) {
-            Polygon polygon = Projection.getTileBoundsPoly(closest, 0);
+            Polygon polygon = Web.methods.calc.getTileBoundsPoly(closest, 0);
             if (polygon != null) {
                 g.setColor(new Color(205, 0, 255, 80));
                 g.fillPolygon(polygon);
@@ -89,7 +91,7 @@ public class PathUtils {
 
         WalkerTile furthestScreenTile = getFurthestReachableTileOnScreen(path);
         if (furthestScreenTile != null) {
-            Polygon polygon = Projection.getTileBoundsPoly(furthestScreenTile, 0);
+            Polygon polygon = Web.methods.calc.getTileBoundsPoly(furthestScreenTile, 0);
             if (polygon != null) {
                 g.setColor(new Color(255, 0, 11, 157));
                 g.fillPolygon(polygon);
@@ -103,7 +105,7 @@ public class PathUtils {
 
         WalkerTile furthestMapTile = getFurthestReachableTileInMinimap(path);
         if (furthestMapTile != null) {
-            Point p = Projection.tileToMinimap(furthestMapTile);
+            Point p = Calculations.convertRLPointToAWTPoint(Web.methods.calc.tileToMinimap(furthestMapTile));
             if (p != null) {
                 g.setColor(new Color(255, 0, 11, 157));
                 g.fillRect(p.x - 3, p.y - 3, 6, 6);
@@ -117,7 +119,7 @@ public class PathUtils {
 
         WalkerTile nextTile = getNextTileInPath(furthestMapTile, path);
         if (nextTile != null) {
-            Polygon polygon = Projection.getTileBoundsPoly(nextTile, 0);
+            Polygon polygon = Web.methods.calc.getTileBoundsPoly(nextTile, 0);
             if (polygon != null) {
                 g.setColor(new Color(255, 242, 0, 157));
                 g.fillPolygon(polygon);

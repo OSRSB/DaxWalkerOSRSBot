@@ -1,24 +1,16 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils;
 
 import net.runelite.client.rsb.methods.Interfaces;
+import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
+import net.runelite.client.rsb.wrappers.RSWidget;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.InterfaceHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.NPCInteraction;
 import net.runelite.client.rsb.wrappers.RSArea;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSArea;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.WalkerTile;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
-import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
-import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
-
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -57,8 +49,8 @@ public class Charter implements Loggable {
     }
 
     private static boolean openCharterMenu() {
-        return Interfaces.isInterfaceValid(CHARTER_INTERFACE_MASTER) ||
-                InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsEquals("Charter")), "Charter", () -> Interfaces.isInterfaceValid(CHARTER_INTERFACE_MASTER) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+        return Web.methods.interfaces.get(CHARTER_INTERFACE_MASTER).isValid() ||
+                InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsEquals("Charter")), "Charter", () -> Web.methods.interfaces.get(CHARTER_INTERFACE_MASTER).isValid() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
     }
 
     private static HashMap<LocationProperty, Location> getCharterLocations(){
@@ -67,7 +59,7 @@ public class Charter implements Loggable {
 
                 rsInterface -> rsInterface != null
                 && rsInterface.getFontID() == 495
-                && !rsInterface.isHidden()
+                && !rsInterface.isVisible()
                 && rsInterface.isTextShadowed())
 
                 .collect(Collectors.toList())
@@ -135,9 +127,9 @@ public class Charter implements Loggable {
     public static class Location {
 
         private String name;
-        private RSInterface rsInterface;
+        private RSWidget rsInterface;
 
-        private Location(RSInterface rsInterface){
+        private Location(RSWidget rsInterface){
             this.name = rsInterface.getText();
             this.rsInterface = rsInterface;
         }
@@ -146,12 +138,16 @@ public class Charter implements Loggable {
             return name;
         }
 
-        public RSInterface getRsInterface() {
+        public RSWidget getRsInterface() {
             return rsInterface;
         }
 
         public boolean click(String... options){
-            return rsInterface.click(options);
+            for (String option : options) {
+                if (rsInterface.doAction(option))
+                    return true;
+            }
+            return false;
         }
 
         @Override

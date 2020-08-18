@@ -1,7 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.teleports.teleport_utils;
 
-import org.tribot.api2007.Combat;
-import org.tribot.api2007.types.RSVarBit;
+import net.runelite.client.rsb.methods.Web;
 
 public class TeleportConstants {
 
@@ -14,11 +13,11 @@ public class TeleportConstants {
             GE_TELEPORT_VARBIT = 4585, SPELLBOOK_INTERFACE_MASTER = 218, SCROLL_INTERFACE_MASTER = 187;
 
     private static int getWildernessLevel() {
-        return Combat.getWildernessLevel();
+        return Web.methods.combat.getWildernessLevel();
     }
 
     public static boolean isVarrockTeleportAtGE(){
-        return RSVarBit.get(GE_TELEPORT_VARBIT).getValue() > 0;
+        return Web.methods.client.getVarbitValue(GE_TELEPORT_VARBIT) > 0;
     }
 
 }

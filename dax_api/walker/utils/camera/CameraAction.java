@@ -1,10 +1,9 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.camera;
 
 
-import net.runelite.api.Varbits;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.util.StdRandom;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.movement.WalkingQueue;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
@@ -38,9 +37,7 @@ public class CameraAction {
             AsynchronousCamera.focus(tile);
             Point currentMousePosition = new Point (Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY());
             if (!HOVER_BOX.contains(currentMousePosition)) {
-                if (!HOVER_BOX.contains(currentMousePosition)) {
-                    Web.methods.mouse.move(AccurateMouse.getRandomPoint(HOVER_BOX));
-                }
+                Web.methods.mouse.move(AccurateMouse.getRandomPoint(HOVER_BOX));
             }
             return WaitFor.condition(StdRandom.uniform(3000, 5000), () -> tile.isOnScreen() && tile.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }

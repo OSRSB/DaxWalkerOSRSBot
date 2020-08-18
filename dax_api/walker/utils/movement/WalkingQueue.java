@@ -1,7 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.movement;
 
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.wrappers.RSCharacter;
 
 import java.util.ArrayList;

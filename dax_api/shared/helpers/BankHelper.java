@@ -3,7 +3,7 @@ package net.runelite.client.rsb.walker.dax_api.shared.helpers;
 import net.runelite.client.rsb.internal.wrappers.Filter;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import net.runelite.client.rsb.wrappers.RSObject;
@@ -52,7 +52,7 @@ public class BankHelper {
     }
 
     public static HashSet<WalkerTile> getBuilding(Positionable positionable){
-        return computeBuilding(positionable, Game.getSceneFlags(), new HashSet<>());
+        return computeBuilding(positionable, Web.methods.game.getSceneFlags(), new HashSet<>());
     }
 
     private static HashSet<WalkerTile> computeBuilding(Positionable positionable, byte[][][] sceneFlags, HashSet<WalkerTile> tiles){

@@ -1,7 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.shared;
 
 
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.Collection;
 import java.util.HashSet;

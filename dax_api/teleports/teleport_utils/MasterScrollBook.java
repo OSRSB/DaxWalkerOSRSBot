@@ -1,16 +1,12 @@
 package net.runelite.client.rsb.walker.dax_api.teleports.teleport_utils;
 
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.util.Timer;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.wrappers.RSItem;
+import net.runelite.client.rsb.wrappers.RSWidget;
 import net.runelite.client.rsb.wrappers.common.Clickable07;
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api.interfaces.Clickable07;
-import org.tribot.api2007.*;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.WalkerTile;
-import org.tribot.api2007.types.RSVarBit;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,8 +49,7 @@ public class MasterScrollBook {
 		
 		//Returns the number of scrolls stored in the book.
 		public int getCount(){
-			RSVarBit var = RSVarBit.get(varbit);
-			return var != null ? var.getValue() : 0;
+			return Web.methods.client.getVarbitValue(varbit);
 		}
 		
 		//Returns the name of the teleport.
@@ -72,16 +67,16 @@ public class MasterScrollBook {
 			if(NPCChat.getOptions() != null){
 				String text = getDefaultTeleportText();
 				if(text.contains(this.getName())){
-					return NPCChat.selectOption("Yes", true);
+					return Web.methods.npcChat.selectOption("Yes", true);
 				}
 			}
 			if(!isOpen()){
 				openBook();
 			}
-			RSInterface target = getInterface(this);
+			RSWidget target = getInterface(this);
 			if(target == null)
 				return false;
-			return click(target,"Set as default") && waitForOptions() && NPCChat.selectOption("Yes", true);
+			return click(target,"Set as default") && waitForOptions() && Web.methods.npcChat.selectOption("Yes", true);
 			
 		}
 		
@@ -95,7 +90,7 @@ public class MasterScrollBook {
 				return setAsDefault() && use();
 			if(!isOpen() && !openBook())
 				return false;
-			RSInterface target = getInterface(this);
+			RSWidget target = getInterface(this);
 			return target != null && click(target, "Activate") && waitTillAtDestination(this);
 		}
 		
@@ -118,9 +113,8 @@ public class MasterScrollBook {
 	}
 	
 	public static Teleports getDefault(){
-		RSVarBit defaultTeleport = RSVarBit.get(DEFAULT_VARBIT);
-		int value;
-		if(defaultTeleport == null || (value = defaultTeleport.getValue()) == 0)
+		int value = Web.methods.client.getVarbitValue(DEFAULT_VARBIT);
+		if(value == 0)
 			return null;
 		return Teleports.values()[value-1];
 	}
@@ -128,25 +122,25 @@ public class MasterScrollBook {
 	//Removes the default left click teleport option.
 	public static boolean removeDefault(){
 		RSItem[] book = getBook();
-		if(Game.isUptext("->")){
+		if(Web.methods.chooseOption.getHoverText().contains("->")){
 			resetUptext();
 		}
-		return book.length > 0 && click(book[0],"Remove default") && waitForOptions() && NPCChat.selectOption("Yes", true);
+		return book.length > 0 && click(book[0],"Remove default") && waitForOptions() && Web.methods.npcChat.selectOption("Yes", true);
 	}
 	
 	//Caches the index and returns the RSInterface associated with the selected teleport.
-	private static RSInterface getInterface(Teleports teleport){
+	private static RSWidget getInterface(Teleports teleport){
 		if(cache.containsKey(teleport.getName())){
-			return Interfaces.get(INTERFACE_MASTER,cache.get(teleport.getName()));
+			return Web.methods.interfaces.get(INTERFACE_MASTER,cache.get(teleport.getName()));
 		}
-		RSInterface master = Interfaces.get(INTERFACE_MASTER);
+		RSWidget master = Web.methods.interfaces.get(INTERFACE_MASTER);
 		if(master == null)
 			return null;
-		for(RSInterface child:master.getChildren()){
-			String name = child.getComponentName();
+		for(RSWidget child:master.getComponents()){
+			String name = child.getName();
 			if(name == null){
 				continue;
-			} else if(name.startsWith("<") && General.stripFormatting(name).contains(teleport.getName())){
+			} else if(name.startsWith("<") && Web.methods.menu.stripFormatting(name).contains(teleport.getName())){
 				cache.put(teleport.getName(), child.getIndex());
 				return child;
 			}
@@ -156,13 +150,13 @@ public class MasterScrollBook {
 	
 	//Returns true if the Master scroll book interface is open.
 	public static boolean isOpen(){
-		return Interfaces.isInterfaceSubstantiated(INTERFACE_MASTER);
+		return Web.methods.interfaces.isInterfaceSubstantiated(INTERFACE_MASTER);
 	}
 	
 	//Opens the master scroll book interface.
 	public static boolean openBook(){
 		RSItem[] book = getBook();
-		if(Game.isUptext("->")){
+		if(Web.methods.chooseOption.getHoverText().contains("->")){
 			resetUptext();
 		}
 		return book.length > 0 && click(book[0],"Open") && waitForBookToOpen();
@@ -178,15 +172,15 @@ public class MasterScrollBook {
 	}
 
 	private static RSItem[] getBook(){
-		return Inventory.find("Master scroll book");
+		return Web.methods.inventory.getItems(Web.methods.inventory.getItemID("Master scroll book"));
 	}
 	
 	private static boolean waitForBookToOpen(){
-		return Timing.waitCondition(new BooleanSupplier(){
+		return Timer.waitCondition(new BooleanSupplier(){
 
 			@Override
 			public boolean getAsBoolean() {
-				General.sleep(50,200);
+				Web.methods.web.sleep(StdRandom.uniform(50,200));
 				return isOpen();
 			}
 			
@@ -194,12 +188,12 @@ public class MasterScrollBook {
 	}
 	
 	private static boolean waitForOptions(){
-		return Timing.waitCondition(new BooleanSupplier(){
+		return Timer.waitCondition(new BooleanSupplier(){
 
 			@Override
 			public boolean getAsBoolean() {
-				General.sleep(50,200);
-				return NPCChat.getOptions().length > 0;
+				Web.methods.web.sleep(StdRandom.uniform(50,200));
+				return Web.methods.npcChat.getOptions().length > 0;
 			}
 			
 		}, 5000);
@@ -207,13 +201,13 @@ public class MasterScrollBook {
 	
 	//Checks which scroll we are setting to default currently.
 	private static String getDefaultTeleportText(){
-		RSInterface master = Interfaces.get(SELECT_OPTION_MASTER,SELECT_OPTION_CHILD);
+		RSWidget master = Web.methods.interfaces.get(SELECT_OPTION_MASTER,SELECT_OPTION_CHILD);
 		if(master == null)
 			return null;
-		RSInterface[] ifaces = master.getChildren();
+		RSWidget[] ifaces = master.getComponents();
 		if(ifaces == null)
 			return null;
-		for(RSInterface iface:ifaces){
+		for(RSWidget iface:ifaces){
 			String txt = iface.getText();
 			if(txt == null || !txt.startsWith("Set"))
 				continue;
@@ -224,12 +218,12 @@ public class MasterScrollBook {
 	
 	//Resets uptext.
 	private static void resetUptext(){
-		RSInterface master = Interfaces.get(GAMETABS_INTERFACE_MASTER);
-		RSInterface[] children = master.getChildren();
+		RSWidget master = Web.methods.interfaces.get(GAMETABS_INTERFACE_MASTER);
+		RSWidget[] children = master.getComponents();
 		if(children == null)
 			return;
-		RSInterface inventory = null;
-		for(RSInterface child:children){
+		RSWidget inventory = null;
+		for(RSWidget child:children){
 			String[] actions = child.getActions();
 			if(actions == null || actions.length == 0)
 				continue;
@@ -239,15 +233,15 @@ public class MasterScrollBook {
 			}
 		}
 		if(inventory != null)
-			inventory.click();
+			inventory.doClick();
 	}
 	
 	private static boolean waitTillAtDestination(Teleports location){
-		return Timing.waitCondition(new BooleanSupplier(){
+		return Timer.waitCondition(new BooleanSupplier(){
 
 			@Override
 			public boolean getAsBoolean() {
-				General.sleep(50,200);
+				Web.methods.web.sleep(StdRandom.uniform(50,200));
 				return location.getDestination().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10;
 			}
 			
@@ -255,10 +249,10 @@ public class MasterScrollBook {
 	}
 	
 	private static boolean click(Clickable07 clickable, String action){
-		if(Game.isUptext("->") && !action.contains("->")){
+		if(Web.methods.chooseOption.getHoverText().contains("->") && !action.contains("->")){
 			resetUptext();
 		}
-		return clickable.click(action);
+		return clickable.doAction(action);
 	}
 	
 	

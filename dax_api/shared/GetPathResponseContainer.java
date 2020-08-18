@@ -1,8 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.shared;
 
-import org.tribot.api2007.types.WalkerTile;
-import scripts.dax_api.shared.jsonSimple.JSONObject;
-import scripts.dax_api.shared.jsonSimple.JSONValue;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONObject;
+import net.runelite.client.rsb.walker.dax_api.shared.jsonSimple.JSONValue;
 
 import java.util.ArrayList;
 

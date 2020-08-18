@@ -2,7 +2,7 @@ package net.runelite.client.rsb.walker.dax_api.walker.utils.generator;
 
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.util.GlobalConfiguration;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding.AStarNode;
 
 import java.io.BufferedWriter;

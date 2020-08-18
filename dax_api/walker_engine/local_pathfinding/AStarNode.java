@@ -1,6 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding;
 
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 
 public class AStarNode {
 

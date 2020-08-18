@@ -4,7 +4,7 @@ import net.runelite.api.ObjectComposition;
 import net.runelite.client.rsb.internal.wrappers.Filter;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSObjectHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
@@ -262,7 +262,7 @@ public class PathObjectHandler implements Loggable {
                         } else {
                             useBladeOnWeb(web);
                         }
-                        if(Game.isUptext("->")){
+                        if(Web.methods.chooseOption.getHoverText().contains("->")){
                             Walking.blindWalkTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
                         }
                         if (web.getLocation().distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) <= 1) {
@@ -597,7 +597,7 @@ public class PathObjectHandler implements Loggable {
         return (weaponType != null && SLASH_WEAPONS.contains(weaponType.getValue())) || Inventory.find("Knife").length > 0;
     }
     private static boolean useBladeOnWeb(RSObject web){
-        if(!Game.isUptext("->")){
+        if(!Web.methods.chooseOption.getHoverText().contains("->")){
             RSItem[] slashable = Inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
             if(slashable.length == 0 || !slashable[0].click("Use"))
                 return false;

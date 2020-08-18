@@ -1,7 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib;
 
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.api_lib.models.*;
 import net.runelite.client.rsb.walker.dax_api.teleports.Teleport;
 import net.runelite.client.rsb.walker.dax_api.walker.DaxWalkerEngine;
@@ -11,17 +11,6 @@ import net.runelite.client.rsb.walker.dax_api.walker_engine.WalkerEngine;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WalkingCondition;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.ShipUtils;
 import net.runelite.client.rsb.wrappers.common.Positionable;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.WalkerTile;
-import scripts.dax_api.api_lib.models.*;
-import scripts.dax_api.teleports.Teleport;
-import scripts.dax_api.walker.DaxWalkerEngine;
-import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.WalkerEngine;
-import scripts.dax_api.walker_engine.WalkingCondition;
-import scripts.dax_api.walker_engine.navigation_utils.ShipUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

@@ -2,7 +2,7 @@ package net.runelite.client.rsb.walker.dax_api.walker.utils.camera;
 
 
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.wrappers.RSCharacter;
 import net.runelite.client.rsb.wrappers.common.Positionable;
 

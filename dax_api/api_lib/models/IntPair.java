@@ -1,8 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
 
-import scripts.dax_api.api_lib.json.JsonArray;
-import scripts.dax_api.api_lib.json.JsonObject;
+import net.runelite.client.rsb.walker.dax_api.api_lib.json.JsonArray;
+import net.runelite.client.rsb.walker.dax_api.api_lib.json.JsonObject;
 
 import java.util.Collection;
 import java.util.Objects;

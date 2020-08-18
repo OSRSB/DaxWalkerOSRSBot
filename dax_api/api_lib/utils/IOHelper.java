@@ -1,9 +1,9 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.utils;
 
 import com.google.gson.JsonObject;
-import scripts.dax_api.api_lib.models.DaxCredentials;
-import scripts.dax_api.api_lib.models.DaxCredentialsProvider;
-import scripts.dax_api.api_lib.models.ServerResponse;
+import net.runelite.client.rsb.walker.dax_api.api_lib.models.DaxCredentials;
+import net.runelite.client.rsb.walker.dax_api.api_lib.models.DaxCredentialsProvider;
+import net.runelite.client.rsb.walker.dax_api.api_lib.models.ServerResponse;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;

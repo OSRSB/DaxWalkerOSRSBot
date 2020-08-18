@@ -1,8 +1,10 @@
 package net.runelite.client.rsb.walker.dax_api;
 
 import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.wrappers.*;
 import net.runelite.client.rsb.wrappers.common.Positionable;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;

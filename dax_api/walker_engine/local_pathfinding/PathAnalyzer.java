@@ -1,12 +1,11 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.local_pathfinding;
 
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.PathFindingNode;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.bfs.BFS;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

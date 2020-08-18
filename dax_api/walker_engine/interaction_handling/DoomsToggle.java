@@ -1,13 +1,10 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling;
 
+import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.InterfaceHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.types.RSInterface;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
-import scripts.dax_api.walker_engine.Loggable;
-import scripts.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.wrappers.RSWidget;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -34,16 +31,18 @@ public class DoomsToggle implements Loggable {
         }
     }
 
-    public static void handle(int parentInterface, String... option){
-        if (!Interfaces.isInterfaceSubstantiated(parentInterface)){
+    public static void handle(int parentInterface, String... options){
+        if (!Web.methods.interfaces.isInterfaceSubstantiated(parentInterface)){
             return;
         }
         getInstance().log("Handling Interface: " + parentInterface);
-        Optional<RSInterface> optional = InterfaceHelper.getAllInterfaces(parentInterface).stream().filter(rsInterface -> {
+        Optional<RSWidget> optional = InterfaceHelper.getAllInterfaces(parentInterface).stream().filter(rsInterface -> {
             String[] actions = rsInterface.getActions();
-            return actions != null && Arrays.stream(option).anyMatch(s -> Arrays.stream(actions).anyMatch(s1 -> s1.equals(s)));
+            return actions != null && Arrays.stream(options).anyMatch(s -> Arrays.stream(actions).anyMatch(s1 -> s1.equals(s)));
         }).findAny();
-        optional.ifPresent(rsInterface -> rsInterface.click(option));
+        optional.ifPresent(rsInterface -> {
+            for (String option : options) rsInterface.doAction(option);
+        });
         WaitFor.milliseconds(500, 1500);
     }
 

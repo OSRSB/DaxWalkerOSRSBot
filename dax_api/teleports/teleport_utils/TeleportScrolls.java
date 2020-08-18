@@ -1,11 +1,10 @@
 package net.runelite.client.rsb.walker.dax_api.teleports.teleport_utils;
 
-import org.tribot.api.Timing;
-import org.tribot.api2007.Inventory;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.WalkerTile;
-import scripts.dax_api.shared.helpers.magic.Validatable;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.Timer;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.client.rsb.walker.dax_api.shared.helpers.magic.Validatable;
+import net.runelite.client.rsb.wrappers.RSItem;
 
 public enum TeleportScrolls implements Validatable {
 	NARDAH("Nardah teleport",new WalkerTile(3419, 2916, 0)),
@@ -42,12 +41,12 @@ public enum TeleportScrolls implements Validatable {
 	}
 	
 	public boolean teleportTo(boolean shouldWait){
-		RSItem[] scroll = Inventory.find(this.name);
-		return scroll[0].click() && (!shouldWait || Timing.waitCondition(() -> this.location.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 15, 8000));
+		RSItem[] scroll = Web.methods.inventory.getItems(Web.methods.inventory.getItemID(this.name));
+		return scroll[0].doClick() && (!shouldWait || Timer.waitCondition(() -> this.location.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 15, 8000));
 	}
 	
 	public boolean hasScroll(){
-		RSItem[] scroll = Inventory.find(this.name);
+		RSItem[] scroll = Web.methods.inventory.getItems(Web.methods.inventory.getItemID(this.name));
 		return scroll.length > 0;
 	}
 

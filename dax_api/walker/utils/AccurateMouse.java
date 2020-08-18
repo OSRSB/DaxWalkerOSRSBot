@@ -3,13 +3,12 @@ package net.runelite.client.rsb.walker.dax_api.walker.utils;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.ObjectComposition;
 import net.runelite.api.coords.LocalPoint;
-import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.rsb.internal.wrappers.Filter;
-import net.runelite.client.rsb.methods.Walking;
+import net.runelite.client.rsb.methods.Calculations;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSItemHelper;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSNPCHelper;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSObjectHelper;
@@ -295,14 +294,13 @@ public class AccurateMouse {
          * TODO: Check usage to understand whether it is using the widget item or the actual interface
          *
          */
-        /*
         if (!(clickable instanceof RSItem || clickable instanceof RSWidget)) {
             return false;
         }
 
-        Rectangle area = clickable instanceof RSItem ? ((RSItem) clickable).getArea() : ((RSWidget) clickable).getArea();
+        Rectangle area = clickable instanceof RSItem ? ((RSItem) clickable).getItem().getArea() : ((RSWidget) clickable).getArea();
         String uptext = Web.methods.chooseOption.getHoverText();
-        if (area.contains(Mouse.getPos())) {
+        if (area.contains(Calculations.convertRLPointToAWTPoint(Web.methods.mouse.getLocation()))) {
             if (uptext != null && (clickActions.length == 0 || Arrays.stream(clickActions).anyMatch(uptext::contains))) {
                 if (hover) {
                     return true;
@@ -310,11 +308,11 @@ public class AccurateMouse {
                 click(1);
                 return true;
             } else {
-                Mouse.click(3);
+                Web.methods.mouse.click(false);
                 return Web.methods.chooseOption.select(clickActions);
             }
         } else {
-            Mouse.moveBox(area);
+            Web.methods.mouse.move(AccurateMouse.getRandomPoint(area));
             if (!hover) {
                 for (String option : clickActions) {
                     if (clickable.doAction(option)) {
@@ -326,9 +324,6 @@ public class AccurateMouse {
             //TODO: handle hovering of interfaces for secondary actions such as right click hover
             return true;
         }
-
-         */
-        return false;
     }
 
     private static boolean handleMenuNode(RSMenuNode rsMenuNode, boolean hover) {
@@ -381,7 +376,7 @@ public class AccurateMouse {
 
 
     public static State getState() {
-        int crosshairState = Game.getCrosshairState();
+        int crosshairState = Web.methods.game.getCrosshairState();
         for (State state : State.values()) {
             if (state.id == crosshairState) {
                 return state;
@@ -503,7 +498,7 @@ public class AccurateMouse {
         }
         for (RSGroundItem rsGroundItem : Web.methods.groundItems.getAll(new Filter<RSGroundItem>() {
             @Override
-            public boolean accept(RSGroundItem rsGroundItem) {
+            public boolean test(RSGroundItem rsGroundItem) {
                 return rsGroundItem.getLocation().equals(tile);
             }
         })) {

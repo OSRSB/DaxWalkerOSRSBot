@@ -1,8 +1,11 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils;
 
 import net.runelite.client.rsb.methods.Interfaces;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.RSWidget;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.InterfaceHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
@@ -52,12 +55,12 @@ public class GnomeGlider {
     }
 
     public static boolean to(Location location) {
-        if (!Interfaces.isInterfaceValid(GNOME_GLIDER_MASTER_INTERFACE)
-                && !InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Glider")), "Glider", () -> Interfaces.isInterfaceValid(GNOME_GLIDER_MASTER_INTERFACE) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+        if (!Web.methods.interfaces.get(GNOME_GLIDER_MASTER_INTERFACE).isValid()
+                && !InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Glider")), "Glider", () -> Web.methods.interfaces.get(GNOME_GLIDER_MASTER_INTERFACE).isValid() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
             return false;
         }
 
-        RSInterface option = InterfaceHelper.getAllInterfaces(GNOME_GLIDER_MASTER_INTERFACE).stream().filter(rsInterface -> {
+        RSWidget option = InterfaceHelper.getAllInterfaces(GNOME_GLIDER_MASTER_INTERFACE).stream().filter(rsInterface -> {
             String[] actions = rsInterface.getActions();
             return actions != null && Arrays.stream(actions).anyMatch(s -> s.contains(location.getName()));
         }).findAny().orElse(null);
@@ -66,11 +69,11 @@ public class GnomeGlider {
             return false;
         }
 
-        if (!option.click()){
+        if (!option.doClick()){
             return false;
         }
 
-        if (WaitFor.condition(General.random(5400, 6500), () -> location.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(StdRandom.uniform(5400, 6500), () -> location.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(250, 500);
             return true;
         }

@@ -1,5 +1,14 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling;
 
+import net.runelite.api.NPC;
+import net.runelite.client.rsb.internal.wrappers.Filter;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.Loggable;
+import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
+import net.runelite.client.rsb.wrappers.RSCharacter;
+import net.runelite.client.rsb.wrappers.RSNPC;
+import net.runelite.client.rsb.wrappers.RSPlayer;
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api.types.generic.Filter;
@@ -71,12 +80,11 @@ public class NPCInteraction implements Loggable {
     }
 
     public static boolean clickNpc(Filter<RSNPC> rsnpcFilter, String... options) {
-        RSNPC[] rsnpcs = NPCs.findNearest(rsnpcFilter);
-        if (rsnpcs.length < 1) {
+        RSNPC npc = Web.methods.npcs.getNearest(rsnpcFilter);
+        if (npc != null) {
             getInstance().log("Cannot find NPC.");
         }
-
-        RSNPC npc = rsnpcs[0];
+;
         return InteractionHelper.click(npc, options);
     }
 
@@ -84,7 +92,7 @@ public class NPCInteraction implements Loggable {
         RSPlayer player = Web.methods.players.getMyPlayer();
         RSCharacter rsCharacter = null;
         if (player != null){
-            rsCharacter = player.getInteractingCharacter();
+            rsCharacter = new RSNPC(Web.methods, (NPC) player.getInteracting());
         }
         return WaitFor.condition(rsCharacter != null ? WaitFor.getMovementRandomSleep(rsCharacter) : 10000, () -> {
             if (isConversationWindowUp()) {
@@ -100,7 +108,7 @@ public class NPCInteraction implements Loggable {
 
     public static void handleConversationRegex(String regex){
         while (true){
-            if (WaitFor.condition(General.random(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+            if (WaitFor.condition(StdRandom.uniform(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                 break;
             }
 
@@ -115,7 +123,7 @@ public class NPCInteraction implements Loggable {
                 continue;
             }
 
-            General.sleep(General.randomSD(350, 2250, 775, 350));
+            Web.methods.web.sleep((int) StdRandom.gaussian(350, 2250, 775, 350));
             getInstance().log("Replying with option: " + selectableOptions.get(0).getText());
             Keyboard.typeString(selectableOptions.get(0).getIndex() + "");
             waitForNextOption();
@@ -127,7 +135,7 @@ public class NPCInteraction implements Loggable {
         List<String> blackList = new ArrayList<>();
         int limit = 0;
         while (limit++ < 50){
-            if (WaitFor.condition(General.random(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+            if (WaitFor.condition(StdRandom.uniform(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                 getInstance().log("Conversation window not up.");
                 break;
             }
@@ -148,7 +156,7 @@ public class NPCInteraction implements Loggable {
                 if(blackList.contains(selected.getText())){
                     continue;
                 }
-                General.sleep(General.randomSD(350, 2250, 775, 350));
+                Web.methods.web.sleep((int) StdRandom.gaussian(350, 2250, 775, 350));
                 getInstance().log("Replying with option: " + selected.getText());
                 blackList.add(selected.getText());
                 Keyboard.typeString(selected.getIndex() + "");
@@ -156,7 +164,7 @@ public class NPCInteraction implements Loggable {
                 limit = 0;
                 break;
             }
-            General.sleep(10,20);
+            Web.methods.web.sleep(StdRandom.uniform(10,20));
         }
         if(limit > 50){
             getInstance().log("Reached conversation limit.");

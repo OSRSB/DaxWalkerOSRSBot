@@ -2,7 +2,7 @@ package net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl;
 
 import net.runelite.api.ObjectComposition;
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.MoveTaskHandler;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
 import net.runelite.client.rsb.walker.dax_api.walker.models.DaxLogger;

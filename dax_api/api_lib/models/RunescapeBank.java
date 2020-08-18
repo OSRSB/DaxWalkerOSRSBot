@@ -1,6 +1,6 @@
 package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 
 public enum RunescapeBank {
     AL_KHARID(3269, 3167, 0),

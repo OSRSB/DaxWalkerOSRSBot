@@ -1,33 +1,22 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring;
 
-import net.runelite.client.rsb.methods.Interfaces;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.Timer;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.RSWidget;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.SecondLetter;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.ThirdLetter;
 import net.runelite.client.rsb.wrappers.RSObject;
-import org.tribot.api.Timing;
-import org.tribot.api2007.Equipment;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.WalkerTile;
-import org.tribot.api2007.types.RSVarBit;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
-import scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter;
-import scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.SecondLetter;
-import scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.ThirdLetter;
 
-import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter.*;
-import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.SecondLetter.*;
-import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.ThirdLetter.*;
+import java.util.Arrays;
+
+import static net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter.*;
+import static net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.SecondLetter.*;
+import static net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils.fairyring.letters.ThirdLetter.*;
 
 public class FairyRing {
 
@@ -41,15 +30,17 @@ public class FairyRing {
 	private static RSObject[] ring;
 
 
-	private static RSInterface getTeleportButton() {
-		return Interfaces.get(INTERFACE_MASTER, TELEPORT_CHILD);
+	private static RSWidget getTeleportButton() {
+		return Web.methods.interfaces.get(INTERFACE_MASTER, TELEPORT_CHILD);
 	}
 
 	public static boolean takeFairyRing(Locations location){
 
 		if(location == null)
 			return false;
-		if (RSVarBit.get(ELITE_DIARY_VARBIT).getValue() == 0 && Equipment.getCount(DRAMEN_STAFFS) == 0){
+		if (Web.methods.client.getVarbitValue(ELITE_DIARY_VARBIT) == 0 && Arrays.stream(DRAMEN_STAFFS).allMatch((id) -> Web.methods.equipment.getCount(id) == 0));
+
+		{
 			if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(DRAMEN_STAFFS)), "Wield")){
 				return false;
 			}
@@ -62,34 +53,34 @@ public class FairyRing {
 			}
 		}
 		final WalkerTile myPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-		return location.turnTo() && pressTeleport() && Timing.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
+		return location.turnTo() && pressTeleport() && Timer.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
 	}
 
 	private static boolean hasInterface(){
-		return Interfaces.isInterfaceSubstantiated(INTERFACE_MASTER);
+		return Web.methods.interfaces.isInterfaceSubstantiated(INTERFACE_MASTER);
 	}
 
 	private static boolean hasCachedLocation(Locations location){
-		ring = Objects.findNearest(25,"Fairy ring");
+		ring = new RSObject[] {Web.methods.objects.getNearest("Fairy ring")};
 		return ring.length > 0 && Filters.Objects.actionsContains(location.toString()).test(ring[0]);
 	}
 
 	private static boolean takeLastDestination(Locations location){
 		final WalkerTile myPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
 		return InteractionHelper.click(ring[0],"Last-destination (" + location + ")") &&
-				Timing.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
+				Timer.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
 	}
 
 	private static boolean pressTeleport(){
-		RSInterface iface = getTeleportButton();
-		return iface != null && iface.click();
+		RSWidget iface = getTeleportButton();
+		return iface != null && iface.doClick();
 	}
 
 	private static boolean openFairyRing(){
 		if(ring.length == 0)
 			return false;
 		return InteractionHelper.click(ring[0],"Configure") &&
-				Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(INTERFACE_MASTER),10000);
+				Timer.waitCondition(() -> Web.methods.interfaces.isInterfaceSubstantiated(INTERFACE_MASTER),10000);
 	}
 
 	public enum Locations {

@@ -1,7 +1,9 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils;
 
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
 import net.runelite.client.rsb.wrappers.RSArea;
@@ -22,7 +24,7 @@ public class ShipUtils {
         }
         return getGangplank() != null
                 && new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane() == 1
-                && Objects.getAll(10, Filters.Objects.nameEquals("Ship's wheel", "Ship's ladder", "Anchor")).length > 0;
+                && Web.methods.objects.getAll(Filters.Objects.nameEquals("Ship's wheel", "Ship's ladder", "Anchor")).length > 0;
     }
 
     public static boolean crossGangplank() {
@@ -30,13 +32,13 @@ public class ShipUtils {
         if (gangplank == null){
             return false;
         }
-        if (!gangplank.click("Cross")){
+        if (!gangplank.doAction("Cross")){
             return false;
         }
-        if (WaitFor.condition(1000, () -> Game.getCrosshairState() == 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(1000, () -> Web.methods.game.getCrosshairState() == 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
             return false;
         }
-        return WaitFor.condition(General.random(2500, 3000), () -> !ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        return WaitFor.condition(StdRandom.uniform(2500, 3000), () -> !ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
     }
 
     private static RSObject getGangplank(){

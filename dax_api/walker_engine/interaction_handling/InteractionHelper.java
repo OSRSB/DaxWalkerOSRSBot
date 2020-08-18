@@ -3,21 +3,13 @@ package net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handlin
 import net.runelite.client.rsb.internal.wrappers.Filter;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.util.StdRandom;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.util.Timer;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.wrappers.*;
 import net.runelite.client.rsb.wrappers.common.Clickable07;
 import net.runelite.client.rsb.wrappers.common.Positionable;
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api.interfaces.Clickable07;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api.types.generic.Filter;
-import org.tribot.api2007.*;
-import org.tribot.api2007.types.*;
-import scripts.dax_api.walker.utils.AccurateMouse;
-import scripts.dax_api.walker_engine.WaitFor;
 
 
 public class InteractionHelper {
@@ -68,7 +60,7 @@ public class InteractionHelper {
                 if (isOnScreenAndClickable(clickable)){
                     return WaitFor.Return.SUCCESS;
                 }
-                if (Timing.timeFromMark(startTime) > 2000 && !Web.methods.players.getMyPlayer().isLocalPlayerMoving()){
+                if (Timer.timeFromMark(startTime) > 2000 && !Web.methods.players.getMyPlayer().isLocalPlayerMoving()){
                     return WaitFor.Return.FAIL;
                 }
                 return WaitFor.Return.IGNORE;

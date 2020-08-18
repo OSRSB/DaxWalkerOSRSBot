@@ -1,22 +1,13 @@
 package net.runelite.client.rsb.walker.dax_api.teleports;
 
 import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.RSItemHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.NPCInteraction;
 import net.runelite.client.rsb.wrappers.RSItem;
-import org.tribot.api.General;
-import org.tribot.api2007.Equipment;
-import org.tribot.api2007.Inventory;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.WalkerTile;
-import scripts.dax_api.shared.helpers.RSItemHelper;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.NPCInteraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +40,7 @@ public class WearableItemTeleport {
 	}
 
 	public static boolean has(Predicate<RSItem> filter) {
-		return Inventory.find(filter).length > 0 || Equipment.find(filter).length > 0;
+		return Web.methods.inventory.find(filter).length > 0 || Web.methods.equipment.find(filter).length > 0;
 	}
 
 	public static boolean teleport(Predicate<RSItem> filter, String action) {
@@ -59,8 +50,8 @@ public class WearableItemTeleport {
 
 	private static boolean teleportWithItem(Predicate<RSItem> itemFilter, String regex) {
 		ArrayList<RSItem> items = new ArrayList<>();
-		items.addAll(Arrays.asList(Inventory.find(itemFilter)));
-		items.addAll(Arrays.asList(Equipment.find(itemFilter)));
+		items.addAll(Arrays.asList(Web.methods.inventory.find(itemFilter)));
+		items.addAll(Arrays.asList(Web.methods.equipment.find(itemFilter)));
 
 		if (items.size() == 0) {
 			return false;
@@ -70,7 +61,7 @@ public class WearableItemTeleport {
 		final WalkerTile startingPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
 
 		return RSItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") && WaitFor.condition(
-				General.random(3800, 4600), () -> {
+				StdRandom.uniform(3800, 4600), () -> {
 					NPCInteraction.handleConversationRegex(regex);
 					if (startingPosition.distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) > 5) {
 						return WaitFor.Return.SUCCESS;

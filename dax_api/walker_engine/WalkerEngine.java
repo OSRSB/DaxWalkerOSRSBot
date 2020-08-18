@@ -1,8 +1,10 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine;
 
 
+import net.runelite.client.rsb.methods.Calculations;
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.util.StdRandom;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.PathFindingNode;
 import net.runelite.client.rsb.walker.dax_api.teleports.Teleport;
 import net.runelite.client.rsb.walker.dax_api.walker.utils.AccurateMouse;
@@ -18,7 +20,6 @@ import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.
 import net.runelite.client.rsb.walker.dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class WalkerEngine implements Loggable{
@@ -76,7 +77,7 @@ public class WalkerEngine implements Loggable{
 
             while (true) {
 
-                if (Login.getLoginState() != Login.STATE.INGAME){
+                if (Web.methods.game.isLoggedIn()){
                     return false;
                 }
 
@@ -109,7 +110,7 @@ public class WalkerEngine implements Loggable{
                 }
 
                 final RealTimeCollisionTile destination = currentNode;
-                if (!Projection.isInMinimap(Projection.tileToMinimap(new WalkerTile(destination.getX(), destination.getY(), destination.getZ())))) {
+                if (!Web.methods.calc.tileOnMap(new WalkerTile(destination.getX(), destination.getY(), destination.getZ()))) {
                     log("Closest tile in path is not in minimap: " + destination);
                     failedAttempt();
                     continue;
@@ -162,7 +163,7 @@ public class WalkerEngine implements Loggable{
 
                     case FURTHEST_CLICKABLE_TILE:
                         if (clickMinimap(currentNode)) {
-                            long offsetWalkingTimeout = System.currentTimeMillis() + General.random(2500, 4000);
+                            long offsetWalkingTimeout = System.currentTimeMillis() + StdRandom.uniform(2500, 4000);
                             WaitFor.condition(10000, () -> {
                                 switch (conditionContainer.trigger()) {
                                     case EXIT_OUT_WALKER_SUCCESS:
@@ -254,8 +255,7 @@ public class WalkerEngine implements Loggable{
         if (pathFindingNode == null){
             return;
         }
-        Point point = Projection.tileToMinimap(new WalkerTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
-        Mouse.move(point);
+        Web.methods.mouse.move(Web.methods.calc.tileToMinimap(new WalkerTile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())));
     }
 
     private boolean resetAttempts(){
@@ -268,11 +268,11 @@ public class WalkerEngine implements Loggable{
     }
 
     private void failedAttempt(){
-        if (Camera.getCameraAngle() < 90) {
-            Camera.setCameraAngle(General.random(90, 100));
+        if (Web.methods.camera.getPitch() < 90) {
+            Web.methods.camera.setPitch(StdRandom.uniform(90, 100));
         }
         if (++attemptsForAction > 1) {
-            Camera.setCameraRotation(General.random(0, 360));
+            Web.methods.camera.setAngle(StdRandom.uniform(0, 360));
         }
         log("Failed attempt on action.");
         WaitFor.milliseconds(450 * (attemptsForAction + 1), 850 * (attemptsForAction + 1));
@@ -309,14 +309,14 @@ public class WalkerEngine implements Loggable{
         WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
         if(startPosition.equals(playerPosition))
             return true;
-        if(Banking.isBankScreenOpen())
-            Banking.close();
+        if(Web.methods.bank.isOpen())
+            Web.methods.bank.close();
         for (Teleport teleport : Teleport.values()) {
             if (!teleport.getRequirement().satisfies()) continue;
             if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
                 log("Using teleport method: " + teleport);
                 teleport.trigger();
-                return WaitFor.condition(General.random(3000, 20000),
+                return WaitFor.condition(StdRandom.uniform(3000, 20000),
                     () -> startPosition.distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) < 10 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             }

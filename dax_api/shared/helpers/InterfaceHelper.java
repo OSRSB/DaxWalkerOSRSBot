@@ -1,10 +1,8 @@
 package net.runelite.client.rsb.walker.dax_api.shared.helpers;
 
 
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSInterfaceComponent;
-import org.tribot.api2007.types.RSInterfaceMaster;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.wrappers.RSWidget;
 
 import java.util.*;
 
@@ -15,27 +13,27 @@ public class InterfaceHelper {
      * @param ids
      * @return never null
      */
-    public static List<RSInterface> getAllInterfaces(int... ids){
-        ArrayList<RSInterface> interfaces = new ArrayList<>();
+    public static List<RSWidget> getAllInterfaces(int... ids){
+        ArrayList<RSWidget> interfaces = new ArrayList<>();
 
         for (int id : ids) {
-            Queue<RSInterface> queue = new LinkedList<>();
-            RSInterfaceMaster master = Interfaces.get(id);
+            Queue<RSWidget> queue = new LinkedList<>();
+            RSWidget master = Web.methods.interfaces.get(id);
 
             if (master == null) {
                 return interfaces;
             }
 
             queue.add(master);
-            RSInterfaceComponent[] components = master.getComponents();
+            RSWidget[] components = master.getComponents();
             if (components != null) {
                 Collections.addAll(queue, components);
             }
 
             while (!queue.isEmpty()) {
-                RSInterface rsInterface = queue.poll();
-                interfaces.add(rsInterface);
-                RSInterface[] children = rsInterface.getChildren();
+                RSWidget RSWidget = queue.poll();
+                interfaces.add(RSWidget);
+                RSWidget[] children = RSWidget.getComponents();
                 if (children != null) {
                     Collections.addAll(queue, children);
                 }
@@ -45,9 +43,9 @@ public class InterfaceHelper {
         return interfaces;
     }
 
-    public static List<RSInterface> getAllInterfaces(RSInterface parent){
-        ArrayList<RSInterface> interfaces = new ArrayList<>();
-        Queue<RSInterface> queue = new LinkedList<>();
+    public static List<RSWidget> getAllInterfaces(RSWidget parent){
+        ArrayList<RSWidget> interfaces = new ArrayList<>();
+        Queue<RSWidget> queue = new LinkedList<>();
 
         if (parent == null){
             return interfaces;
@@ -55,9 +53,9 @@ public class InterfaceHelper {
 
         queue.add(parent);
         while (!queue.isEmpty()){
-            RSInterface rsInterface = queue.poll();
-            interfaces.add(rsInterface);
-            RSInterface[] children = rsInterface.getChildren();
+            RSWidget RSWidget = queue.poll();
+            interfaces.add(RSWidget);
+            RSWidget[] children = RSWidget.getComponents();
             if (children != null) {
                 Collections.addAll(queue, children);
             }
@@ -66,29 +64,29 @@ public class InterfaceHelper {
         return interfaces;
     }
 
-    public static boolean textEquals(RSInterface rsInterface, String match){
-        String text = rsInterface.getText();
+    public static boolean textEquals(RSWidget RSWidget, String match){
+        String text = RSWidget.getText();
         return text != null && text.equals(match);
     }
 
-    public static boolean textContains(RSInterface rsInterface, String match){
-        String text = rsInterface.getText();
+    public static boolean textContains(RSWidget RSWidget, String match){
+        String text = RSWidget.getText();
         return text != null && text.contains(match);
     }
 
-    public static boolean textMatches(RSInterface rsInterface, String match){
-        if (rsInterface == null){
+    public static boolean textMatches(RSWidget RSWidget, String match){
+        if (RSWidget == null){
             return false;
         }
-        String text = rsInterface.getText();
+        String text = RSWidget.getText();
         return text != null && text.matches(match);
     }
 
-    public static List<String> getActions(RSInterface rsInterface){
-        if (rsInterface == null){
+    public static List<String> getActions(RSWidget RSWidget){
+        if (RSWidget == null){
             return Collections.emptyList();
         }
-        String[] actions = rsInterface.getActions();
+        String[] actions = RSWidget.getActions();
         if (actions == null){
             return Collections.emptyList();
         }

@@ -1,21 +1,14 @@
 package net.runelite.client.rsb.walker.dax_api.walker_engine.navigation_utils;
 
 import net.runelite.client.rsb.methods.Interfaces;
+import net.runelite.client.rsb.methods.Web;
+import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.walker.dax_api.Filters;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.RSWidget;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.shared.helpers.InterfaceHelper;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.WaitFor;
 import net.runelite.client.rsb.walker.dax_api.walker_engine.interaction_handling.InteractionHelper;
-import org.tribot.api.General;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.WalkerTile;
-import scripts.dax_api.shared.helpers.InterfaceHelper;
-import scripts.dax_api.walker_engine.WaitFor;
-import scripts.dax_api.walker_engine.interaction_handling.InteractionHelper;
-
 /**
  * Created by Me on 3/13/2017.
  */
@@ -58,12 +51,12 @@ public class SpiritTree {
     }
 
     public static boolean to(Location location){
-        if (!Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE)
-                && !InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+        if (!Web.methods.interfaces.get(SPIRIT_TREE_MASTER_INTERFACE).isValid()
+                && !InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Web.methods.interfaces.get(SPIRIT_TREE_MASTER_INTERFACE).isValid() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
             return false;
         }
 
-        RSInterface option = InterfaceHelper.getAllInterfaces(SPIRIT_TREE_MASTER_INTERFACE).stream().filter(rsInterface -> {
+        RSWidget option = InterfaceHelper.getAllInterfaces(SPIRIT_TREE_MASTER_INTERFACE).stream().filter(rsInterface -> {
             String text = rsInterface.getText();
             return text != null && text.contains(location.getName());
         }).findAny().orElse(null);
@@ -72,11 +65,11 @@ public class SpiritTree {
             return false;
         }
 
-        if (!option.click()){
+        if (!option.doClick()){
             return false;
         }
 
-        if (WaitFor.condition(General.random(5400, 6500), () -> location.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(StdRandom.uniform(5400, 6500), () -> location.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(250, 500);
             return true;
         }

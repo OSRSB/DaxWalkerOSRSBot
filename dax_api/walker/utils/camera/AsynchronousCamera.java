@@ -1,19 +1,16 @@
 package net.runelite.client.rsb.walker.dax_api.walker.utils.camera;
 
 
+import net.runelite.client.rsb.methods.Camera;
 import net.runelite.client.rsb.methods.Web;
 import net.runelite.client.rsb.util.StdRandom;
 import net.runelite.client.rsb.wrappers.common.Positionable;
-import org.tribot.api.General;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.Camera;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static net.runelite.client.rsb.walker.dax_api.walker.utils.camera.CameraCalculations.getRotationToTile;
-import static scripts.dax_api.walker.utils.camera.CameraCalculations.getRotationToTile;
 
 public class AsynchronousCamera {
 
@@ -39,7 +36,7 @@ public class AsynchronousCamera {
         if (getInstance().angleTask != null && !getInstance().angleTask.isDone()){
             return null;
         }
-        Camera.setRotationMethod(Camera.ROTATION_METHOD.ONLY_KEYS);
+        Web.methods.camera.setRotationMethod(Camera.ROTATION_METHOD.ONLY_KEYS);
             return getInstance().angleTask = getInstance().executorService.submit(() -> Web.methods.camera.setPitch(
 		            CameraCalculations.normalizeAngle(angle + StdRandom.uniform(-tolerance, tolerance))));
     }
@@ -48,7 +45,7 @@ public class AsynchronousCamera {
         if (getInstance().rotationTask != null && !getInstance().rotationTask.isDone()){
             return null;
         }
-        Camera.setRotationMethod(Camera.ROTATION_METHOD.ONLY_KEYS);
+        Web.methods.camera.setRotationMethod(Camera.ROTATION_METHOD.ONLY_KEYS);
         return getInstance().rotationTask = getInstance().executorService.submit(() -> Web.methods.camera.setAngle(
 		        CameraCalculations.normalizeRotation(degrees + StdRandom.uniform(-tolerance, tolerance))));
     }

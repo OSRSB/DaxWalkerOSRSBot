@@ -1,7 +1,7 @@
 package net.runelite.client.rsb.walker.dax_api.walker;
 
 import net.runelite.client.rsb.methods.Web;
-import net.runelite.client.rsb.walker.dax_api.WalkerTile;
+import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl.DefaultObjectHandler;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.move_task.impl.DefaultWalkHandler;
 import net.runelite.client.rsb.walker.dax_api.walker.handlers.passive_action.PassiveAction;
