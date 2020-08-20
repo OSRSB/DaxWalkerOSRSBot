@@ -30,7 +30,7 @@ public class Reachable {
         if (playerPosition.getX() == position.getX() && playerPosition.getY() == position.getY()) {
             return true;
         }
-        return getParent(position.toLocalTile()) != null;
+        return getParent(position.toSceneTile()) != null;
     }
 
     public boolean canReach(int x, int y) {
@@ -68,8 +68,8 @@ public class Reachable {
 
     public WalkerTile getParent(Positionable positionable) {
         WalkerTile tile = positionable.getLocation();
-        if (tile.getType() != WalkerTile.TYPES.LOCAL) {
-            tile = tile.toLocalTile();
+        if (tile.getType() != WalkerTile.TYPES.SCENE) {
+            tile = tile.toSceneTile();
         }
         int x = tile.getX(), y = tile.getY();
         if (x < 0 || y < 0) {
@@ -108,7 +108,7 @@ public class Reachable {
      */
     public ArrayList<WalkerTile> getPath(int x, int y) {
         ArrayList<WalkerTile> path = new ArrayList<>();
-        WalkerTile playerPos = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).toLocalTile();
+        WalkerTile playerPos = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).toSceneTile();
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return path;
         }
@@ -121,7 +121,7 @@ public class Reachable {
         if (map[x][y] == null) {
             return null;
         }
-        WalkerTile tile = new WalkerTile(x, y, new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane(), WalkerTile.TYPES.LOCAL);
+        WalkerTile tile = new WalkerTile(x, y, new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane(), WalkerTile.TYPES.SCENE);
         while ((tile = map[tile.getX()][tile.getY()]) != null) {
             path.add(tile.toWorldTile());
         }
@@ -132,7 +132,7 @@ public class Reachable {
     public int getDistance(Positionable positionable) {
         WalkerTile position = convertToLocal(positionable.getLocation().getX(), positionable.getLocation().getY());
         int x = position.getX(), y = position.getY();
-        WalkerTile playerPos = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).toLocalTile();
+        WalkerTile playerPos = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).toSceneTile();
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return 0;
         }
@@ -154,15 +154,15 @@ public class Reachable {
     }
 
     private static WalkerTile convertToLocal(int x, int y) {
-        WalkerTile position = new WalkerTile(x, y, new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane(), x >= 104 || y >= 104 ? WalkerTile.TYPES.WORLD : WalkerTile.TYPES.LOCAL);
-        if (position.getType() != WalkerTile.TYPES.LOCAL) {
-            position = position.toLocalTile();
+        WalkerTile position = new WalkerTile(x, y, new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane(), x >= 104 || y >= 104 ? WalkerTile.TYPES.WORLD : WalkerTile.TYPES.SCENE);
+        if (position.getType() != WalkerTile.TYPES.SCENE) {
+            position = position.toSceneTile();
         }
         return position;
     }
 
     public static WalkerTile getBestWalkableTile(Positionable positionable, Reachable reachable) {
-        WalkerTile localPosition = positionable.getLocation().toLocalTile();
+        WalkerTile localPosition = positionable.getLocation().toSceneTile();
         HashSet<WalkerTile> building = BankHelper.getBuilding(positionable);
         boolean[][] traversed = new boolean[104][104];
         WalkerTile[][] parentMap = new WalkerTile[104][104];
@@ -232,7 +232,7 @@ public class Reachable {
      * @return local reachable tiles
      */
     private static WalkerTile[][] generateMap(WalkerTile homeTile) {
-        WalkerTile localPlayerPosition = homeTile.toLocalTile();
+        WalkerTile localPlayerPosition = homeTile.toSceneTile();
         boolean[][] traversed = new boolean[104][104];
         WalkerTile[][] parentMap = new WalkerTile[104][104];
         Queue<WalkerTile> queue = new LinkedList<>();

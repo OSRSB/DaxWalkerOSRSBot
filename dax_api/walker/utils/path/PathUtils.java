@@ -35,7 +35,7 @@ public class PathUtils {
 
         DaxPathFinder.Destination[][] map = DaxPathFinder.getMap();
         for (WalkerTile tile : reversed) {
-            Point point = Calculations.convertRLPointToAWTPoint(Web.methods.calc.tileToMinimap(tile));
+            net.runelite.api.Point point = Web.methods.calc.tileToMinimap(tile);
             if (point == null) {
                 continue;
             }

@@ -57,7 +57,7 @@ public class BankHelper {
 
     private static HashSet<WalkerTile> computeBuilding(Positionable positionable, byte[][][] sceneFlags, HashSet<WalkerTile> tiles){
         try {
-            WalkerTile local = positionable.getLocation().toLocalTile();
+            WalkerTile local = positionable.getLocation().toSceneTile();
             int localX = local.getX(), localY = local.getY(), localZ = local.getPlane();
             if (localX < 0 || localY < 0 || localZ < 0){
                 return tiles;
@@ -71,10 +71,10 @@ public class BankHelper {
             if (!tiles.add(local.toWorldTile())){ //Already computed
                 return tiles;
             }
-            computeBuilding(new WalkerTile(localX, localY + 1, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-            computeBuilding(new WalkerTile(localX + 1, localY, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-            computeBuilding(new WalkerTile(localX, localY - 1, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
-            computeBuilding(new WalkerTile(localX - 1, localY, localZ, WalkerTile.TYPES.LOCAL).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX, localY + 1, localZ, WalkerTile.TYPES.SCENE).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX + 1, localY, localZ, WalkerTile.TYPES.SCENE).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX, localY - 1, localZ, WalkerTile.TYPES.SCENE).toWorldTile(), sceneFlags, tiles);
+            computeBuilding(new WalkerTile(localX - 1, localY, localZ, WalkerTile.TYPES.SCENE).toWorldTile(), sceneFlags, tiles);
         } catch (ArrayIndexOutOfBoundsException e) {
 
         }

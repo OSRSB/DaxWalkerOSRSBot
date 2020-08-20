@@ -16,7 +16,7 @@ public class PathAnalyzer {
 
     public static RealTimeCollisionTile closestTileInPathToPlayer(List<WalkerTile> path) {
         CollisionDataCollector.generateRealTimeCollision();
-        final WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+        final WalkerTile playerPosition = Web.methods.players.getMyPlayer().getLocation();
         closestToPlayer = (RealTimeCollisionTile) BFS.bfsClosestToPath(path, RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()));
         return closestToPlayer;
     }
@@ -219,7 +219,7 @@ public class PathAnalyzer {
     }
 
     private static boolean isLoaded(WalkerTile tile){
-        final WalkerTile local = tile.toLocalTile();
+        final WalkerTile local = tile.toSceneTile();
         return local.getX() >= 0 && local.getX() < 104 && local.getY() >= 0 && local.getY() < 104;
     }
 

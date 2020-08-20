@@ -37,7 +37,7 @@ public class WalkingQueue {
         int plane = rsCharacter.getLocation().getWorldLocation().getPlane();
 
         for (int i = 0; i < xIndex.length && i < yIndex.length; i++) {
-            walkingQueue.add(new WalkerTile(xIndex[i], yIndex[i], plane, WalkerTile.TYPES.LOCAL).toWorldTile());
+            walkingQueue.add(new WalkerTile(xIndex[i], yIndex[i], plane, WalkerTile.TYPES.SCENE).toWorldTile());
         }
         return walkingQueue;
     }

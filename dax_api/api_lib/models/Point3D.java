@@ -2,6 +2,7 @@ package net.runelite.client.rsb.walker.dax_api.api_lib.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.rsb.wrappers.subwrap.WalkerTile;
 import net.runelite.client.rsb.wrappers.common.Positionable;
 
@@ -49,7 +50,7 @@ public class Point3D {
 
             @Override
             public WalkerTile getLocation() {
-                return new WalkerTile(x, y, z);
+                return new WalkerTile(new WorldPoint(x, y, z));
             }
 
             @Override

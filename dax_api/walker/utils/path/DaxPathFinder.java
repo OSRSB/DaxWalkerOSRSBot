@@ -106,7 +106,7 @@ public class DaxPathFinder {
     }
 
     public static int distance(Destination[][] map, Positionable tile) {
-        WalkerTile worldTile = tile.getLocation().toLocalTile();
+        WalkerTile worldTile = tile.getLocation().toSceneTile();
         int x = worldTile.getX(), y = worldTile.getY();
 
         if (!validLocalBounds(tile)) {
@@ -123,7 +123,7 @@ public class DaxPathFinder {
 
     public static boolean canReach(Destination[][] map, WalkerTile tile) {
         if (tile.getPlane() != new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane()) return false;
-        WalkerTile worldTile = tile.getType() != WalkerTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
+        WalkerTile worldTile = tile.getType() != WalkerTile.TYPES.SCENE ? tile.toSceneTile() : tile;
         int x = worldTile.getX(), y = worldTile.getY();
         if (!validLocalBounds(tile) || x > map.length || y > map[x].length) {
             return false;
@@ -147,7 +147,7 @@ public class DaxPathFinder {
     }
 
     public static List<WalkerTile> getPath(Destination[][] map, WalkerTile tile) {
-        WalkerTile worldTile = tile.getType() != WalkerTile.TYPES.LOCAL ? tile.toLocalTile() : tile;
+        WalkerTile worldTile = tile.getType() != WalkerTile.TYPES.SCENE ? tile.toSceneTile() : tile;
         int x = worldTile.getX(), y = worldTile.getY();
 
         Destination destination = map[x][y];
@@ -160,7 +160,7 @@ public class DaxPathFinder {
     }
 
     public static Destination[][] getMap() {
-        final WalkerTile home = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).toLocalTile();
+        final WalkerTile home = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).toSceneTile();
         Destination[][] map = new Destination[104][104];
         int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
         if(collisionData == null || collisionData.length < home.getX() || collisionData[home.getX()].length < home.getY()){
@@ -254,7 +254,7 @@ public class DaxPathFinder {
     }
 
     private static boolean validLocalBounds(Positionable positionable) {
-        WalkerTile tile = positionable.getLocation().getType() == WalkerTile.TYPES.LOCAL ? positionable.getLocation() : positionable.getLocation().toLocalTile();
+        WalkerTile tile = positionable.getLocation().getType() == WalkerTile.TYPES.SCENE ? positionable.getLocation() : positionable.getLocation().toSceneTile();
         return tile.getX() >= 0 && tile.getX() < 104 && tile.getY() >= 0 && tile.getY() < 104;
     }
 
@@ -270,7 +270,7 @@ public class DaxPathFinder {
         int plane = rsCharacter.getLocation().getWorldLocation().getPlane();
         int[] xIndex = rsCharacter.getPathX(), yIndex = rsCharacter.getPathY();
         for (int i = 0; i < xIndex.length && i < yIndex.length; i++) {
-            walkingQueue.add(new WalkerTile(xIndex[i], yIndex[i], plane, WalkerTile.TYPES.LOCAL).toWorldTile());
+            walkingQueue.add(new WalkerTile(xIndex[i], yIndex[i], plane, WalkerTile.TYPES.SCENE).toWorldTile());
         }
         return walkingQueue;
     }

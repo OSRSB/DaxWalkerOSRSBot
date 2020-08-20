@@ -81,13 +81,13 @@ public class AccurateMouse {
         }
         for (int i = 0; i < StdRandom.uniform(4, 6); i++) {
             LocalPoint dest = Web.methods.client.getLocalDestinationLocation();
-            WalkerTile currentDestination = (dest != null) ? new WalkerTile(dest.getX(), dest.getY(), WalkerTile.TYPES.LOCAL).toWorldTile() : null;
+            WalkerTile currentDestination = (dest != null) ? new WalkerTile(dest.getX(), dest.getY(), WalkerTile.TYPES.SCENE).toWorldTile() : null;
             if (currentDestination != null && currentDestination.equals(tile.getLocation())) {
                 return true;
             }
 
             Point point = Web.methods.calc.tileToMinimap(tile.getLocation());
-            if (point.getX() == -1 || !Web.methods.calc.tileOnMap(new WalkerTile(point.getX(), point.getY(), Web.methods.client.getPlane()))) {
+            if (point == null || !Web.methods.calc.tileOnMap(tile.getLocation())) {
                 return false;
             }
 
@@ -99,8 +99,8 @@ public class AccurateMouse {
             }
 
             WalkerTile newDestination = WaitFor.getValue(250, () -> {
-                WalkerTile destination = new WalkerTile(Web.methods.walking.getDestination());
-                return destination == null || destination.equals(currentDestination) ? null : destination;
+                RSTile rsTile = Web.methods.walking.getDestination();
+                return rsTile == null || new WalkerTile(rsTile).equals(currentDestination) ? null : new WalkerTile(rsTile);
             });
             if (newDestination != null && newDestination.equals(tile)) {
                 return true;

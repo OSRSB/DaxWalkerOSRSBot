@@ -77,7 +77,7 @@ public class WalkerEngine implements Loggable{
 
             while (true) {
 
-                if (Web.methods.game.isLoggedIn()){
+                if (!Web.methods.game.isLoggedIn()){
                     return false;
                 }
 

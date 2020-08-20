@@ -27,7 +27,7 @@ public class CollisionFileMaker {
             for (int x = 0; x < collisionData.length; x++) {
                 for (int y = 0; y < collisionData[x].length; y++) {
                     int flag = collisionData[x][y];
-                    WalkerTile tile = new WalkerTile(x, y, baseZ, WalkerTile.TYPES.LOCAL).toWorldTile();
+                    WalkerTile tile = new WalkerTile(x, y, baseZ, WalkerTile.TYPES.SCENE).toWorldTile();
                     CollisionTile collisionTile = new CollisionTile(
                             tile.getX(), tile.getY(), tile.getPlane(),
                             AStarNode.blockedNorth(flag),

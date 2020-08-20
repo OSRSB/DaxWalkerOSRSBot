@@ -18,7 +18,7 @@ public class CollisionDataCollector {
 
         for (int i = 0; i < collisionData.length; i++) {
             for (int j = 0; j < collisionData[i].length; j++) {
-                WalkerTile localTile = new WalkerTile(i, j, playerPosition.getPlane(), WalkerTile.TYPES.LOCAL);
+                WalkerTile localTile = new WalkerTile(i, j, playerPosition.getPlane(), WalkerTile.TYPES.SCENE);
                 WalkerTile worldTile = localTile.toWorldTile();
                 RealTimeCollisionTile.create(worldTile.getX(), worldTile.getY(), worldTile.getPlane(), collisionData[i][j]);
             }
@@ -32,7 +32,7 @@ public class CollisionDataCollector {
             return;
         for (int i = 0; i < collisionData.length; i++) {
             for (int j = 0; j < collisionData[i].length; j++) {
-                WalkerTile localTile = new WalkerTile(i, j, playerPosition.getPlane(), WalkerTile.TYPES.LOCAL);
+                WalkerTile localTile = new WalkerTile(i, j, playerPosition.getPlane(), WalkerTile.TYPES.SCENE);
                 WalkerTile worldTile = localTile.toWorldTile();
                 RealTimeCollisionTile realTimeCollisionTile = RealTimeCollisionTile.get(worldTile.getX(), worldTile.getY(), worldTile.getPlane());
                 if (realTimeCollisionTile != null){
