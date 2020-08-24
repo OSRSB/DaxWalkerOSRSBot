@@ -420,7 +420,7 @@ public class NavigationSpecialCase implements Loggable {
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 } else {
-                    RSObject[] objects = new RSObject[] {Web.methods.objects.getNearest("Tunnel entrance")};
+                    RSObject[] objects = new RSObject[] {Web.methods.objects.findNearest(20,"Tunnel entrance")};
                     if (objects.length > 0 && walkToObject(objects[0])){
                         ObjectComposition definition = objects[0].getDef();
                         String[] actions = definition != null ? definition.getActions() : null;
@@ -569,7 +569,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case ARDY_LOG_WEST:
             case ARDY_LOG_EAST:
-                RSObject[] logSearch = new RSObject[] {Web.methods.objects.getNearest(Filters.Objects.nameEquals("Log balance").combine(Filters.Objects.actionsContains("Walk-across"), true))};
+                RSObject[] logSearch = new RSObject[] {Web.methods.objects.getNearest(15, Filters.Objects.nameEquals("Log balance").combine(Filters.Objects.actionsContains("Walk-across"), true))};
                 if (AccurateMouse.click(logSearch[0], "Walk-across")){
                     int agilityXP = Web.methods.skills.getCurrentExp(Web.methods.skills.getIndex(Skill.AGILITY.toString()));
                     if (WaitFor.condition(StdRandom.uniform(7600, 1200), () -> Web.methods.skills.getCurrentExp(Web.methods.skills.getIndex(Skill.AGILITY.toString())) > agilityXP ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
@@ -933,7 +933,7 @@ public class NavigationSpecialCase implements Loggable {
     }
 
     public static boolean clickObject(Predicate<RSObject> filter, String[] action, WaitFor.Condition condition){
-        RSObject[] objects = new RSObject[]{Web.methods.objects.getNearest(filter)};
+        RSObject[] objects = new RSObject[]{Web.methods.objects.getNearest(15, filter)};
         return InteractionHelper.click(objects[0], action, condition);
     }
 

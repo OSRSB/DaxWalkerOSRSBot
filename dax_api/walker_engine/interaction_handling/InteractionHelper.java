@@ -91,7 +91,7 @@ public class InteractionHelper {
     }
 
     public static RSObject getRSObject(Filter<RSObject> filter){
-        return Web.methods.objects.getNearest(filter);
+        return Web.methods.objects.getNearest(15, filter);
     }
 
     public static RSGroundItem getRSGroundItem(Filter<RSGroundItem> filter){

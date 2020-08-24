@@ -31,6 +31,11 @@ public class RSObjectHelper {
             return emptyActions;
         }
         String[] actions = definition.getActions();
+        for (int i = 0; i < actions.length; i++) {
+            if (actions[i] == null) {
+                actions[i] = "";
+            }
+        }
         return actions != null ? actions : emptyActions;
     }
 
