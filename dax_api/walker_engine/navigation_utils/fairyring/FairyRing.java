@@ -61,7 +61,7 @@ public class FairyRing {
 	}
 
 	private static boolean hasCachedLocation(Locations location){
-		ring = new RSObject[] {Web.methods.objects.getNearest("Fairy ring")};
+		ring = new RSObject[] {Web.methods.objects.findNearest(25, "Fairy ring")};
 		return ring.length > 0 && Filters.Objects.actionsContains(location.toString()).test(ring[0]);
 	}
 
