@@ -193,7 +193,7 @@ public class DaxPathFinder {
                     continue; //Traversed already
                 }
 
-                map[destinationX][destinationY] = new Destination(neighbor, currentLocal, destination.getDistance() + 1);
+                map[destinationX][destinationY] = new Destination(neighbor, currentLocal, (destination != null) ? destination.getDistance() + 1 : 0);
                 queue.add(map[destinationX][destinationY]);
             }
 

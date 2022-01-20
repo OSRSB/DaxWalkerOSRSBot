@@ -215,7 +215,7 @@ public class PathObjectHandler implements Loggable {
             Filter<RSObject> specialObjectFilter = Filters.Objects.nameEquals(specialObject.getName())
                     .combine(Filters.Objects.actionsContains(specialObject.getAction()), true)
                     .combine(Filters.Objects.inArea(new RSArea(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)), true);
-            interactiveObjects = Web.methods.objects.getAll(specialObjectFilter);
+            interactiveObjects = new RSObject[]{Web.methods.objects.getNearest(15, specialObjectFilter)};
         }
 
         if (interactiveObjects.length == 0) {
@@ -445,7 +445,7 @@ public class PathObjectHandler implements Loggable {
                 if (rsObject.getLocation().distanceTo(destinationDetails.getDestination().getWalkerTile()) > 5) {
                     return false;
                 }
-                if (Arrays.stream(rsObject.getArea().getTileArray()).noneMatch(WalkerTile -> Web.methods.calc.distanceBetween(WalkerTile, position) <= 2)) {
+                if (Arrays.stream(rsObject.getArea().getTileArray()).noneMatch(rsTile -> new WalkerTile(rsTile).distanceTo(position) <= 2)) {
                     return false;
                 }
                 List<String> options = Arrays.asList(def.getActions());

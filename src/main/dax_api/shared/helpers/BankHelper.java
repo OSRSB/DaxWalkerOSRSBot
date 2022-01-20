@@ -22,7 +22,7 @@ public class BankHelper {
     }
 
     public static boolean isInBank(Positionable positionable){
-        RSObject bankObjects = Web.methods.objects.getNearest(BANK_OBJECT_FILTER);
+        RSObject bankObjects = Web.methods.objects.getNearest(15, BANK_OBJECT_FILTER);
         if (bankObjects == null){
             return false;
         }

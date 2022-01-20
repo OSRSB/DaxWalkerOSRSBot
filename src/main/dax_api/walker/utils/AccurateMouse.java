@@ -60,10 +60,7 @@ public class AccurateMouse {
     }
 
     public static void click(Point point, int button) {
-        if (!Web.methods.mouse.getLocation().equals(point)) {
-            Web.methods.mouse.move(point.getX(), point.getY());
-        }
-        Web.methods.mouse.click(point, 5, 180, button==1);
+        Web.methods.mouse.click(point, button==1);
     }
 
 
@@ -81,7 +78,7 @@ public class AccurateMouse {
         }
         for (int i = 0; i < StdRandom.uniform(4, 6); i++) {
             LocalPoint dest = Web.methods.client.getLocalDestinationLocation();
-            WalkerTile currentDestination = (dest != null) ? new WalkerTile(dest.getX(), dest.getY(), WalkerTile.TYPES.SCENE).toWorldTile() : null;
+            WalkerTile currentDestination = (dest != null) ? new WalkerTile(dest.getX(), dest.getY(), Web.methods.client.getPlane(), WalkerTile.TYPES.SCENE).toWorldTile() : null;
             if (currentDestination != null && currentDestination.equals(tile.getLocation())) {
                 return true;
             }
@@ -91,12 +88,8 @@ public class AccurateMouse {
                 return false;
             }
 
-            if (!Web.methods.mouse.getLocation().equals(point)) {
-                AccurateMouse.move(point);
-                continue;
-            } else {
-                AccurateMouse.click(point);
-            }
+            AccurateMouse.click(point);
+
 
             WalkerTile newDestination = WaitFor.getValue(250, () -> {
                 RSTile rsTile = Web.methods.walking.getDestination();
@@ -258,10 +251,14 @@ public class AccurateMouse {
             return true;
         }
 
-        String regex = String.format("(%s) (.*-> )?%s(.*)", String.join("|", Arrays.stream(clickActions).map(
+        String regex = //String.format("(%s)", Arrays.stream(clickActions).map(
+                //Pattern::quote).collect(Collectors.toList())).replace("[", "").replace("]", "");
+                String.format("(%s %s)(.*)", String.join("|", Arrays.stream(clickActions).map(
                 Pattern::quote).collect(Collectors.toList())), targetName != null ? Pattern.quote(targetName) : "");
 
-        if (WaitFor.condition(80, () -> Arrays.stream(Web.methods.chooseOption.getOptions()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
+
+
+        if (WaitFor.condition(80, () -> Arrays.stream(Web.methods.chooseOption.getEntriesString()).anyMatch(s -> s.matches(regex)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
             boolean multipleMatches = false;
 
             String[] options = Web.methods.chooseOption.getOptions();
@@ -341,11 +338,7 @@ public class AccurateMouse {
                 Web.methods.mouse.move(getRandomPoint(rectangle));
             }
         } else {
-            if (rectangle.contains(currentMousePosition)) {
-                click(1);
-            } else {
-                Web.methods.mouse.click(getRandomPoint(rectangle), true);
-            }
+            Web.methods.mouse.click(getRandomPoint(rectangle), true);
         }
         return true;
     }
