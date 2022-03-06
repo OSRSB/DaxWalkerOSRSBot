@@ -18,6 +18,7 @@ repositories {
 }
 
 def runeLiteVersion = '1.8.9'
+def osrsbotVersion = '0.0.7'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
@@ -29,8 +30,8 @@ dependencies {
         exclude group: 'ch.qos.logback', module: 'logback-classic'
     }
 
-    compile group: 'net.sf.jopt-simple', name:'jopt-simple', version: '5.0.4'
-    compile group: 'com.github.OSRSB', name: 'RSB', version: '0.0.2'
+    implementation group: 'net.sf.jopt-simple', name:'jopt-simple', version: '5.0.4'
+    implementation group: 'com.github.OSRSB', name: 'OsrsBot', version: osrsbotVersion
 }
 
 group = 'osrsb'
