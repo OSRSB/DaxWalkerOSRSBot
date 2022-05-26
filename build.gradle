@@ -17,8 +17,8 @@ repositories {
     mavenCentral()
 }
 
-def runeLiteVersion = '1.8.9'
-def osrsbotVersion = '0.0.7'
+def runeLiteVersion = '1.8.16'
+def osrsbotVersion = '0.0.9'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
@@ -31,12 +31,11 @@ dependencies {
     }
 
     implementation group: 'net.sf.jopt-simple', name:'jopt-simple', version: '5.0.4'
-    implementation group: 'com.github.OSRSB', name: 'OsrsBot', version: osrsbotVersion
+    // implementation group: 'com.github.OSRSB', name: 'OsrsBot', version: osrsbotVersion
+    // implementation project(":OSRSBot")
 }
 
-group = 'osrsb'
-version = '1.0'
-sourceCompatibility = '1.8'
+group = 'OSRSBot'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
