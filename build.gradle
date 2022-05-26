@@ -21,6 +21,10 @@ def runeLiteVersion = '1.8.16'
 def osrsbotVersion = '0.0.9'
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.json:json:20090211'
+    compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
+    implementation group: 'net.runelite', name: 'cache', version: runeLiteVersion
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
@@ -32,7 +36,7 @@ dependencies {
 
     implementation group: 'net.sf.jopt-simple', name:'jopt-simple', version: '5.0.4'
     // implementation group: 'com.github.OSRSB', name: 'OsrsBot', version: osrsbotVersion
-    // implementation project(":OSRSBot")
+    implementation project(":OSRSBot")
 }
 
 group = 'OSRSBot'
