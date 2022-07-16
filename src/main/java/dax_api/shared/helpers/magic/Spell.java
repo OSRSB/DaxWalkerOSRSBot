@@ -1,8 +1,8 @@
 package dax_api.shared.helpers.magic;
 
-import net.runelite.api.Skill;
-import rsb.methods.Web;
 import dax_api.shared.Pair;
+import net.runelite.api.Skill;
+import net.runelite.rsb.methods.Web;
 
 
 public enum  Spell implements Validatable  {

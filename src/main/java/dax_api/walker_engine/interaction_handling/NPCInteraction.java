@@ -1,16 +1,16 @@
 package dax_api.walker_engine.interaction_handling;
 
-import net.runelite.api.NPC;
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.shared.helpers.InterfaceHelper;
 import dax_api.walker_engine.Loggable;
 import dax_api.walker_engine.WaitFor;
-import rsb.wrappers.RSCharacter;
-import rsb.wrappers.RSNPC;
-import rsb.wrappers.RSPlayer;
-import rsb.wrappers.RSWidget;
+import net.runelite.api.NPC;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.RSCharacter;
+import net.runelite.rsb.wrappers.RSNPC;
+import net.runelite.rsb.wrappers.RSPlayer;
+import net.runelite.rsb.wrappers.RSWidget;
 
 import java.util.ArrayList;
 import java.util.Arrays;

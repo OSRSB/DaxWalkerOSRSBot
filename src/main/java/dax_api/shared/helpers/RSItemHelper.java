@@ -1,15 +1,14 @@
 package dax_api.shared.helpers;
 
-import net.runelite.api.ItemComposition;
-import net.runelite.client.game.ItemManager;
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Calculations;
-import rsb.methods.Web;
 import dax_api.Filters;
-import rsb.wrappers.RSGroundItem;
-import rsb.wrappers.RSItem;
-import rsb.wrappers.subwrap.ChooseOption;
-import rsb.wrappers.subwrap.RSMenuNode;
+import net.runelite.api.ItemComposition;
+import net.runelite.cache.definitions.ItemDefinition;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Calculations;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSGroundItem;
+import net.runelite.rsb.wrappers.RSItem;
+import net.runelite.rsb.wrappers.subwrap.RSMenuNode;
 
 import java.awt.*;
 import java.util.Arrays;

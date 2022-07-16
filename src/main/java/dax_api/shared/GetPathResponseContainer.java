@@ -1,8 +1,8 @@
 package dax_api.shared;
 
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.jsonSimple.JSONObject;
 import dax_api.shared.jsonSimple.JSONValue;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 

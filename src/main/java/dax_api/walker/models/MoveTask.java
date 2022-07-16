@@ -1,7 +1,7 @@
 package dax_api.walker.models;
 
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker.models.enums.Situation;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 
 public class MoveTask {

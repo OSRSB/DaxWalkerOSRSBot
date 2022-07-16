@@ -1,13 +1,6 @@
 package dax_api.walker_engine.interaction_handling;
 
-import net.runelite.api.ObjectComposition;
-import net.runelite.cache.definitions.ObjectDefinition;
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Calculations;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.Filters;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.RSObjectHelper;
 import dax_api.walker_engine.Loggable;
 import dax_api.walker_engine.WaitFor;
@@ -16,9 +9,14 @@ import dax_api.walker_engine.bfs.BFS;
 import dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import dax_api.walker_engine.local_pathfinding.Reachable;
 import dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
-import rsb.wrappers.RSArea;
-import rsb.wrappers.RSItem;
-import rsb.wrappers.RSObject;
+import net.runelite.cache.definitions.ObjectDefinition;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.RSArea;
+import net.runelite.rsb.wrappers.RSItem;
+import net.runelite.rsb.wrappers.RSObject;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,13 +1,13 @@
 package dax_api.walker.handlers.move_task;
 
-import rsb.methods.Web;
-import rsb.util.Timer;
 import dax_api.walker.handlers.passive_action.PassiveAction;
 import dax_api.walker.models.MoveTask;
 import dax_api.walker.models.WaitCondition;
 import dax_api.walker.models.enums.ActionResult;
 import dax_api.walker.models.enums.MoveActionResult;
 import dax_api.walker_engine.WaitFor;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.Timer;
 
 import java.util.ArrayList;
 import java.util.List;

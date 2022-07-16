@@ -1,15 +1,15 @@
 package dax_api.walker_engine.interaction_handling;
 
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
-import rsb.util.Timer;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker.utils.AccurateMouse;
 import dax_api.walker_engine.WaitFor;
-import rsb.wrappers.*;
-import rsb.wrappers.common.Clickable07;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.util.Timer;
+import net.runelite.rsb.wrappers.*;
+import net.runelite.rsb.wrappers.common.Clickable07;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 
 public class InteractionHelper {

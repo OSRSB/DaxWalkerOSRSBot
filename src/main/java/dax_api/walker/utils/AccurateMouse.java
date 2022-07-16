@@ -1,25 +1,23 @@
 package dax_api.walker.utils;
 
-import net.runelite.api.ItemComposition;
-import net.runelite.api.ObjectComposition;
-import net.runelite.api.coords.LocalPoint;
-import net.runelite.cache.definitions.ItemDefinition;
-import net.runelite.cache.definitions.ObjectDefinition;
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Calculations;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.Filters;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.RSItemHelper;
 import dax_api.shared.helpers.RSNPCHelper;
 import dax_api.shared.helpers.RSObjectHelper;
 import dax_api.walker_engine.WaitFor;
-import rsb.wrappers.*;
-import rsb.wrappers.common.Clickable;
-import rsb.wrappers.common.Positionable;
-import rsb.wrappers.subwrap.RSMenuNode;
 import net.runelite.api.Point;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.cache.definitions.ItemDefinition;
+import net.runelite.cache.definitions.ObjectDefinition;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Calculations;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.*;
+import net.runelite.rsb.wrappers.common.Clickable;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.RSMenuNode;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.awt.*;
 import java.awt.geom.Area;

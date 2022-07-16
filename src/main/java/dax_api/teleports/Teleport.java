@@ -1,12 +1,6 @@
 package dax_api.teleports;
 
-import rsb.internal.globval.enums.InterfaceTab;
-import rsb.methods.Game;
-import rsb.methods.GameGUI;
-import rsb.methods.Web;
-import rsb.util.Timer;
 import dax_api.Filters;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.api_lib.models.Requirement;
 import dax_api.shared.helpers.InterfaceHelper;
 import dax_api.shared.helpers.RSItemHelper;
@@ -15,8 +9,12 @@ import dax_api.shared.helpers.magic.Spell;
 import dax_api.teleports.teleport_utils.TeleportConstants;
 import dax_api.teleports.teleport_utils.TeleportLimit;
 import dax_api.teleports.teleport_utils.TeleportScrolls;
-import rsb.wrappers.RSItem;
-import rsb.wrappers.RSWidget;
+import net.runelite.rsb.internal.globval.enums.InterfaceTab;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.Timer;
+import net.runelite.rsb.wrappers.RSItem;
+import net.runelite.rsb.wrappers.RSWidget;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;

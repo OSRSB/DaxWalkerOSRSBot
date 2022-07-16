@@ -1,12 +1,12 @@
 package dax_api.teleports.teleport_utils;
 
-import rsb.methods.Web;
-import rsb.util.StdRandom;
-import rsb.util.Timer;
-import rsb.wrappers.subwrap.WalkerTile;
-import rsb.wrappers.RSItem;
-import rsb.wrappers.RSWidget;
-import rsb.wrappers.common.Clickable07;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.util.Timer;
+import net.runelite.rsb.wrappers.RSItem;
+import net.runelite.rsb.wrappers.RSWidget;
+import net.runelite.rsb.wrappers.common.Clickable07;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.Arrays;
 import java.util.HashMap;

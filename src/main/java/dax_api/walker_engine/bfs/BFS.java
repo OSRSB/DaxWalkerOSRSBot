@@ -1,10 +1,10 @@
 package dax_api.walker_engine.bfs;
 
 
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.NodeInfo;
 import dax_api.shared.PathFindingNode;
 import dax_api.walker_engine.WaitFor;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.LinkedList;
 import java.util.List;

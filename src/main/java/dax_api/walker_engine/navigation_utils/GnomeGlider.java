@@ -1,13 +1,13 @@
 package dax_api.walker_engine.navigation_utils;
 
-import rsb.methods.Interfaces;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.Filters;
 import dax_api.shared.helpers.InterfaceHelper;
 import dax_api.walker_engine.WaitFor;
 import dax_api.walker_engine.interaction_handling.InteractionHelper;
-
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.RSWidget;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.Arrays;
 

@@ -1,16 +1,16 @@
 package dax_api.walker_engine.navigation_utils;
 
-import rsb.methods.Interfaces;
-import rsb.methods.Web;
 import dax_api.Filters;
-import dax_api.walker_engine.Loggable;
-import rsb.wrappers.RSWidget;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.InterfaceHelper;
+import dax_api.walker_engine.Loggable;
 import dax_api.walker_engine.WaitFor;
 import dax_api.walker_engine.interaction_handling.InteractionHelper;
 import dax_api.walker_engine.interaction_handling.NPCInteraction;
-import rsb.wrappers.RSArea;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSArea;
+import net.runelite.rsb.wrappers.RSWidget;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+
 import java.util.HashMap;
 import java.util.stream.Collectors;
 

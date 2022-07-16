@@ -1,10 +1,10 @@
 package dax_api.shared.helpers.magic;
 
 
-import net.runelite.api.ItemComposition;
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Web;
-import rsb.wrappers.RSItem;
+import net.runelite.cache.definitions.ItemDefinition;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSItem;
 
 import java.util.Arrays;
 

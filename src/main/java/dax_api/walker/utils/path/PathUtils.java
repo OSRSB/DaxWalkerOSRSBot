@@ -4,7 +4,6 @@ import net.runelite.rsb.methods.Calculations;
 import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;

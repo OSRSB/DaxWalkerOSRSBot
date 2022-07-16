@@ -1,12 +1,12 @@
 package dax_api.walker.utils.path;
 
-import rsb.methods.Calculations;
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker_engine.local_pathfinding.AStarNode;
 import dax_api.walker_engine.local_pathfinding.Reachable;
-import rsb.wrappers.RSCharacter;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.methods.Calculations;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSCharacter;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.awt.*;
 import java.util.List;

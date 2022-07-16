@@ -1,10 +1,10 @@
 package dax_api.walker.utils.camera;
 
 
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
-import rsb.wrappers.RSCharacter;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSCharacter;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 public class CameraCalculations {
 

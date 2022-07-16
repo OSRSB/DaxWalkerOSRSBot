@@ -1,10 +1,10 @@
 package dax_api.teleports.teleport_utils;
 
-import rsb.methods.Web;
-import rsb.util.Timer;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.magic.Validatable;
-import rsb.wrappers.RSItem;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.Timer;
+import net.runelite.rsb.wrappers.RSItem;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 public enum TeleportScrolls implements Validatable {
 	NARDAH("Nardah teleport",new WalkerTile(3419, 2916, 0)),

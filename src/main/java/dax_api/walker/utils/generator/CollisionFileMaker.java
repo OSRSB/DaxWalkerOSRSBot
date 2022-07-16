@@ -1,9 +1,9 @@
 package dax_api.walker.utils.generator;
 
-import rsb.methods.Web;
-import rsb.internal.globval.GlobalConfiguration;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker_engine.local_pathfinding.AStarNode;
+import net.runelite.rsb.internal.globval.GlobalConfiguration;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.io.BufferedWriter;
 import java.io.File;

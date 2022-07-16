@@ -1,13 +1,13 @@
 package dax_api.walker.handlers.move_task.impl;
 
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.walker.handlers.move_task.MoveTaskHandler;
 import dax_api.walker.handlers.passive_action.PassiveAction;
 import dax_api.walker.models.MoveTask;
 import dax_api.walker.models.enums.MoveActionResult;
 import dax_api.walker.utils.AccurateMouse;
 import dax_api.walker.utils.path.DaxPathFinder;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
 
 import java.util.List;
 

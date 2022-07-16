@@ -1,11 +1,11 @@
 package dax_api.walker_engine.local_pathfinding;
 
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.PathFindingNode;
 import dax_api.walker_engine.bfs.BFS;
 import dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.List;
 

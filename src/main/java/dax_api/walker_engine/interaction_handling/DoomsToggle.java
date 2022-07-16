@@ -1,10 +1,10 @@
 package dax_api.walker_engine.interaction_handling;
 
-import rsb.methods.Web;
 import dax_api.shared.helpers.InterfaceHelper;
 import dax_api.walker_engine.Loggable;
 import dax_api.walker_engine.WaitFor;
-import rsb.wrappers.RSWidget;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSWidget;
 
 import java.util.Arrays;
 import java.util.Optional;

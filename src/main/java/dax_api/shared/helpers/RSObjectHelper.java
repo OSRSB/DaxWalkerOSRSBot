@@ -1,6 +1,5 @@
 package dax_api.shared.helpers;
 
-import net.runelite.api.ObjectComposition;
 import net.runelite.cache.definitions.ObjectDefinition;
 import net.runelite.rsb.internal.wrappers.Filter;
 import net.runelite.rsb.methods.Web;

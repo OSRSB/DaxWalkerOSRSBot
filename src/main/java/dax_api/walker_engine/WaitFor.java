@@ -1,15 +1,15 @@
 package dax_api.walker_engine;
 
 
-import rsb.methods.Web;
-import rsb.util.StdRandom;
-import rsb.util.Timer;
-import rsb.wrappers.subwrap.WalkerTile;
-import rsb.wrappers.RSCharacter;
-import rsb.wrappers.RSGroundItem;
-import rsb.wrappers.RSObject;
-import rsb.wrappers.common.Clickable07;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.util.Timer;
+import net.runelite.rsb.wrappers.RSCharacter;
+import net.runelite.rsb.wrappers.RSGroundItem;
+import net.runelite.rsb.wrappers.RSObject;
+import net.runelite.rsb.wrappers.common.Clickable07;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.Random;
 

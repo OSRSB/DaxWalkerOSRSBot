@@ -1,13 +1,13 @@
 package dax_api.shared.helpers;
 
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Web;
 import dax_api.Filters;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker_engine.WaitFor;
 import dax_api.walker_engine.interaction_handling.InteractionHelper;
-import rsb.wrappers.RSObject;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSObject;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.HashSet;
 

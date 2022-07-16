@@ -1,10 +1,10 @@
 package dax_api.walker_engine;
 
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.NodeInfo;
 import dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

@@ -1,32 +1,29 @@
 package dax_api.walker_engine.navigation_utils;
 
-import net.runelite.api.ObjectComposition;
-import net.runelite.api.Skill;
-import net.runelite.cache.definitions.ObjectDefinition;
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.Filters;
 import dax_api.shared.helpers.RSItemHelper;
-import dax_api.walker_engine.interaction_handling.DoomsToggle;
-import rsb.wrappers.RSItem;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.RSObjectHelper;
 import dax_api.walker.utils.AccurateMouse;
 import dax_api.walker_engine.Loggable;
 import dax_api.walker_engine.WaitFor;
+import dax_api.walker_engine.interaction_handling.DoomsToggle;
 import dax_api.walker_engine.interaction_handling.InteractionHelper;
 import dax_api.walker_engine.interaction_handling.NPCInteraction;
 import dax_api.walker_engine.navigation_utils.fairyring.FairyRing;
-import rsb.wrappers.RSNPC;
-import rsb.wrappers.RSObject;
-
+import net.runelite.api.Skill;
+import net.runelite.cache.definitions.ObjectDefinition;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.RSItem;
+import net.runelite.rsb.wrappers.RSNPC;
+import net.runelite.rsb.wrappers.RSObject;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
-
 
 import static dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
 
