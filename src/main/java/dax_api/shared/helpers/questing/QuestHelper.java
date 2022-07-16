@@ -1,7 +1,7 @@
 package dax_api.shared.helpers.questing;
 
 import dax_api.shared.helpers.InterfaceHelper;
-import rsb.wrappers.RSWidget;
+import net.runelite.rsb.wrappers.RSWidget;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package dax_api.shared.helpers;
 
-import rsb.wrappers.RSNPC;
+import net.runelite.rsb.wrappers.RSNPC;
 
 
 public class RSNPCHelper {

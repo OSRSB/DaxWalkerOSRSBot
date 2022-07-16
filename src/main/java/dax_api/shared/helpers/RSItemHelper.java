@@ -131,9 +131,10 @@ public class RSItemHelper {
     }
 
 
-    public static String getItemName(int id){
+    /*public static String getItemName(int id){
+        Web
         return getItemName(Web.methods.runeLite.getItemManager().getItemComposition(id));
-    }
+    }*/
 
     public static String getItemName(RSGroundItem rsGroundItem){
         return getItemName(rsGroundItem.getItem().getDefinition());
@@ -151,19 +152,19 @@ public class RSItemHelper {
 
 
     public static boolean isStackable(RSItem rsItem) {
-        ItemComposition definition = rsItem.getDefinition();
-        return definition != null && definition.isStackable();
+        ItemDefinition definition = rsItem.getDefinition();
+        return definition != null && definition.stackable > 1;
     }
 
-    private static String[] getItemActions(ItemComposition rsItemDefinition){
+    private static String[] getItemActions(ItemDefinition rsItemDefinition){
         if (rsItemDefinition == null){
             return new String[0];
         }
-        String[] actions = rsItemDefinition.getInventoryActions();
+        String[] actions = rsItemDefinition.getInterfaceOptions();
         return actions != null ? actions : new String[0];
     }
 
-    private static String getItemName(ItemComposition definition){
+    private static String getItemName(ItemDefinition definition){
         String name = definition.getName();
         return name != null ? name : "null";
     }

@@ -621,7 +621,7 @@ public enum Teleport {
 	}
 
 	private static Predicate<RSItem> notNotedFilter() {
-		return rsItem -> rsItem.getDefinition() != null && rsItem.getDefinition().getNote() != 799;
+		return rsItem -> rsItem.getDefinition() != null && rsItem.getDefinition().getNotedID() != 799;
 	}
 
 	private static boolean itemAction(String name, String... actions) {

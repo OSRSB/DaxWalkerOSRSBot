@@ -2,7 +2,7 @@ package dax_api.api_lib.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 import java.util.List;

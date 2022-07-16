@@ -1,7 +1,7 @@
 package dax_api.shared;
 
 
-import rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.Collection;
 import java.util.HashSet;

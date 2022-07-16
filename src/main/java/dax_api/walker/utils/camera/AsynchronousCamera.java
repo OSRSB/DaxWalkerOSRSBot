@@ -1,10 +1,10 @@
 package dax_api.walker.utils.camera;
 
 
-import rsb.methods.Camera;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.methods.Camera;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.common.Positionable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -3,6 +3,7 @@ package dax_api.walker.utils;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.ObjectComposition;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.cache.definitions.ItemDefinition;
 import net.runelite.cache.definitions.ObjectDefinition;
 import rsb.internal.wrappers.Filter;
 import rsb.methods.Calculations;
@@ -115,7 +116,7 @@ public class AccurateMouse {
             model = rsCharacter.getModel();
         } else if (clickable instanceof RSGroundItem) {
             RSGroundItem rsGroundItem = ((RSGroundItem) clickable);
-            ItemComposition rsItemDefinition = rsGroundItem.getItem().getDefinition();
+            ItemDefinition rsItemDefinition = rsGroundItem.getItem().getDefinition();
             name = rsItemDefinition != null ? rsItemDefinition.getName() : null;
             model = rsGroundItem.getModel();
         } else if (clickable instanceof RSObject) {
@@ -496,12 +497,12 @@ public class AccurateMouse {
                 return rsGroundItem.getLocation().equals(tile);
             }
         })) {
-            ItemComposition definition = rsGroundItem.getItem().getDefinition();
+            ItemDefinition definition = rsGroundItem.getItem().getDefinition();
             if (definition == null) {
                 continue;
             }
 
-            String[] actions = definition.getInventoryActions();
+            String[] actions = definition.getInterfaceOptions();
 
             if (actions == null || actions.length == 0) {
                 continue;
