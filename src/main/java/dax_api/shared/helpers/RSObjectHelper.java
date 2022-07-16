@@ -2,9 +2,9 @@ package dax_api.shared.helpers;
 
 import net.runelite.api.ObjectComposition;
 import net.runelite.cache.definitions.ObjectDefinition;
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Web;
-import rsb.wrappers.RSObject;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSObject;
 
 import java.util.Arrays;
 import java.util.List;

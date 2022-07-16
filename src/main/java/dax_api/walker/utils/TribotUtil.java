@@ -3,7 +3,7 @@ package dax_api.walker.utils;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.ObjectComposition;
 import net.runelite.cache.definitions.ObjectDefinition;
-import rsb.wrappers.*;
+import net.runelite.rsb.wrappers.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,13 +20,13 @@ public class TribotUtil {
         }
 
         if (o instanceof RSItem) {
-            ItemComposition definition = ((RSItem) o).getDefinition();
+            ItemDefinition definition = ((RSItem) o).getDefinition();
             if (definition == null) return null;
             return definition.getName();
         }
 
         if (o instanceof RSGroundItem) {
-            ItemComposition definition = ((RSGroundItem) o).getItem().getDefinition();
+            ItemDefinition definition = ((RSGroundItem) o).getItem().getDefinition();
             if (definition == null) return null;
             return definition.getName();
         }
@@ -52,13 +52,13 @@ public class TribotUtil {
         }
 
         if (o instanceof RSItem) {
-            ItemComposition definition = ((RSItem) o).getDefinition();
+            ItemDefinition definition = ((RSItem) o).getDefinition();
             if (definition == null) return null;
-            return Arrays.asList(definition.getInventoryActions());
+            return Arrays.asList(definition.getInterfaceOptions());
         }
 
         if (o instanceof RSGroundItem) {
-            ItemComposition definition = ((RSGroundItem) o).getItem().getDefinition();
+            ItemDefinition definition = ((RSGroundItem) o).getItem().getDefinition();
             if (definition == null) return null;
             return Arrays.asList(((RSGroundItem) o).getItem().getGroundActions());
         }

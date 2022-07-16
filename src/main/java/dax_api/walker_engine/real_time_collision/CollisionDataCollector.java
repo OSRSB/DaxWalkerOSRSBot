@@ -1,7 +1,7 @@
 package dax_api.walker_engine.real_time_collision;
 
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 
 public class CollisionDataCollector {

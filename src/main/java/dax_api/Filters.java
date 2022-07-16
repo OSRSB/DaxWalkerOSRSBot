@@ -1,10 +1,10 @@
 package dax_api;
 
-import rsb.internal.wrappers.Filter;
-import rsb.methods.Web;
-import rsb.wrappers.*;
-import rsb.wrappers.common.Positionable;
-import rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.internal.wrappers.Filter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.*;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;

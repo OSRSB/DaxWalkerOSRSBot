@@ -1,8 +1,8 @@
 package dax_api.shared.helpers;
 
 
-import rsb.methods.Web;
-import rsb.wrappers.RSWidget;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSWidget;
 
 import java.util.*;
 

@@ -4,8 +4,8 @@ package dax_api.api_lib.models;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import net.runelite.api.Skill;
-import rsb.methods.Skills;
-import rsb.methods.Web;
+import net.runelite.rsb.methods.Skills;
+import net.runelite.rsb.methods.Web;
 
 import java.util.Arrays;
 import java.util.List;

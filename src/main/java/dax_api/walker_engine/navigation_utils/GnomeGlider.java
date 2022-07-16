@@ -4,8 +4,6 @@ import rsb.methods.Interfaces;
 import rsb.methods.Web;
 import rsb.util.StdRandom;
 import dax_api.Filters;
-import rsb.wrappers.RSWidget;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.InterfaceHelper;
 import dax_api.walker_engine.WaitFor;
 import dax_api.walker_engine.interaction_handling.InteractionHelper;

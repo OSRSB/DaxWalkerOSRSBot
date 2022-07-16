@@ -75,7 +75,7 @@ public enum RuneElement {
      * @return item name. Never null. "null" if no name.
      */
     private static String getItemName(RSItem item) {
-        ItemComposition definition = item.getDefinition();
+        ItemDefinition definition = item.getDefinition();
         String name;
         return definition == null || (name = definition.getName()) == null ? "null" : name;
     }

@@ -1,6 +1,6 @@
 package dax_api.teleports.teleport_utils;
 
-import rsb.methods.Web;
+import net.runelite.rsb.methods.Web;
 
 public class TeleportConstants {
 

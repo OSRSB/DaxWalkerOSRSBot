@@ -1,8 +1,8 @@
 package dax_api.walker.utils.path;
 
-import rsb.methods.Calculations;
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.methods.Calculations;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 
 import java.awt.*;
