@@ -1,7 +1,6 @@
 package dax_api.walker.utils;
 
-import net.runelite.api.ItemComposition;
-import net.runelite.api.ObjectComposition;
+import net.runelite.cache.definitions.ItemDefinition;
 import net.runelite.cache.definitions.ObjectDefinition;
 import net.runelite.rsb.wrappers.*;
 

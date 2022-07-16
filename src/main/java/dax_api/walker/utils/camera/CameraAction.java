@@ -1,14 +1,14 @@
 package dax_api.walker.utils.camera;
 
 
-import rsb.methods.Web;
-import rsb.util.StdRandom;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker.utils.AccurateMouse;
 import dax_api.walker.utils.movement.WalkingQueue;
 import dax_api.walker_engine.WaitFor;
-import rsb.wrappers.RSCharacter;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.RSCharacter;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.awt.*;
 

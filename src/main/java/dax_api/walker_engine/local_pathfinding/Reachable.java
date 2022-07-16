@@ -1,11 +1,10 @@
 package dax_api.walker_engine.local_pathfinding;
 
 
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.BankHelper;
-import rsb.wrappers.common.Positionable;
-
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.*;
 

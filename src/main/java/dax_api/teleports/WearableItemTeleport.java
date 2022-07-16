@@ -1,13 +1,13 @@
 package dax_api.teleports;
 
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.Filters;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.helpers.RSItemHelper;
 import dax_api.walker_engine.WaitFor;
 import dax_api.walker_engine.interaction_handling.NPCInteraction;
-import rsb.wrappers.RSItem;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.RSItem;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;

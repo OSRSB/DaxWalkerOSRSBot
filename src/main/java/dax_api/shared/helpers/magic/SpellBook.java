@@ -1,6 +1,7 @@
 package dax_api.shared.helpers.magic;
 
-import rsb.methods.Web;
+import net.runelite.rsb.methods.Web;
+
 import java.util.Arrays;
 
 public class SpellBook {

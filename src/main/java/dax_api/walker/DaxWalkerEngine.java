@@ -1,7 +1,5 @@
 package dax_api.walker;
 
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker.handlers.move_task.impl.DefaultObjectHandler;
 import dax_api.walker.handlers.move_task.impl.DefaultWalkHandler;
 import dax_api.walker.handlers.passive_action.PassiveAction;
@@ -13,12 +11,13 @@ import dax_api.walker.models.enums.MoveActionResult;
 import dax_api.walker.models.enums.Situation;
 import dax_api.walker.utils.path.DaxPathFinder;
 import dax_api.walker.utils.path.PathUtils;
-
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static dax_api.walker.models.enums.Situation.*;
+import static dax_api.walker.models.enums.Situation.COLLISION_BLOCKING;
 
 public class DaxWalkerEngine implements DaxLogger {
 

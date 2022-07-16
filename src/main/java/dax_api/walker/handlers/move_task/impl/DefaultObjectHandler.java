@@ -1,9 +1,5 @@
 package dax_api.walker.handlers.move_task.impl;
 
-import net.runelite.api.ObjectComposition;
-import net.runelite.cache.definitions.ObjectDefinition;
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker.handlers.move_task.MoveTaskHandler;
 import dax_api.walker.handlers.passive_action.PassiveAction;
 import dax_api.walker.models.DaxLogger;
@@ -14,8 +10,10 @@ import dax_api.walker.utils.AccurateMouse;
 import dax_api.walker.utils.TribotUtil;
 import dax_api.walker.utils.camera.DaxCamera;
 import dax_api.walker.utils.path.DaxPathFinder;
-import rsb.wrappers.RSObject;
-
+import net.runelite.cache.definitions.ObjectDefinition;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSObject;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.Arrays;
 import java.util.Comparator;

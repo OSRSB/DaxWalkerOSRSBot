@@ -1,11 +1,10 @@
 package dax_api.walker_engine.navigation_utils.fairyring.letters;
 
-import rsb.methods.Interfaces;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
-import rsb.util.Timer;
 import dax_api.walker_engine.navigation_utils.fairyring.FairyRing;
-import rsb.wrappers.RSWidget;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.util.Timer;
+import net.runelite.rsb.wrappers.RSWidget;
 
 public enum SecondLetter {
     I(0),

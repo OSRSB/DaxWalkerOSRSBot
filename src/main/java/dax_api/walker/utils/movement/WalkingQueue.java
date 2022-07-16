@@ -1,8 +1,8 @@
 package dax_api.walker.utils.movement;
 
-import rsb.methods.Web;
-import rsb.wrappers.subwrap.WalkerTile;
-import rsb.wrappers.RSCharacter;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.wrappers.RSCharacter;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.ArrayList;
 

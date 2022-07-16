@@ -1,16 +1,16 @@
 package dax_api.walker_engine.navigation_utils.fairyring;
 
-import rsb.methods.Web;
-import rsb.util.Timer;
 import dax_api.Filters;
-import rsb.wrappers.RSWidget;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.walker_engine.WaitFor;
 import dax_api.walker_engine.interaction_handling.InteractionHelper;
 import dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter;
 import dax_api.walker_engine.navigation_utils.fairyring.letters.SecondLetter;
 import dax_api.walker_engine.navigation_utils.fairyring.letters.ThirdLetter;
-import rsb.wrappers.RSObject;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.Timer;
+import net.runelite.rsb.wrappers.RSObject;
+import net.runelite.rsb.wrappers.RSWidget;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 import java.util.Arrays;
 

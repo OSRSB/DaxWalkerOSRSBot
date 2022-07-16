@@ -1,10 +1,6 @@
 package dax_api.walker_engine;
 
 
-import rsb.methods.Calculations;
-import rsb.methods.Web;
-import rsb.util.StdRandom;
-import rsb.wrappers.subwrap.WalkerTile;
 import dax_api.shared.PathFindingNode;
 import dax_api.teleports.Teleport;
 import dax_api.walker.utils.AccurateMouse;
@@ -18,8 +14,10 @@ import dax_api.walker_engine.navigation_utils.NavigationSpecialCase;
 import dax_api.walker_engine.navigation_utils.ShipUtils;
 import dax_api.walker_engine.real_time_collision.CollisionDataCollector;
 import dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
-import java.awt.*;
 import java.util.List;
 
 public class WalkerEngine implements Loggable{

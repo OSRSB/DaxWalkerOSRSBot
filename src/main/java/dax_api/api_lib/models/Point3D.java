@@ -3,8 +3,8 @@ package dax_api.api_lib.models;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import net.runelite.api.coords.WorldPoint;
-import rsb.wrappers.subwrap.WalkerTile;
-import rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.common.Positionable;
+import net.runelite.rsb.wrappers.subwrap.WalkerTile;
 
 public class Point3D {
 

@@ -1,9 +1,9 @@
 package dax_api.walker.handlers.passive_action.impl;
 
-import rsb.methods.Web;
-import rsb.util.StdRandom;
 import dax_api.walker.handlers.passive_action.PassiveAction;
 import dax_api.walker.models.enums.ActionResult;
+import net.runelite.rsb.methods.Web;
+import net.runelite.rsb.util.StdRandom;
 
 public class RunEnergyPassiveAction implements PassiveAction {
 
