@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'com.github.raverydavis'
+group = 'com.github.OSRSB'
 
 allprojects {
     repositories {
@@ -97,7 +97,7 @@ dependencies {
 
     implementation group: 'net.sf.jopt-simple', name:'jopt-simple', version: '5.0.4'
     // implementation group: 'com.github.OSRSB', name: 'OsrsBot', version: osrsbotVersion
-    implementation 'com.github.raverydavis:OsrsBot:ci-test-SNAPSHOT'
+    implementation 'com.github.OSRSB:OsrsBot:master-SNAPSHOT'
     // Uncomment if you want to use local
     // implementation project(":OSRSBot")
 }
