@@ -166,7 +166,7 @@ public class Reachable {
         boolean[][] traversed = new boolean[104][104];
         WalkerTile[][] parentMap = new WalkerTile[104][104];
         Queue<WalkerTile> queue = new LinkedList<>();
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
+        int[][] collisionData = Web.methods.client.getCollisionMaps()[Web.methods.game.getPlane()].getFlags();
         if(collisionData == null)
             return null;
 
@@ -235,7 +235,7 @@ public class Reachable {
         boolean[][] traversed = new boolean[104][104];
         WalkerTile[][] parentMap = new WalkerTile[104][104];
         Queue<WalkerTile> queue = new LinkedList<>();
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
+        int[][] collisionData = Web.methods.client.getCollisionMaps()[Web.methods.game.getPlane()].getFlags();
 
         if(collisionData == null)
             return new WalkerTile[][]{};

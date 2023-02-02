@@ -10,7 +10,7 @@ public class CollisionDataCollector {
         RealTimeCollisionTile.clearMemory();
 
         WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
+        int[][] collisionData = Web.methods.client.getCollisionMaps()[Web.methods.game.getPlane()].getFlags();
 
         if (collisionData == null) {
             return;
@@ -27,7 +27,7 @@ public class CollisionDataCollector {
 
     public static void updateRealTimeCollision(){
         WalkerTile playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-        int[][] collisionData = Web.methods.walking.getCollisionFlags(Web.methods.client.getPlane());
+        int[][] collisionData = Web.methods.client.getCollisionMaps()[Web.methods.game.getPlane()].getFlags();
         if(collisionData == null)
             return;
         for (int i = 0; i < collisionData.length; i++) {
