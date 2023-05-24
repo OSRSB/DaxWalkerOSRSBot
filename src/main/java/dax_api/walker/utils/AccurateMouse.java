@@ -161,7 +161,8 @@ public class AccurateMouse {
                 return uptext != null && uptext.startsWith("Walk here") ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
             }) == WaitFor.Return.SUCCESS) {
                 click(1);
-                if (waitResponse() == State.YELLOW) {
+                // TODO: waitResponse() calls getState() which is currently not implemented so just wait and return true
+                if (waitResponse() == State.YELLOW || true) {
                     WalkerTile clicked = new WalkerTile(Objects.requireNonNull(WaitFor.getValue(900, Web.methods.walking::getDestination)));
                     return clicked.equals(destination) || Web.methods.players.getMyPlayer().getPosition().equals(destination);
                 } else {
@@ -227,7 +228,7 @@ public class AccurateMouse {
         }
 
         if (point == null) {
-            point = model.getPointOnScreen();
+            point = model.getPointNearCenter();
             //point = model.getHumanHoverPoint();
         }
 
@@ -237,10 +238,12 @@ public class AccurateMouse {
 
         java.awt.Point jPoint = new java.awt.Point(point.getX(), point.getY());
 
-        if (jPoint.distance(new java.awt.Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY())) < Web.methods.mouse.getSpeed() / 20) {
-            Web.methods.mouse.hop(point);
-        } else {
-            Web.methods.mouse.move(point);
+        for (int i = 0 ; i < 3 && !model.contains(Web.methods.mouse.getLocation()); i++) {
+            if (jPoint.distance(new java.awt.Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY())) < Web.methods.mouse.getSpeed() / 20) {
+                Web.methods.mouse.hop(point);
+            } else {
+                Web.methods.mouse.move(point);
+            }
         }
 
         if (!model.getConvexHull().contains(new java.awt.Point(point.getX(), point.getY()))) {
@@ -272,8 +275,9 @@ public class AccurateMouse {
             }
 
             if (uptext.matches(regex) && !hover && !multipleMatches) {
-                click(1);
-                return waitResponse() == State.RED;
+                Web.methods.mouse.clickImmediately(true);
+                // TODO: waitResponse() calls getState() which is currently not implemented so just wait and return true
+                return waitResponse() == State.RED || true;
             }
 
             click(3);
