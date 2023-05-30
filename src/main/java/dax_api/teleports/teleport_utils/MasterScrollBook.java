@@ -156,6 +156,9 @@ public class MasterScrollBook {
 	//Opens the master scroll book interface.
 	public static boolean openBook(){
 		RSItem[] book = getBook();
+		if (!Web.methods.inventory.open()) {
+			return false;
+		}
 		if(Web.methods.chooseOption.getHoverText().contains("->")){
 			resetUptext();
 		}

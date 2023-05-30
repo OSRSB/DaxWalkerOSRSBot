@@ -627,6 +627,9 @@ public enum Teleport {
 		if (items.length == 0) {
 			return false;
 		}
+		if (!Web.methods.inventory.open()) {
+			return false;
+		}
 		for (String action : actions) {
 			if (items[0].doAction(action)) {
 				return true;

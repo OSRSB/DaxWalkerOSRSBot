@@ -599,7 +599,7 @@ public class PathObjectHandler implements Loggable {
     private static boolean useBladeOnWeb(RSObject web){
         if(!Web.methods.chooseOption.getHoverText().contains("->")){
             RSItem[] slashable = Web.methods.inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
-            if(slashable.length == 0 || !slashable[0].doAction("Use"))
+            if(slashable.length == 0 || !Web.methods.inventory.open() || !slashable[0].doAction("Use"))
                 return false;
         }
         return InteractionHelper.click(web, Web.methods.chooseOption.getHoverText());
