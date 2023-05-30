@@ -76,28 +76,26 @@ public class AccurateMouse {
         if (tile == null) {
             return false;
         }
-        for (int i = 0; i < StdRandom.uniform(4, 6); i++) {
-            LocalPoint dest = Web.methods.client.getLocalDestinationLocation();
-            WalkerTile currentDestination = (dest != null) ? new WalkerTile(dest.getX(), dest.getY(), Web.methods.client.getPlane(), WalkerTile.TYPES.SCENE).toWorldTile() : null;
-            if (currentDestination != null && currentDestination.equals(tile.getLocation())) {
-                return true;
-            }
+        LocalPoint dest = Web.methods.client.getLocalDestinationLocation();
+        WalkerTile currentDestination = (dest != null) ? new WalkerTile(dest.getX(), dest.getY(), Web.methods.client.getPlane(), WalkerTile.TYPES.SCENE).toWorldTile() : null;
+        if (currentDestination != null && currentDestination.equals(tile.getLocation())) {
+            return true;
+        }
 
-            Point point = Web.methods.calc.tileToMinimap(tile.getLocation());
-            if (point == null || !Web.methods.calc.tileOnMap(tile.getLocation())) {
-                return false;
-            }
+        Point point = Web.methods.calc.tileToMinimap(tile.getLocation());
+        if (point == null || !Web.methods.calc.tileOnMap(tile.getLocation())) {
+            return false;
+        }
 
-            AccurateMouse.click(point);
+        AccurateMouse.click(point);
 
 
-            WalkerTile newDestination = WaitFor.getValue(250, () -> {
-                RSTile rsTile = Web.methods.walking.getDestination();
-                return rsTile == null || new WalkerTile(rsTile).equals(currentDestination) ? null : new WalkerTile(rsTile);
-            });
-            if (newDestination != null && newDestination.equals(tile)) {
-                return true;
-            }
+        WalkerTile newDestination = WaitFor.getValue(250, () -> {
+            RSTile rsTile = Web.methods.walking.getDestination();
+            return rsTile == null || new WalkerTile(rsTile).equals(currentDestination) ? null : new WalkerTile(rsTile);
+        });
+        if (newDestination != null && newDestination.equals(tile)) {
+            return true;
         }
         return false;
     }
