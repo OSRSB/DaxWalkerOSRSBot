@@ -643,10 +643,18 @@ public enum Teleport {
 	private static boolean teleportWithScrollInterface(Predicate<RSItem> itemFilter, String regex){
 		ArrayList<RSItem> items = new ArrayList<>();
 		items.addAll(Arrays.asList(Web.methods.inventory.find(itemFilter)));
-		items.addAll(Arrays.asList(Web.methods.equipment.find(itemFilter)));
-
 		if (items.size() == 0) {
-			return false;
+			items.clear();
+			items.addAll(Arrays.asList(Web.methods.equipment.find(itemFilter)));
+			if (items.size() == 0) {
+				return false;
+			}
+			else {
+				Web.methods.equipment.open();
+			}
+		}
+		else {
+			Web.methods.inventory.open();
 		}
 
 		if(!Web.methods.interfaces.isInterfaceSubstantiated(TeleportConstants.SCROLL_INTERFACE_MASTER)){

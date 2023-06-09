@@ -51,10 +51,18 @@ public class WearableItemTeleport {
 	private static boolean teleportWithItem(Predicate<RSItem> itemFilter, String regex) {
 		ArrayList<RSItem> items = new ArrayList<>();
 		items.addAll(Arrays.asList(Web.methods.inventory.find(itemFilter)));
-		items.addAll(Arrays.asList(Web.methods.equipment.find(itemFilter)));
-
 		if (items.size() == 0) {
-			return false;
+			items.clear();
+			items.addAll(Arrays.asList(Web.methods.equipment.find(itemFilter)));
+			if (items.size() == 0) {
+				return false;
+			}
+			else {
+				Web.methods.equipment.open();
+			}
+		}
+		else {
+			Web.methods.inventory.open();
 		}
 
 		RSItem teleportItem = items.get(0);
