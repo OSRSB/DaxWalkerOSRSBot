@@ -52,7 +52,7 @@ public class PathObjectHandler implements Loggable {
                 return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Web"), true)
-                                .combine(Filters.Objects.actionsContains("Slash"), true)).isClickable();
+                                .combine(Filters.Objects.actionsContains("Slash"), true)) != null;
             }
         }),
         ROCKFALL("Rockfall", "Mine", null, new SpecialCondition() {
@@ -61,7 +61,7 @@ public class PathObjectHandler implements Loggable {
                 return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Rockfall"), true)
-                                .combine(Filters.Objects.actionsContains("Mine"), true)).isClickable();
+                                .combine(Filters.Objects.actionsContains("Mine"), true)) != null;
             }
         }),
         ROOTS("Roots", "Chop", null, new SpecialCondition() {
@@ -70,7 +70,7 @@ public class PathObjectHandler implements Loggable {
                 return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Roots"), true)
-                                .combine(Filters.Objects.actionsContains("Chop"), true)).isClickable();
+                                .combine(Filters.Objects.actionsContains("Chop"), true)) != null;
             }
         }),
         ROCK_SLIDE("Rockslide", "Climb-over", null, new SpecialCondition() {
@@ -79,7 +79,7 @@ public class PathObjectHandler implements Loggable {
                 return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Rockslide"), true)
-                                .combine(Filters.Objects.actionsContains("Climb-over"), true)).isClickable();
+                                .combine(Filters.Objects.actionsContains("Climb-over"), true)) != null;
             }
         }),
         ROOT("Root", "Step-over", null, new SpecialCondition() {
@@ -88,7 +88,7 @@ public class PathObjectHandler implements Loggable {
                 return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Root"), true)
-                                .combine(Filters.Objects.actionsContains("Step-over"), true)).isClickable();
+                                .combine(Filters.Objects.actionsContains("Step-over"), true)) != null;
             }
         }),
         BRIMHAVEN_VINES("Vines", "Chop-down", null, new SpecialCondition() {
@@ -97,7 +97,7 @@ public class PathObjectHandler implements Loggable {
                 return Web.methods.objects.getNearest(
                         Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
                                 .combine(Filters.Objects.nameEquals("Vines"), true)
-                                .combine(Filters.Objects.actionsContains("Chop-down"), true)).isClickable();
+                                .combine(Filters.Objects.actionsContains("Chop-down"), true)) != null;
             }
         }),
         AVA_BOOKCASE ("Bookcase", "Search", new WalkerTile(3097, 3359, 0), new SpecialCondition() {
