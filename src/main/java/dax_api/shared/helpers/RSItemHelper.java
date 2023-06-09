@@ -60,6 +60,9 @@ public class RSItemHelper {
         }
         List<RSItem> list = Arrays.stream(Web.methods.inventory.find(filter)).collect(Collectors.toList());
         if (one) {
+            if (!Web.methods.inventory.open()) {
+                return false;
+            }
             RSItem closest = getClosestToMouse(list);
             return closest != null && closest.doAction(action);
         }

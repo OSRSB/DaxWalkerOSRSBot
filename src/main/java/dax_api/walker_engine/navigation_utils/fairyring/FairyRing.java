@@ -41,7 +41,7 @@ public class FairyRing {
 		if (Web.methods.client.getVarbitValue(ELITE_DIARY_VARBIT) == 0 && Arrays.stream(DRAMEN_STAFFS).allMatch((id) -> Web.methods.equipment.getCount(id) == 0));
 
 		{
-			if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(DRAMEN_STAFFS)), "Wield")){
+			if (!Web.methods.inventory.open() || !InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(DRAMEN_STAFFS)), "Wield")){
 				return false;
 			}
 		}

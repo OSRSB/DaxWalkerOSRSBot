@@ -346,7 +346,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case ZANARIS_RING:
                 if (Web.methods.equipment.getCount(772) == 0){
-                    if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(772)), "Wield")){
+                    if (!Web.methods.inventory.open() || !InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(772)), "Wield")){
                         getInstance().log("Could not equip Dramen staff.");
                         break;
                     }
