@@ -7,23 +7,23 @@ import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.util.StdRandom;
 import net.runelite.rsb.wrappers.RSArea;
 import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 
 
 public class ShipUtils {
 
-    private static final WalkerTile[] SPECIAL_CASES = new WalkerTile[]{new WalkerTile(2663, 2676, 1)};
+    private static final RSTile[] SPECIAL_CASES = new RSTile[]{new RSTile(2663, 2676, 1)};
 
     public static boolean isOnShip() {
-        WalkerTile playerPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-        for (WalkerTile specialCase : SPECIAL_CASES){
+        RSTile playerPos = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+        for (RSTile specialCase : SPECIAL_CASES){
             if (new RSArea(specialCase, 5).contains(playerPos)){
                 return true;
             }
         }
         return getGangplank() != null
-                && new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane() == 1
+                && new RSTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane() == 1
                 && Web.methods.objects.getAll(Filters.Objects.nameEquals("Ship's wheel", "Ship's ladder", "Anchor")).length > 0;
     }
 

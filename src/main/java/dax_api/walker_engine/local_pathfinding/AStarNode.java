@@ -1,6 +1,6 @@
 package dax_api.walker_engine.local_pathfinding;
 
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 public class AStarNode {
 
@@ -174,11 +174,11 @@ public class AStarNode {
         return x + " " + y + " " + z;
     }
 
-    public WalkerTile toWalkerTile(){
-        return new WalkerTile(x, y, z/*, TYPES.WORLD*/);
+    public RSTile toRSTile(){
+        return new RSTile(x, y, z/*, TYPES.WORLD*/);
     }
 
-    public static String stringID(WalkerTile tile){
+    public static String stringID(RSTile tile){
         return tile.getX() + " " + tile.getY() + " " + tile.getPlane();
     }
 

@@ -2,7 +2,7 @@ package dax_api.shared;
 
 import dax_api.shared.jsonSimple.JSONObject;
 import dax_api.shared.jsonSimple.JSONValue;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class GetPathResponseContainer {
     private String response;
     private ArrayList<String> path;
     private PlayerInformation playerInformation;
-    private ArrayList<WalkerTile> WalkerTilePath;
+    private ArrayList<RSTile> RSTilePath;
 
     public static GetPathResponseContainer CLIENT_ERROR = new GetPathResponseContainer(Status.CLIENT_ERROR, "No problem with server. Client issue.", new ArrayList<>(), null, true);
 
@@ -65,17 +65,17 @@ public class GetPathResponseContainer {
         }
     }
 
-    public ArrayList<WalkerTile> getWalkerTilePath(){
-        if (WalkerTilePath != null){
-            return WalkerTilePath;
+    public ArrayList<RSTile> getRSTilePath(){
+        if (RSTilePath != null){
+            return RSTilePath;
         }
-        WalkerTilePath = new ArrayList<>();
+        RSTilePath = new ArrayList<>();
         for (String tile : path){
             String[] coords = tile.split(" ");
             int x = Integer.parseInt(coords[0]), y = Integer.parseInt(coords[1]), z = Integer.parseInt(coords[2]);
-            WalkerTilePath.add(new WalkerTile(x, y, z));
+            RSTilePath.add(new RSTile(x, y, z));
         }
-        return WalkerTilePath;
+        return RSTilePath;
     }
 
     public static GetPathResponseContainer fromJSONString(String s){

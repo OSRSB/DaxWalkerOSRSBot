@@ -8,7 +8,7 @@ import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.util.StdRandom;
 import net.runelite.rsb.wrappers.RSCharacter;
 import net.runelite.rsb.wrappers.common.Positionable;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.awt.*;
 
@@ -25,7 +25,7 @@ public class CameraAction {
     }
 
     public static boolean focusCamera(Positionable positionable){
-        WalkerTile tile = positionable.getLocation();
+        RSTile tile = positionable.getLocation();
         if (tile.isOnScreen() && tile.isClickable()){
             return true;
         }
@@ -48,8 +48,8 @@ public class CameraAction {
             return true;
         }
 
-        WalkerTile destination = new WalkerTile(rsCharacter.getLocation());
-        WalkerTile newDestination = WalkingQueue.getWalkingTowards(rsCharacter);
+        RSTile destination = new RSTile(rsCharacter.getLocation());
+        RSTile newDestination = WalkingQueue.getWalkingTowards(rsCharacter);
         if (newDestination != null){
             destination = newDestination;
         }

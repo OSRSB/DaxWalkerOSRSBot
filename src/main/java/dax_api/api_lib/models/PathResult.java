@@ -2,7 +2,7 @@ package dax_api.api_lib.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +54,11 @@ public class PathResult {
         this.cost = cost;
     }
 
-    public ArrayList<WalkerTile> toWalkerTilePath() {
+    public ArrayList<RSTile> toRSTilePath() {
         if (getPath() == null) {
             return new ArrayList<>();
         }
-        ArrayList<WalkerTile> path = new ArrayList<>();
+        ArrayList<RSTile> path = new ArrayList<>();
         for (Point3D point3D : getPath()) {
             path.add(point3D.toPositionable().getLocation());
         }

@@ -18,7 +18,7 @@ import net.runelite.rsb.util.StdRandom;
 import net.runelite.rsb.wrappers.RSItem;
 import net.runelite.rsb.wrappers.RSNPC;
 import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;
@@ -228,15 +228,15 @@ public class NavigationSpecialCase implements Loggable {
             this.z = z;
         }
 
-        WalkerTile getWalkerTile(){
-            return new WalkerTile(x, y, z);
+        RSTile getRSTile(){
+            return new RSTile(x, y, z);
         }
     }
 
-    public static SpecialLocation getLocation(WalkerTile WalkerTile){
+    public static SpecialLocation getLocation(RSTile RSTile){
         return Arrays.stream(
-                SpecialLocation.values()).filter(tile -> tile.z == WalkerTile.getPlane()
-                && Point2D.distance(tile.x, tile.y, WalkerTile.getX(), WalkerTile.getY()) <= 2)
+                SpecialLocation.values()).filter(tile -> tile.z == RSTile.getPlane()
+                && Point2D.distance(tile.x, tile.y, RSTile.getX(), RSTile.getY()) <= 2)
                     .findFirst().orElse(null);
     }
 
@@ -257,7 +257,7 @@ public class NavigationSpecialCase implements Loggable {
                     NPCInteraction.handleConversation("Yes");
                     return true;
                 } else {
-                    if (clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() > 4000 ?
+                    if (clickObject(Filters.Objects.nameEquals("Dungeon entrance"), "Enter", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() > 4000 ?
                             WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
                     } else {
@@ -311,9 +311,9 @@ public class NavigationSpecialCase implements Loggable {
 
             case MISCELLANIA_TO_RELLEKKA:
             case RELLEKKA_TO_MISCELLANIA:
-                final WalkerTile curr = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+                final RSTile curr = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
                 if (NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Travel"), new String[]{"Travel"})){
-                    WaitFor.condition(10000,() -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(curr) > 20 ?
+                    WaitFor.condition(10000,() -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(curr) > 20 ?
                                 WaitFor.Return.SUCCESS :
                                 WaitFor.Return.IGNORE);
                     WaitFor.milliseconds(4000, 5000);
@@ -352,13 +352,13 @@ public class NavigationSpecialCase implements Loggable {
                     }
                 }
                 if (InteractionHelper.click(
-		                InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> SpecialLocation.ZANARIS_RING.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+		                InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> SpecialLocation.ZANARIS_RING.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 break;
             case LUMBRIDGE_ZANARIS_SHED:
                 if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Fairy ring")),
-		                "Use", () -> LUMBRIDGE_ZANARIS_SHED.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+		                "Use", () -> LUMBRIDGE_ZANARIS_SHED.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 break;
@@ -370,7 +370,7 @@ public class NavigationSpecialCase implements Loggable {
                     InteractionHelper.focusCamera(
 		                    InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")));
                     if (InteractionHelper.click(
-		                    InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).equals(new WalkerTile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+		                    InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).equals(new RSTile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
                     }
                 }
@@ -380,10 +380,10 @@ public class NavigationSpecialCase implements Loggable {
             case ROPE_TO_TREE:
                 break;
             case WATERFALL_DUNGEON_ENTRANCE:
-                if (WATERFALL_DUNGEON.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 500){
-                    return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> WATERFALL_DUNGEON_ENTRANCE.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                if (WATERFALL_DUNGEON.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 500){
+                    return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> WATERFALL_DUNGEON_ENTRANCE.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                 } else if (RSItemHelper.use(954)){
-                    if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameContains("Dead tree")), "Use Rope", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).equals(new WalkerTile(2511, 3463, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameContains("Dead tree")), "Use Rope", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).equals(new RSTile(2511, 3463, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
                     }
                 }
@@ -395,26 +395,26 @@ public class NavigationSpecialCase implements Loggable {
 
             case WATERFALL_DUNGEON:
                 if (InteractionHelper.click(
-		                InteractionHelper.getRSObject(Filters.Objects.idEquals(2010)), "Open", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getX() == WATERFALL_DUNGEON.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+		                InteractionHelper.getRSObject(Filters.Objects.idEquals(2010)), "Open", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getX() == WATERFALL_DUNGEON.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 getInstance().log("Failed to get to waterfall dungeon");
                 break;
             case WATERFALL_FALL_DOWN:
-                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Get in")), "Get in", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(new WalkerTile(2527, 3413, 0)) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Get in")), "Get in", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(new RSTile(2527, 3413, 0)) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 getInstance().log("Failed to fall down waterfall");
                 break;
 
             case KALPHITE_TUNNEL:
-                if (clickObject(Filters.Objects.nameEquals("Rope"), "Climb-up", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 9000 ?
+                if (clickObject(Filters.Objects.nameEquals("Rope"), "Climb-up", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 9000 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
                     return true;
                 }
                 break;
             case KALPHITE_TUNNEL_INSIDE:
-                if (clickObject(Filters.Objects.nameEquals("Tunnel entrance").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() > 4000 ?
+                if (clickObject(Filters.Objects.nameEquals("Tunnel entrance").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() > 4000 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 } else {
@@ -439,7 +439,7 @@ public class NavigationSpecialCase implements Loggable {
                         return rsObject.getLocation().getY() == 10171;
                     }
                 }, true))};
-                if (clickObject(objects[0], "Ride", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (clickObject(objects[0], "Ride", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     getInstance().log("Rode cart to GE");
                     return true;
                 } else {
@@ -452,7 +452,7 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case BRIMHAVEN_DUNGEON_SURFACE:
-                if (clickObject(Filters.Objects.nameEquals("Exit"), "Leave", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 8000 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (clickObject(Filters.Objects.nameEquals("Exit"), "Leave", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 8000 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 } else {
                     getInstance().log("Failed to exit dungeon.");
@@ -467,7 +467,7 @@ public class NavigationSpecialCase implements Loggable {
                             if (NPCInteraction.isConversationWindowUp()) {
                                 NPCInteraction.handleConversation(NPCInteraction.GENERAL_RESPONSES);
                             }
-                            return new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() == 3383 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                            return new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() == 3383 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                         })){
                     WaitFor.milliseconds(1060, 1500);
                     return true;
@@ -479,8 +479,8 @@ public class NavigationSpecialCase implements Loggable {
             case GNOME_SHORTCUT_ELKOY_ENTER:
             case GNOME_SHORTCUT_ELKOY_EXIT:
                 if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Elkoy"), new String[]{"Follow"})){
-                    WalkerTile current = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-                    if(WaitFor.condition(8000, () ->  new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                    RSTile current = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+                    if(WaitFor.condition(8000, () ->  new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(current) > 20 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         return false;
                     }
                     WaitFor.milliseconds(1000, 2000);
@@ -491,7 +491,7 @@ public class NavigationSpecialCase implements Loggable {
             case GNOME_TREE_ENTRANCE:
             case GNOME_TREE_EXIT:
                 if (clickObject(Filters.Objects.nameEquals("Tree Door").combine(Filters.Objects.actionsContains("Open"), true), "Open",
-                        () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() == 3492 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                        () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() == 3492 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     WaitFor.milliseconds(1060, 1500);
                     return true;
                 } else {
@@ -501,7 +501,7 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case ZEAH_SAND_CRAB:
-                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() >= 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() >= 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                     getInstance().log("Paid for travel.");
                     return true;
                 } else {
@@ -509,7 +509,7 @@ public class NavigationSpecialCase implements Loggable {
                 }
                 break;
             case ZEAH_SAND_CRAB_ISLAND:
-                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                     getInstance().log("Paid for travel.");
                     return true;
                 } else {
@@ -586,7 +586,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case GNOME_WAYDAR:
                 if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Daero"), new String[]{"Travel"})){
-                    if (WaitFor.condition(5000, () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(GNOME_WAYDAR.getWalkerTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                    if (WaitFor.condition(5000, () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(GNOME_WAYDAR.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
                     WaitFor.milliseconds(1000, 2000);
@@ -596,7 +596,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case CRASH_ISLAND:
                 if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
-                    if (WaitFor.condition(5000, () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(CRASH_ISLAND.getWalkerTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                    if (WaitFor.condition(5000, () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(CRASH_ISLAND.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
                     WaitFor.milliseconds(1000, 2000);
@@ -606,7 +606,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case APE_ATOLL_GLIDER_CRASH:
                 if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lumdo"), new String[]{"Travel"})){
-                    if (WaitFor.condition(5000, () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(APE_ATOLL_GLIDER_CRASH.getWalkerTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                    if (WaitFor.condition(5000, () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(APE_ATOLL_GLIDER_CRASH.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
                     WaitFor.milliseconds(1000, 2000);
@@ -615,7 +615,7 @@ public class NavigationSpecialCase implements Loggable {
                 break;
             case GNOME_DROPOFF:
                 if (NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Waydar"), new String[]{"Travel"})){
-                    if (WaitFor.condition(5000, () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(CRASH_ISLAND.getWalkerTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+                    if (WaitFor.condition(5000, () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(CRASH_ISLAND.getRSTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                         break;
                     }
                     WaitFor.milliseconds(1000, 2000);
@@ -624,7 +624,7 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case HAM_OUTSIDE:
-                if (clickObject(Filters.Objects.nameEquals("Ladder"), "Climb-up", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 4000 ?
+                if (clickObject(Filters.Objects.nameEquals("Ladder"), "Climb-up", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 4000 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
                     return true;
                 }
@@ -639,7 +639,7 @@ public class NavigationSpecialCase implements Loggable {
                     }
                 } else {
                     if (InteractionHelper.click(RSObjectHelper.get(Filters.Objects.actionsContains("Climb-down")), "Climb-down")){
-                        WaitFor.condition(3000, () -> HAM_INSIDE.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        WaitFor.condition(3000, () -> HAM_INSIDE.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         return true;
                     }
                 }
@@ -651,14 +651,14 @@ public class NavigationSpecialCase implements Loggable {
                 if(NPCInteraction.isConversationWindowUp() || clickObject(Filters.Objects.nameEquals("Large door"), "Open",() -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     NPCInteraction.handleConversationRegex("Yes");
                     return WaitFor.condition(3000,
-                            () -> FEROX_ENCLAVE_PORTAL_F2P.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                            () -> FEROX_ENCLAVE_PORTAL_F2P.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
             case CASTLE_WARS_DOOR:
                 if(NPCInteraction.isConversationWindowUp() || clickObject(Filters.Objects.nameEquals("Castle Wars portal"), "Enter", () -> NPCInteraction.isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     NPCInteraction.handleConversationRegex("Yes");
                     return WaitFor.condition(3000,
-                            () -> CASTLE_WARS_DOOR.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                            () -> CASTLE_WARS_DOOR.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
 
@@ -667,7 +667,7 @@ public class NavigationSpecialCase implements Loggable {
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     NPCInteraction.handleConversationRegex("Row to the barge and travel to the Digsite.");
                     return WaitFor.condition(5000,
-                            () -> FOSSIL_ISLAND_BARGE.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                            () -> FOSSIL_ISLAND_BARGE.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
 
@@ -779,7 +779,7 @@ public class NavigationSpecialCase implements Loggable {
                     if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Barge guard"),"Quick-Travel")){
                         System.out.println("Success");
                         return WaitFor.condition(8000,
-                                () -> FOSSIL_ISLAND_FERRY_CAMP.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                                () -> FOSSIL_ISLAND_FERRY_CAMP.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                     }
                 } else {
                     return takeFossilIslandBoat("Row to the camp.");
@@ -787,19 +787,19 @@ public class NavigationSpecialCase implements Loggable {
                 break;
             case RELLEKKA_DOCK_FROM_ISLES:
                 return NPCInteraction.clickNpc(Filters.NPCs.actionsEquals("Rellekka"),"Rellekka") &&
-                        WaitFor.condition(15000,() -> RELLEKKA_DOCK_FROM_ISLES.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10
+                        WaitFor.condition(15000,() -> RELLEKKA_DOCK_FROM_ISLES.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10
                                 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             case JATIZSO_DOCK:
                 return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Mord Gunnars"),"Jatizso") &&
-                        WaitFor.condition(15000,() -> JATIZSO_DOCK.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10
+                        WaitFor.condition(15000,() -> JATIZSO_DOCK.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10
                                 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             case NEITIZNOT_DOCK:
                 return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Maria Gunnars"),"Neitiznot") &&
-                        WaitFor.condition(15000,() -> NEITIZNOT_DOCK.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10
+                        WaitFor.condition(15000,() -> NEITIZNOT_DOCK.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10
                                 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case OBSERVATORY_INSIDE:
-                return clickObject(Filters.Objects.nameEquals("Rope"),"Climb", () -> OBSERVATORY_INSIDE.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 5
+                return clickObject(Filters.Objects.nameEquals("Rope"),"Climb", () -> OBSERVATORY_INSIDE.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 5
                         ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
             case OBSERVATORY_OUTSIDE:
                 return (NPCInteraction.isConversationWindowUp() ||  clickObject(Filters.Objects.nameEquals("Door"),"Open",
@@ -807,40 +807,40 @@ public class NavigationSpecialCase implements Loggable {
                         && WaitFor.condition(15000,() -> {
                     if(NPCInteraction.isConversationWindowUp())
                         NPCInteraction.handleConversation("Yes.");
-                    return OBSERVATORY_OUTSIDE.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 5
+                    return OBSERVATORY_OUTSIDE.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 5
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                 }) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(600,1800) != null;
 
             case MOSS_GIANT_ISLAND_ROPE:
             case MOSS_GIANT_ISLAND_ROPE_LANDING:
-                if(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(MOSS_GIANT_ISLAND_ROPE.getWalkerTile()) >= 2){
-                    Web.methods.walking.walkTo(MOSS_GIANT_ISLAND_ROPE.getWalkerTile());
+                if(new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(MOSS_GIANT_ISLAND_ROPE.getRSTile()) >= 2){
+                    Web.methods.walking.walkTo(MOSS_GIANT_ISLAND_ROPE.getRSTile());
                     WaitFor.milliseconds(200,400);
                 }
-                if (clickObject(Filters.Objects.nameEquals("Ropeswing"), "Swing-on", () -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getX() < 2708 ?
+                if (clickObject(Filters.Objects.nameEquals("Ropeswing"), "Swing-on", () -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).getX() < 2708 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
                     return true;
                 }
                 return false;
             case SHANTAY_PASS_ENTRANCE:
             case SHANTAY_PASS_EXIT:
-                if(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 3117){
-                    return clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> SHANTAY_PASS_ENTRANCE.getWalkerTile().equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
+                if(new RSTile(Web.methods.players.getMyPlayer().getLocation()).getY() < 3117){
+                    return clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> SHANTAY_PASS_ENTRANCE.getRSTile().equals(new RSTile(Web.methods.players.getMyPlayer().getLocation()))
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
                 } else if(Web.methods.inventory.getCount(1854) == 0){
                     NPCInteraction.talkTo(Filters.NPCs.nameEquals("Shantay"),new String[]{"Buy-pass"}, new String[]{});
                 }
                 return Web.methods.inventory.getCount(1854) > 0 && clickObject(Filters.Objects.nameEquals("Shantay pass"),"Go-through", () -> {
                     DoomsToggle.handleToggle();
-                    return SHANTAY_PASS_EXIT.getWalkerTile().equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
+                    return SHANTAY_PASS_EXIT.getRSTile().equals(new RSTile(Web.methods.players.getMyPlayer().getLocation()))
                             ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
                 }) && WaitFor.milliseconds(600,1800) != null;
 
             case PATERDOMUS_EAST_ENTRANCE:
-                return clickObject(Filters.Objects.nameEquals("Trapdoor"), new String[]{"Open","Climb-down"}, () -> PATERDOMUS_EAST_ENTRANCE.getWalkerTile().equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
+                return clickObject(Filters.Objects.nameEquals("Trapdoor"), new String[]{"Open","Climb-down"}, () -> PATERDOMUS_EAST_ENTRANCE.getRSTile().equals(new RSTile(Web.methods.players.getMyPlayer().getLocation()))
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
             case PATERDOMUS_EAST_EXIT:
-                return clickObject(Filters.Objects.nameEquals("Holy barrier"), "Pass-through", () -> PATERDOMUS_EAST_EXIT.getWalkerTile().equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
+                return clickObject(Filters.Objects.nameEquals("Holy barrier"), "Pass-through", () -> PATERDOMUS_EAST_EXIT.getRSTile().equals(new RSTile(Web.methods.players.getMyPlayer().getLocation()))
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
         }
 
@@ -865,8 +865,8 @@ public class NavigationSpecialCase implements Loggable {
             }
         }
         if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro"),new String[]{travelOption})){
-            WalkerTile current = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-            if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+            RSTile current = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+            if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
                 return false;
             }
             WaitFor.milliseconds(1800, 2800);
@@ -879,8 +879,8 @@ public class NavigationSpecialCase implements Loggable {
         getInstance().log("First trip to zeah");
         if(NPCInteraction.talkTo(Filters.NPCs.nameEquals("Veos", "Captain Magoro"), new String[]{"Talk-to"}, new String[]{
                 locationOption,"Can you take me somewhere?","That's great, can you take me there please?","Can you take me to Great Kourend?"})) {
-            WalkerTile current = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-            if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+            RSTile current = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+            if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
                 return false;
             }
             WaitFor.milliseconds(1800, 2800);
@@ -961,9 +961,9 @@ public class NavigationSpecialCase implements Loggable {
                 "Travel",
                 () -> NPCInteraction.isConversationWindowUp() ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
-            WalkerTile myPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+            RSTile myPos = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
             NPCInteraction.handleConversation(destination);
-            return WaitFor.condition(5000,() -> new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
+            return WaitFor.condition(5000,() -> new RSTile(Web.methods.players.getMyPlayer().getLocation()).distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
                     WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }
         return false;

@@ -1,6 +1,6 @@
 package dax_api.api_lib.models;
 
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 public enum RunescapeBank {
     AL_KHARID(3269, 3167, 0),
@@ -60,12 +60,12 @@ public enum RunescapeBank {
     ZANARIS(2383, 4458, 0),
     ZEAH_SAND_BANK(1719, 3465, 0)
     ;
-    WalkerTile position;
+    RSTile position;
     RunescapeBank(int x, int y, int z){
-        this.position = new WalkerTile(x,y,z);
+        this.position = new RSTile(x,y,z);
     }
 
-    public WalkerTile getLocation(){
+    public RSTile getLocation(){
         return this.position;
     }
 }

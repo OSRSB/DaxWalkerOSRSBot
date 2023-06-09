@@ -4,7 +4,7 @@ import dax_api.shared.NodeInfo;
 import dax_api.walker_engine.local_pathfinding.PathAnalyzer;
 import dax_api.walker_engine.real_time_collision.RealTimeCollisionTile;
 import net.runelite.rsb.methods.Web;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -23,7 +23,7 @@ public class WebWalkerPaint {
 
     private final Point mapCenter;
     private final ExecutorService service;
-    private WalkerTile playerPosition;
+    private RSTile playerPosition;
     private int lastChange;
 
 
@@ -56,9 +56,9 @@ public class WebWalkerPaint {
         if (!WalkerEngine.getInstance().isNavigating()){
             return;
         }
-        if (playerPosition == null || !playerPosition.equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) || lastChange != RealTimeCollisionTile.getAllInitialized().size()) {
+        if (playerPosition == null || !playerPosition.equals(new RSTile(Web.methods.players.getMyPlayer().getLocation())) || lastChange != RealTimeCollisionTile.getAllInitialized().size()) {
             lastChange = RealTimeCollisionTile.getAllInitialized().size();
-            playerPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+            playerPosition = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
             final int playerX = playerPosition.getX(), playerY = playerPosition.getY();
             service.submit(() -> {
                 nonDisplayableMapImageGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
@@ -68,9 +68,9 @@ public class WebWalkerPaint {
                 nonDisplayableMapImageGraphics.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
 
                 int previousLocalX = -1, previousLocalY = -1;
-                List<WalkerTile> path = WalkerEngine.getInstance().getCurrentPath();
+                List<RSTile> path = WalkerEngine.getInstance().getCurrentPath();
                 if (path != null) {
-                    for (WalkerTile node : path) {
+                    for (RSTile node : path) {
                         int relativeX = node.getX() - playerX, relativeY = playerY - node.getY();
                         int localX = (relativeX + REGION_SIZE / 2) * TILE_WIDTH, localY = (relativeY + REGION_SIZE / 2) * TILE_WIDTH;
 

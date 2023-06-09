@@ -9,7 +9,7 @@ import net.runelite.rsb.util.Timer;
 import net.runelite.rsb.wrappers.*;
 import net.runelite.rsb.wrappers.common.Clickable07;
 import net.runelite.rsb.wrappers.common.Positionable;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 
 public class InteractionHelper {
@@ -47,7 +47,7 @@ public class InteractionHelper {
             return b;
         }
 
-        WalkerTile position = ((Positionable) clickable).getLocation();
+        RSTile position = ((Positionable) clickable).getLocation();
 
         if (!isOnScreenAndClickable(clickable)){
             Web.methods.walking.walkTo(Web.methods.walking.randomizeTile(position, 10, 10));
@@ -105,9 +105,9 @@ public class InteractionHelper {
         if (isOnScreenAndClickable(clickable)){
             return true;
         }
-        WalkerTile tile = ((Positionable) clickable).getLocation();
+        RSTile tile = ((Positionable) clickable).getLocation();
         Web.methods.camera.turnTo(tile);
-        Web.methods.camera.setPitch(100 - (tile.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) * 4));
+        Web.methods.camera.setPitch(100 - (tile.distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) * 4));
         return isOnScreenAndClickable(clickable);
     }
 

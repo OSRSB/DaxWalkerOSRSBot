@@ -16,7 +16,7 @@ import net.runelite.rsb.util.StdRandom;
 import net.runelite.rsb.wrappers.RSArea;
 import net.runelite.rsb.wrappers.RSItem;
 import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -100,67 +100,67 @@ public class PathObjectHandler implements Loggable {
                                 .combine(Filters.Objects.actionsContains("Chop-down"), true)) != null;
             }
         }),
-        AVA_BOOKCASE ("Bookcase", "Search", new WalkerTile(3097, 3359, 0), new SpecialCondition() {
+        AVA_BOOKCASE ("Bookcase", "Search", new RSTile(3097, 3359, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getX() >= 3097 && destinationDetails.getAssumed().equals(new WalkerTile(3097, 3359, 0));
+                return destinationDetails.getDestination().getX() >= 3097 && destinationDetails.getAssumed().equals(new RSTile(3097, 3359, 0));
             }
         }),
-        AVA_LEVER ("Lever", "Pull", new WalkerTile(3096, 3357, 0), new SpecialCondition() {
+        AVA_LEVER ("Lever", "Pull", new RSTile(3096, 3357, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new WalkerTile(3097, 3359, 0));
+                return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new RSTile(3097, 3359, 0));
             }
         }),
-        ARDY_DOOR_LOCK_SIDE("Door", "Pick-lock", new WalkerTile(2565, 3356, 0), new SpecialCondition() {
+        ARDY_DOOR_LOCK_SIDE("Door", "Pick-lock", new RSTile(2565, 3356, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getX() >= 2565 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2565, 3356, 0)) < 3;
+                return new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).getX() >= 2565 && new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new RSTile(2565, 3356, 0)) < 3;
             }
         }),
-        ARDY_DOOR_UNLOCKED_SIDE("Door", "Open", new WalkerTile(2565, 3356, 0), new SpecialCondition() {
+        ARDY_DOOR_UNLOCKED_SIDE("Door", "Open", new RSTile(2565, 3356, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getX() < 2565 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2565, 3356, 0)) < 3;
+                return new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).getX() < 2565 && new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new RSTile(2565, 3356, 0)) < 3;
             }
         }),
-        YANILLE_DOOR_LOCK_SIDE("Door", "Pick-lock", new WalkerTile(2601, 9482, 0), new SpecialCondition() {
+        YANILLE_DOOR_LOCK_SIDE("Door", "Pick-lock", new RSTile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getY() <= 9481 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2601, 9482, 0)) < 3;
+                return new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).getY() <= 9481 && new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new RSTile(2601, 9482, 0)) < 3;
             }
         }),
-        YANILLE_DOOR_UNLOCKED_SIDE("Door", "Open", new WalkerTile(2601, 9482, 0), new SpecialCondition() {
+        YANILLE_DOOR_UNLOCKED_SIDE("Door", "Open", new RSTile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).getY() > 9481 && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new WalkerTile(2601, 9482, 0)) < 3;
+                return new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).getY() > 9481 && new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(new RSTile(2601, 9482, 0)) < 3;
             }
         }),
-        EDGEVILLE_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new WalkerTile(3138, 3516, 0), new SpecialCondition() {
+        EDGEVILLE_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3138, 3516, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new WalkerTile(3138, 3516, 0));
+                return destinationDetails.getAssumed().equals(new RSTile(3138, 3516, 0));
             }
         }),
-        VARROCK_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new WalkerTile(3141, 3513, 0), new SpecialCondition() {
+        VARROCK_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new RSTile(3141, 3513, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new WalkerTile(3141, 3513, 0 ));
+                return destinationDetails.getAssumed().equals(new RSTile(3141, 3513, 0 ));
             }
         }),
-        GAMES_ROOM_STAIRS("Stairs", "Climb-down", new WalkerTile(2899, 3565, 0), new SpecialCondition() {
+        GAMES_ROOM_STAIRS("Stairs", "Climb-down", new RSTile(2899, 3565, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getWalkerTile().equals(new WalkerTile(2899, 3565, 0)) &&
-                    destinationDetails.getAssumed().equals(new WalkerTile(2205, 4934, 1));
+                return destinationDetails.getDestination().getRSTile().equals(new RSTile(2899, 3565, 0)) &&
+                    destinationDetails.getAssumed().equals(new RSTile(2205, 4934, 1));
             }
         });
 
         private String name, action;
-        private WalkerTile location;
+        private RSTile location;
         private SpecialCondition specialCondition;
 
-        SpecialObject(String name, String action, WalkerTile location, SpecialCondition specialCondition){
+        SpecialObject(String name, String action, RSTile location, SpecialCondition specialCondition){
             this.name = name;
             this.action = action;
             this.location = location;
@@ -175,7 +175,7 @@ public class PathObjectHandler implements Loggable {
             return action;
         }
 
-        public WalkerTile getLocation() {
+        public RSTile getLocation() {
             return location;
         }
 
@@ -198,7 +198,7 @@ public class PathObjectHandler implements Loggable {
         abstract boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails);
     }
 
-    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, List<WalkerTile> path){
+    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, List<RSTile> path){
         RealTimeCollisionTile start = destinationDetails.getDestination(), end = destinationDetails.getNextTile();
 
         RSObject[] interactiveObjects = null;
@@ -229,7 +229,7 @@ public class PathObjectHandler implements Loggable {
         return handle(path, interactiveObjects[0], destinationDetails, action, specialObject);
     }
 
-    private static boolean handle(List<WalkerTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
+    private static boolean handle(List<RSTile> path, RSObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
         PathAnalyzer.DestinationDetails current = PathAnalyzer.furthestReachableTile(path);
 
         if (current == null){
@@ -264,9 +264,9 @@ public class PathObjectHandler implements Loggable {
                             useBladeOnWeb(web);
                         }
                         if(Web.methods.chooseOption.getHoverText().contains("->")){
-                            Web.methods.walking.walkTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
+                            Web.methods.walking.walkTo(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())));
                         }
-                        if (web.getLocation().distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) <= 1) {
+                        if (web.getLocation().distanceTo(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()))) <= 1) {
                             WaitFor.milliseconds((int) StdRandom.gaussian(50, 800, 250, 150));
                         } else {
                             WaitFor.milliseconds(2000, 4000);
@@ -288,10 +288,10 @@ public class PathObjectHandler implements Loggable {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){
                             continue;
                         }
-                        if (new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) > 1){
-                            WaitFor.condition(StdRandom.uniform(3000, 4000), () -> new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        if (new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) > 1){
+                            WaitFor.condition(StdRandom.uniform(3000, 4000), () -> new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         }
-                        if (new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).equals(new WalkerTile(2564, 3356, 0))){
+                        if (new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).equals(new RSTile(2564, 3356, 0))){
                             successfulClick = true;
                             break;
                         }
@@ -303,7 +303,7 @@ public class PathObjectHandler implements Loggable {
                     }
                     successfulClick = true;
                     WaitFor.condition(10000, () ->
-                            SpecialObject.EDGEVILLE_UNDERWALL_TUNNEL.getLocation().equals(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) ?
+                            SpecialObject.EDGEVILLE_UNDERWALL_TUNNEL.getLocation().equals(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()))) ?
                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     break;
                 case EDGEVILLE_UNDERWALL_TUNNEL:
@@ -312,7 +312,7 @@ public class PathObjectHandler implements Loggable {
                     }
                     successfulClick = true;
                     WaitFor.condition(10000, () ->
-                            SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) ?
+                            SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()))) ?
                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     break;
             }
@@ -331,7 +331,7 @@ public class PathObjectHandler implements Loggable {
 
         if (strongholdDoor){
             if (WaitFor.condition(StdRandom.uniform(6700, 7800), () -> {
-                WalkerTile playerPosition = new WalkerTile(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())));
+                RSTile playerPosition = new RSTile(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())));
                 if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), destinationDetails.getNextTile(), 50)) {
                     WaitFor.milliseconds(500, 1000);
                     return WaitFor.Return.SUCCESS;
@@ -359,7 +359,7 @@ public class PathObjectHandler implements Loggable {
             }
             if (current.getNextTile() != null){
                 PathAnalyzer.DestinationDetails hoverDetails = PathAnalyzer.furthestReachableTile(path, current.getNextTile());
-                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getWalkerTile().distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) > 7 && !strongholdDoor && new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(object) <= 2){
+                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getRSTile().distanceTo(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()))) > 7 && !strongholdDoor && new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceTo(object) <= 2){
                     WalkerEngine.getInstance().hoverMinimap(hoverDetails.getDestination());
                 }
             }
@@ -373,7 +373,7 @@ public class PathObjectHandler implements Loggable {
 
     public static RSObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
         RSObject[] objects = Web.methods.objects.getAll(interactiveObjectFilter(x, y, z, destinationDetails));
-        final WalkerTile base = new WalkerTile(x, y, z);
+        final RSTile base = new RSTile(x, y, z);
         Arrays.sort(objects, (o1, o2) -> {
             int c = Integer.compare(o1.getLocation().distanceTo(base), o2.getLocation().distanceTo(base));
             int assumedZ = destinationDetails.getAssumedZ(), destinationZ = destinationDetails.getDestination().getZ();
@@ -394,7 +394,7 @@ public class PathObjectHandler implements Loggable {
                 if (actions2.contains("Climb-down")){
                     return 1;
                 }
-            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getWalkerTile()) > 20){
+            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getRSTile()) > 20){
                 if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
                     return -1;
                 } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
@@ -426,7 +426,7 @@ public class PathObjectHandler implements Loggable {
      * @return
      */
     private static Filter<RSObject> interactiveObjectFilter(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-        final WalkerTile position = new WalkerTile(x, y, z);
+        final RSTile position = new RSTile(x, y, z);
         return new Filter<RSObject>() {
             @Override
             public boolean test(RSObject rsObject) {
@@ -441,10 +441,10 @@ public class PathObjectHandler implements Loggable {
                 if (RSObjectHelper.getActionsList(rsObject).stream().anyMatch(s -> getInstance().sortedBlackListOptions.contains(s))){
                     return false;
                 }
-                if (rsObject.getLocation().distanceTo(destinationDetails.getDestination().getWalkerTile()) > 5) {
+                if (rsObject.getLocation().distanceTo(destinationDetails.getDestination().getRSTile()) > 5) {
                     return false;
                 }
-                if (Arrays.stream(rsObject.getArea().getTileArray()).noneMatch(rsTile -> new WalkerTile(rsTile).distanceTo(position) <= 2)) {
+                if (Arrays.stream(rsObject.getArea().getTileArray()).noneMatch(rsTile -> new RSTile(rsTile).distanceTo(position) <= 2)) {
                     return false;
                 }
                 List<String> options = Arrays.asList(def.getActions());

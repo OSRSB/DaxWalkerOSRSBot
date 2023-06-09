@@ -1,7 +1,7 @@
 package dax_api.shared;
 
 
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,8 +32,8 @@ public abstract class PathFindingNode implements Comparable {
         return distance(pathFindingNode);
     }
 
-    public WalkerTile getWalkerTile(){
-        return new WalkerTile(getX(), getY(), getZ());
+    public RSTile getRSTile(){
+        return new RSTile(getX(), getY(), getZ());
     }
 
     @Override

@@ -6,7 +6,7 @@ import net.runelite.rsb.util.Timer;
 import net.runelite.rsb.wrappers.RSItem;
 import net.runelite.rsb.wrappers.RSWidget;
 import net.runelite.rsb.wrappers.common.Clickable07;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,8 +40,8 @@ public class MasterScrollBook {
 		
 		private int varbit;
 		private String name;
-		private WalkerTile destination;
-		Teleports(int varbit, String name, WalkerTile destination){
+		private RSTile destination;
+		Teleports(int varbit, String name, RSTile destination){
 			this.varbit = varbit;
 			this.name = name;
 			this.destination = destination;
@@ -58,7 +58,7 @@ public class MasterScrollBook {
 		}
 		
 		//Returns the destination that the teleport will take you to.
-		public WalkerTile getDestination(){
+		public RSTile getDestination(){
 			return destination;
 		}
 		
@@ -245,7 +245,7 @@ public class MasterScrollBook {
 			@Override
 			public boolean getAsBoolean() {
 				Web.methods.web.sleep(StdRandom.uniform(50,200));
-				return location.getDestination().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10;
+				return location.getDestination().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10;
 			}
 			
 		}, 8000);

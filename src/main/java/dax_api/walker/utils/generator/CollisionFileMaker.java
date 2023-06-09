@@ -3,7 +3,7 @@ package dax_api.walker.utils.generator;
 import dax_api.walker_engine.local_pathfinding.AStarNode;
 import net.runelite.rsb.internal.globval.GlobalConfiguration;
 import net.runelite.rsb.methods.Web;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,14 +20,14 @@ public class CollisionFileMaker {
                 return;
             int baseX = Web.methods.game.getBaseX();
             int baseY = Web.methods.game.getBaseY();
-            int baseZ = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane();
+            int baseZ = new RSTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane();
 
             File file = new File(GlobalConfiguration.Paths.getSettingsDirectory() + File.separator + baseX + "x" + baseY + "x" + baseZ + ".cdata");
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
             for (int x = 0; x < collisionData.length; x++) {
                 for (int y = 0; y < collisionData[x].length; y++) {
                     int flag = collisionData[x][y];
-                    WalkerTile tile = new WalkerTile(x, y, baseZ, WalkerTile.TYPES.SCENE).toWorldTile();
+                    RSTile tile = new RSTile(x, y, baseZ, RSTile.TYPES.SCENE).toWorldTile();
                     CollisionTile collisionTile = new CollisionTile(
                             tile.getX(), tile.getY(), tile.getPlane(),
                             AStarNode.blockedNorth(flag),
