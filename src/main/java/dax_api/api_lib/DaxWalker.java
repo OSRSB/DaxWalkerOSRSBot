@@ -143,6 +143,10 @@ public class DaxWalker implements Loggable {
             return true;
         }
 
+        if (path.get(0).distanceTo(Web.methods.players.getMyPlayer()) > 50) {
+            return false;
+        }
+
         return WalkerEngine.getInstance().walkPath(path, getGlobalWalkingCondition().combine(walkingCondition));
     }
 
