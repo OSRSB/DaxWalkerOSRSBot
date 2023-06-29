@@ -124,6 +124,28 @@ public class DaxWalker implements Loggable {
         return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
     }
 
+    public static boolean walkPath(List<RSTile> path) {
+        return walkPath(path, null);
+    }
+
+    public static boolean walkPath(List<RSTile> path, WalkingCondition walkingCondition) {
+        if (ShipUtils.isOnShip()) {
+            ShipUtils.crossGangplank();
+            WaitFor.milliseconds(500, 1200);
+        }
+
+        if (path == null || path.size() == 0) {
+            return true;
+        }
+
+        RSTile start = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+        if (start.equals(path.get(path.size() - 1))) {
+            return true;
+        }
+
+        return WalkerEngine.getInstance().walkPath(path, getGlobalWalkingCondition().combine(walkingCondition));
+    }
+
     private List<PathRequestPair> getPathTeleports(RSTile start) {
         return Teleport.getValidStartingRSTiles().stream()
                 .map(t -> new PathRequestPair(Point3D.fromPositionable(t),
