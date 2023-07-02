@@ -4,7 +4,7 @@ package dax_api.walker.utils.camera;
 import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.wrappers.RSCharacter;
 import net.runelite.rsb.wrappers.common.Positionable;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 public class CameraCalculations {
 
@@ -22,11 +22,11 @@ public class CameraCalculations {
     }
 
     public static int getAngleToTile(Positionable tile) {
-        return 100 - (int) (Math.min(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())).distanceToDouble(tile), 15) * 4);
+        return 100 - (int) (Math.min(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation())).distanceToDouble(tile), 15) * 4);
     }
 
     public static int getRotationToTile(RSCharacter target) {
-        WalkerTile location = new WalkerTile(target.getLocation());
+        RSTile location = new RSTile(target.getLocation());
         RSCharacter.DIRECTION direction = target.getDirectionFacing();
         int cameraRotation = Web.methods.camera.getCharacterAngle(target);
         switch (direction) {

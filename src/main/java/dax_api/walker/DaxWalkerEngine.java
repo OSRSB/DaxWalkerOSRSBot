@@ -12,7 +12,7 @@ import dax_api.walker.models.enums.Situation;
 import dax_api.walker.utils.path.DaxPathFinder;
 import dax_api.walker.utils.path.PathUtils;
 import net.runelite.rsb.methods.Web;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class DaxWalkerEngine implements DaxLogger {
         return passiveActions;
     }
 
-    public boolean walkPath(List<WalkerTile> path) {
+    public boolean walkPath(List<RSTile> path) {
         int failAttempts = 0;
 
         while (failAttempts < 3) {
@@ -52,13 +52,13 @@ public class DaxWalkerEngine implements DaxLogger {
         return false;
     }
 
-    private boolean reachedEnd(List<WalkerTile> path) {
+    private boolean reachedEnd(List<RSTile> path) {
         if (path == null || path.size() == 0) return true;
-        WalkerTile tile = new WalkerTile(Web.methods.walking.getDestination());
+        RSTile tile = new RSTile(Web.methods.walking.getDestination());
         return tile != null && tile.equals(path.get(path.size() - 1));
     }
 
-    private MoveActionResult walkNext(List<WalkerTile> path) {
+    private MoveActionResult walkNext(List<RSTile> path) {
         MoveTask moveTask = determineNextAction(path);
         debug("Move task: " + moveTask);
 
@@ -84,13 +84,13 @@ public class DaxWalkerEngine implements DaxLogger {
         }
     }
 
-    private MoveTask determineNextAction(List<WalkerTile> path) {
-        WalkerTile furthestClickable = PathUtils.getFurthestReachableTileInMinimap(path);
+    private MoveTask determineNextAction(List<RSTile> path) {
+        RSTile furthestClickable = PathUtils.getFurthestReachableTileInMinimap(path);
         if (furthestClickable == null) {
             return new MoveTask(Situation.PATH_TOO_FAR, null, null);
         }
 
-        WalkerTile next;
+        RSTile next;
         try {
             next = PathUtils.getNextTileInPath(furthestClickable, path);
         } catch (PathUtils.NotInPathException e) {

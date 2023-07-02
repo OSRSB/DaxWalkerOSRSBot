@@ -4,7 +4,7 @@ import net.runelite.rsb.internal.wrappers.Filter;
 import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.wrappers.*;
 import net.runelite.rsb.wrappers.common.Positionable;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -281,19 +281,19 @@ public interface Filters {
 
         public static Filter<RSObject> tileEquals(Positionable pos) {
             return (RSObject object) -> {
-                WalkerTile oTile = new WalkerTile(object.getLocation());
-                WalkerTile pTile = pos.getLocation();
-                Function<ArrayList<WalkerTile>, Boolean> operation = e -> e.get(0).equals(e.get(1));
-                return (new Comparator<WalkerTile>()).iterateAndCompare(oTile, new WalkerTile[]{pTile}, operation);
+                RSTile oTile = new RSTile(object.getLocation());
+                RSTile pTile = pos.getLocation();
+                Function<ArrayList<RSTile>, Boolean> operation = e -> e.get(0).equals(e.get(1));
+                return (new Comparator<RSTile>()).iterateAndCompare(oTile, new RSTile[]{pTile}, operation);
             };
         }
 
         public static Filter<RSObject> tileNotEquals(Positionable pos) {
             return (RSObject object) -> {
-                WalkerTile oTile = new WalkerTile(object.getLocation());
-                WalkerTile pTile = pos.getLocation();
-                Function<ArrayList<WalkerTile>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
-                return (new Comparator<WalkerTile>()).iterateAndCompare(oTile, new WalkerTile[]{pTile}, operation);
+                RSTile oTile = new RSTile(object.getLocation());
+                RSTile pTile = pos.getLocation();
+                Function<ArrayList<RSTile>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
+                return (new Comparator<RSTile>()).iterateAndCompare(oTile, new RSTile[]{pTile}, operation);
             };
         }
 
@@ -422,7 +422,7 @@ public interface Filters {
 
         public static Filter<RSNPC> inArea(RSArea area) {
             return (RSNPC npc) -> {
-                RSArea nArea = new RSArea(new WalkerTile[]{new WalkerTile(npc.getLocation())});
+                RSArea nArea = new RSArea(new RSTile[]{new RSTile(npc.getLocation())});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
                 return (new Comparator<RSArea>()).iterateAndCompare(nArea, new RSArea[]{area}, operation);
             };
@@ -430,7 +430,7 @@ public interface Filters {
 
         public static Filter<RSNPC> notInArea(RSArea area) {
             return (RSNPC npc) -> {
-                RSArea nArea = new RSArea(new WalkerTile[]{new WalkerTile(npc.getLocation())});
+                RSArea nArea = new RSArea(new RSTile[]{new RSTile(npc.getLocation())});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
                 return (new Comparator<RSArea>()).iterateAndCompare(nArea, new RSArea[]{area}, operation);
             };
@@ -438,19 +438,19 @@ public interface Filters {
 
         public static Filter<RSNPC> tileEquals(Positionable pos) {
             return (RSNPC npc) -> {
-                WalkerTile nTile = new WalkerTile(npc.getLocation());
-                WalkerTile pTile = pos.getLocation();
-                Function<ArrayList<WalkerTile>, Boolean> operation = e -> e.get(0).equals(e.get(1));
-                return (new Comparator<WalkerTile>()).iterateAndCompare(nTile, new WalkerTile[]{pTile}, operation);
+                RSTile nTile = new RSTile(npc.getLocation());
+                RSTile pTile = pos.getLocation();
+                Function<ArrayList<RSTile>, Boolean> operation = e -> e.get(0).equals(e.get(1));
+                return (new Comparator<RSTile>()).iterateAndCompare(nTile, new RSTile[]{pTile}, operation);
             };
         }
 
         public static Filter<RSNPC> tileNotEquals(Positionable pos) {
             return (RSNPC npc) -> {
-                WalkerTile nTile = new WalkerTile(npc.getLocation());
-                WalkerTile pTile = pos.getLocation();
-                Function<ArrayList<WalkerTile>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
-                return (new Comparator<WalkerTile>()).iterateAndCompare(nTile, new WalkerTile[]{pTile}, operation);
+                RSTile nTile = new RSTile(npc.getLocation());
+                RSTile pTile = pos.getLocation();
+                Function<ArrayList<RSTile>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
+                return (new Comparator<RSTile>()).iterateAndCompare(nTile, new RSTile[]{pTile}, operation);
             };
         }
     }
@@ -543,7 +543,7 @@ public interface Filters {
 
         public static Filter<RSPlayer> inArea(RSArea area) {
             return (RSPlayer player) -> {
-                RSArea pArea = new RSArea(new WalkerTile[]{new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))});
+                RSArea pArea = new RSArea(new RSTile[]{new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()))});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
                 return (new Comparator<RSArea>()).iterateAndCompare(pArea, new RSArea[]{area}, operation);
             };
@@ -551,7 +551,7 @@ public interface Filters {
 
         public static Filter<RSPlayer> notInArea(RSArea area) {
             return (RSPlayer player) -> {
-                RSArea pArea = new RSArea(new WalkerTile[]{new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))});
+                RSArea pArea = new RSArea(new RSTile[]{new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()))});
                 Function<ArrayList<RSArea>, Boolean> operation = e -> e.get(0).contains(e.get(1).getTileArray());
                 return (new Comparator<RSArea>()).iterateAndCompare(pArea, new RSArea[]{area}, operation);
             };
@@ -559,19 +559,19 @@ public interface Filters {
 
         public static Filter<RSPlayer> tileEquals(Positionable pos) {
             return (RSPlayer player) -> {
-                WalkerTile playerTile = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-                WalkerTile pTile = pos.getLocation();
-                Function<ArrayList<WalkerTile>, Boolean> operation = e -> e.get(0).equals(e.get(1));
-                return (new Comparator<WalkerTile>()).iterateAndCompare(playerTile, new WalkerTile[]{pTile}, operation);
+                RSTile playerTile = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+                RSTile pTile = pos.getLocation();
+                Function<ArrayList<RSTile>, Boolean> operation = e -> e.get(0).equals(e.get(1));
+                return (new Comparator<RSTile>()).iterateAndCompare(playerTile, new RSTile[]{pTile}, operation);
             };
         }
 
         public static Filter<RSPlayer> tileNotEquals(Positionable pos) {
             return (RSPlayer player) -> {
-                WalkerTile playerTile = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-                WalkerTile pTile = pos.getLocation();
-                Function<ArrayList<WalkerTile>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
-                return (new Comparator<WalkerTile>()).iterateAndCompare(playerTile, new WalkerTile[]{pTile}, operation);
+                RSTile playerTile = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+                RSTile pTile = pos.getLocation();
+                Function<ArrayList<RSTile>, Boolean> operation = e -> !e.get(0).equals(e.get(1));
+                return (new Comparator<RSTile>()).iterateAndCompare(playerTile, new RSTile[]{pTile}, operation);
             };
         }
     }

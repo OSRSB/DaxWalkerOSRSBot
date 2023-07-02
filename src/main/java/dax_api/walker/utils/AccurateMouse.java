@@ -17,7 +17,7 @@ import net.runelite.rsb.wrappers.*;
 import net.runelite.rsb.wrappers.common.Clickable;
 import net.runelite.rsb.wrappers.common.Positionable;
 import net.runelite.rsb.wrappers.subwrap.RSMenuNode;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -77,7 +77,7 @@ public class AccurateMouse {
             return false;
         }
         LocalPoint dest = Web.methods.client.getLocalDestinationLocation();
-        WalkerTile currentDestination = (dest != null) ? new WalkerTile(dest.getX(), dest.getY(), Web.methods.client.getPlane(), WalkerTile.TYPES.SCENE).toWorldTile() : null;
+        RSTile currentDestination = (dest != null) ? new RSTile(dest.getX(), dest.getY(), Web.methods.client.getPlane(), RSTile.TYPES.SCENE).toWorldTile() : null;
         if (currentDestination != null && currentDestination.equals(tile.getLocation())) {
             return true;
         }
@@ -90,9 +90,9 @@ public class AccurateMouse {
         AccurateMouse.click(point);
 
 
-        WalkerTile newDestination = WaitFor.getValue(250, () -> {
+        RSTile newDestination = WaitFor.getValue(250, () -> {
             RSTile rsTile = Web.methods.walking.getDestination();
-            return rsTile == null || new WalkerTile(rsTile).equals(currentDestination) ? null : new WalkerTile(rsTile);
+            return rsTile == null || new RSTile(rsTile).equals(currentDestination) ? null : new RSTile(rsTile);
         });
         if (newDestination != null && newDestination.equals(tile)) {
             return true;
@@ -144,7 +144,7 @@ public class AccurateMouse {
     }
 
 
-    public static boolean walkScreenTile(WalkerTile destination) {
+    public static boolean walkScreenTile(RSTile destination) {
         if (!destination.isOnScreen() || !destination.isClickable()) {
             return false;
         }
@@ -161,7 +161,7 @@ public class AccurateMouse {
                 click(1);
                 // TODO: waitResponse() calls getState() which is currently not implemented so just wait and return true
                 if (waitResponse() == State.YELLOW || true) {
-                    WalkerTile clicked = new WalkerTile(Objects.requireNonNull(WaitFor.getValue(900, Web.methods.walking::getDestination)));
+                    RSTile clicked = new RSTile(Objects.requireNonNull(WaitFor.getValue(900, Web.methods.walking::getDestination)));
                     return clicked.equals(destination) || Web.methods.players.getMyPlayer().getPosition().equals(destination);
                 } else {
                     break;
@@ -171,7 +171,7 @@ public class AccurateMouse {
         return false;
     }
 
-    public static boolean hoverScreenTileWalkHere(WalkerTile destination) {
+    public static boolean hoverScreenTileWalkHere(RSTile destination) {
         for (int i = 0; i < Web.methods.web.random(4, 6); i++) {
             Point point = getWalkingPoint(destination);
             if (point == null) {
@@ -185,7 +185,7 @@ public class AccurateMouse {
         return false;
     }
 
-    public static boolean isHoveringScreenTileWalkHere(WalkerTile destination) {
+    public static boolean isHoveringScreenTileWalkHere(RSTile destination) {
         return isWalkingPoint(new java.awt.Point(Web.methods.mouse.getLocation().getX(), Web.methods.mouse.getLocation().getY())
                 , destination);
     }
@@ -208,10 +208,10 @@ public class AccurateMouse {
         }
 
         Point point = null;
-        if (clickable instanceof WalkerTile && Arrays.stream(clickActions).anyMatch(s -> s.matches("Walk here"))) {
+        if (clickable instanceof RSTile && Arrays.stream(clickActions).anyMatch(s -> s.matches("Walk here"))) {
 
-            Web.methods.calc.getRandomPolyPoint(Web.methods.calc.getTileBoundsPoly((WalkerTile) clickable, 0));
-            //point = ((WalkerTile) clickable).getHumanHoverPoint();
+            Web.methods.calc.getRandomPolyPoint(Web.methods.calc.getTileBoundsPoly((RSTile) clickable, 0));
+            //point = ((RSTile) clickable).getHumanHoverPoint();
         } else if (model == null) {
             return false;
         }
@@ -398,14 +398,14 @@ public class AccurateMouse {
      * @param destination
      * @return
      */
-    public static Point getWalkingPoint(WalkerTile destination) {
+    public static Point getWalkingPoint(RSTile destination) {
         Area area = getTileModel(destination);
         ArrayList<Polygon> polygons = new ArrayList<>();
         for (RSTile tile : new RSArea(destination, 1).getTileArray()) {
             if (tile.equals(destination)) {
                 continue;
             }
-            polygons.add(Web.methods.calc.getTileBoundsPoly(new WalkerTile(tile), 0));
+            polygons.add(Web.methods.calc.getTileBoundsPoly(new RSTile(tile), 0));
             polygons.addAll(
                     Arrays.stream(Web.methods.objects.getAllAt(tile)).filter(object -> RSObjectHelper.getActions(object).length > 0).map(RSObject::getModel).filter(Objects::nonNull).map(RSModel::getConvexHull).filter(Objects::nonNull).collect(
                             Collectors.toList()));
@@ -413,7 +413,7 @@ public class AccurateMouse {
                     Arrays.stream(Web.methods.groundItems.getAllAt(tile)).filter(object -> RSItemHelper.getItemActions(object).length > 0).map(RSGroundItem::getModel).filter(Objects::nonNull).map(RSModel::getConvexHull).filter(Objects::nonNull).collect(
                             Collectors.toList()));
             polygons.addAll(
-                    Arrays.stream(Web.methods.npcs.getAll(Filters.NPCs.tileEquals(new WalkerTile(tile)))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(Objects::nonNull).map(RSModel::getConvexHull).filter(Objects::nonNull).collect(
+                    Arrays.stream(Web.methods.npcs.getAll(Filters.NPCs.tileEquals(new RSTile(tile)))).filter(object -> RSNPCHelper.getActions(object).length > 0).map(RSNPC::getModel).filter(Objects::nonNull).map(RSModel::getConvexHull).filter(Objects::nonNull).collect(
                             Collectors.toList()));
         }
 
@@ -434,7 +434,7 @@ public class AccurateMouse {
         return null;
     }
 
-    private static boolean isWalkingPoint(java.awt.Point point, WalkerTile destination) {
+    private static boolean isWalkingPoint(java.awt.Point point, RSTile destination) {
         String uptext = Web.methods.chooseOption.getHoverText();
         if (uptext == null || !uptext.startsWith("Walk here")) {
             return false;
@@ -446,7 +446,7 @@ public class AccurateMouse {
             if (tile.equals(destination)) {
                 continue;
             }
-            polygons.add(Web.methods.calc.getTileBoundsPoly(new WalkerTile(tile), 0));
+            polygons.add(Web.methods.calc.getTileBoundsPoly(new RSTile(tile), 0));
         }
 
         if (!area.contains(point)) {
@@ -469,7 +469,7 @@ public class AccurateMouse {
         return (int) (min + Math.floor(Math.random() * (max + 1 - min)));
     }
 
-    private static Area getTileModel(WalkerTile tile) {
+    private static Area getTileModel(RSTile tile) {
         Polygon tilePolygon = Web.methods.calc.getTileBoundsPoly(tile, 0);
         Area area = new Area(tilePolygon);
         for (RSObject rsObject : Web.methods.objects.getAll(Filters.Objects.inArea(new RSArea(tile, 3)))) {

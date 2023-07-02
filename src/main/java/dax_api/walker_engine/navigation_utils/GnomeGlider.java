@@ -7,7 +7,7 @@ import dax_api.walker_engine.interaction_handling.InteractionHelper;
 import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.util.StdRandom;
 import net.runelite.rsb.wrappers.RSWidget;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.Arrays;
 
@@ -35,8 +35,8 @@ public class GnomeGlider {
         public String getName() {
             return name;
         }
-        public WalkerTile getWalkerTile(){
-            return new WalkerTile(x, y, z);
+        public RSTile getRSTile(){
+            return new RSTile(x, y, z);
         }
 
         public int getX() {
@@ -71,7 +71,7 @@ public class GnomeGlider {
             return false;
         }
 
-        if (WaitFor.condition(StdRandom.uniform(5400, 6500), () -> location.getWalkerTile().distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(StdRandom.uniform(5400, 6500), () -> location.getRSTile().distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(250, 500);
             return true;
         }

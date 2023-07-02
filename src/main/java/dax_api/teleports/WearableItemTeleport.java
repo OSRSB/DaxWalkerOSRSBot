@@ -7,7 +7,7 @@ import dax_api.walker_engine.interaction_handling.NPCInteraction;
 import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.util.StdRandom;
 import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,12 +66,12 @@ public class WearableItemTeleport {
 		}
 
 		RSItem teleportItem = items.get(0);
-		final WalkerTile startingPosition = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+		final RSTile startingPosition = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
 
 		return RSItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") && WaitFor.condition(
 				StdRandom.uniform(3800, 4600), () -> {
 					NPCInteraction.handleConversationRegex(regex);
-					if (startingPosition.distanceTo(new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))) > 5) {
+					if (startingPosition.distanceTo(new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()))) > 5) {
 						return WaitFor.Return.SUCCESS;
 					}
 					return WaitFor.Return.IGNORE;

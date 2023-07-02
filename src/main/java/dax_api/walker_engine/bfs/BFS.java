@@ -4,7 +4,7 @@ package dax_api.walker_engine.bfs;
 import dax_api.shared.NodeInfo;
 import dax_api.shared.PathFindingNode;
 import dax_api.walker_engine.WaitFor;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,15 +15,15 @@ public class BFS {
     private static final int DEFAULT_OFFSET = 12;
     public static int OFFSET_SEARCH = DEFAULT_OFFSET;
 
-    public static PathFindingNode bfsClosestToPath(List<WalkerTile> path, PathFindingNode start){
+    public static PathFindingNode bfsClosestToPath(List<RSTile> path, PathFindingNode start){
         return bfsClosestToPath(path, start, -1);
     }
 
-    public static PathFindingNode bfsClosestToPath(List<WalkerTile> path, PathFindingNode start, int limit){
+    public static PathFindingNode bfsClosestToPath(List<RSTile> path, PathFindingNode start, int limit){
         if (path == null || start == null){
             return null;
         }
-        if (path.contains(start.getWalkerTile())) {
+        if (path.contains(start.getRSTile())) {
             return start;
         }
         NodeInfo.clearMemory(start.getClass());
@@ -44,7 +44,7 @@ public class BFS {
                     continue;
                 }
                 nodeInfo.traversed = true;
-                if (path.contains(neighbor.getWalkerTile())){
+                if (path.contains(neighbor.getRSTile())){
                     return neighbor;
                 }
                 queue.add(neighbor);

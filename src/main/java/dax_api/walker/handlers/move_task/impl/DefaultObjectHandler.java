@@ -13,7 +13,7 @@ import dax_api.walker.utils.path.DaxPathFinder;
 import net.runelite.cache.definitions.ObjectDefinition;
 import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.wrappers.RSObject;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -82,7 +82,7 @@ public class DefaultObjectHandler implements MoveTaskHandler, DaxLogger {
                     .toArray(RSObject[]::new);
         }
 
-        Arrays.sort(objects, Comparator.comparingDouble(o -> new WalkerTile(o.getLocation()).distanceToDouble(moveTask.getDestination())));
+        Arrays.sort(objects, Comparator.comparingDouble(o -> new RSTile(o.getLocation()).distanceToDouble(moveTask.getDestination())));
         return objects;
     }
 
@@ -121,7 +121,7 @@ public class DefaultObjectHandler implements MoveTaskHandler, DaxLogger {
     }
 
     private Direction getDirection(MoveTask moveTask) {
-        int playerPlane = new WalkerTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane();
+        int playerPlane = new RSTile(Web.methods.players.getMyPlayer().getLocation()).getWorldLocation().getPlane();
         int plane = moveTask.getNext() != null ? moveTask.getNext().getPlane() : playerPlane;
         if (plane > playerPlane) return Direction.UP;
         if (plane < playerPlane) return Direction.DOWN;

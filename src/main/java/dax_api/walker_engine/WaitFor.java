@@ -9,7 +9,7 @@ import net.runelite.rsb.wrappers.RSGroundItem;
 import net.runelite.rsb.wrappers.RSObject;
 import net.runelite.rsb.wrappers.common.Clickable07;
 import net.runelite.rsb.wrappers.common.Positionable;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.Random;
 
@@ -19,12 +19,12 @@ public class WaitFor {
 
     public static Condition getNotMovingCondition(){
         return new Condition() {
-            final WalkerTile initialTile = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+            final RSTile initialTile = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
             final long movingDelay = 1300, startTime = System.currentTimeMillis();
 
             @Override
             public Return active() {
-                if (Timer.timeFromMark(startTime) > movingDelay && initialTile.equals(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()))
+                if (Timer.timeFromMark(startTime) > movingDelay && initialTile.equals(new RSTile(Web.methods.players.getMyPlayer().getLocation()))
                         && !Web.methods.players.getMyPlayer().isLocalPlayerMoving()) {
                     return Return.FAIL;
                 }
@@ -34,7 +34,7 @@ public class WaitFor {
     }
 
     public static int getMovementRandomSleep(Positionable positionable){
-        return getMovementRandomSleep((int) Web.methods.calc.distanceBetween(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()), positionable.getLocation()));
+        return getMovementRandomSleep((int) Web.methods.calc.distanceBetween(new RSTile(Web.methods.players.getMyPlayer().getLocation()), positionable.getLocation()));
     }
 
     public static int getMovementRandomSleep(int distance){

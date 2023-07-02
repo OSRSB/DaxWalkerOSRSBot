@@ -4,28 +4,28 @@ import dax_api.shared.helpers.magic.Validatable;
 import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.util.Timer;
 import net.runelite.rsb.wrappers.RSItem;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 public enum TeleportScrolls implements Validatable {
-	NARDAH("Nardah teleport",new WalkerTile(3419, 2916, 0)),
-	DIGSITE("Digsite teleport",new WalkerTile(3325, 3411, 0)),
-	FELDIP_HILLS("Feldip hills teleport",new WalkerTile(2540, 2924, 0)),
-	LUNAR_ISLE("Lunar isle teleport",new WalkerTile(2095, 3913, 0)),
-	MORTTON("Mort'ton teleport",new WalkerTile(3487, 3287, 0)),
-	PEST_CONTROL("Pest control teleport",new WalkerTile(2658, 2658, 0)),
-	PISCATORIS("Piscatoris teleport",new WalkerTile(2340, 3650, 0)),
-	TAI_BWO_WANNAI("Tai bwo wannai teleport",new WalkerTile(2789,3065,0)),
-	ELF_CAMP("Elf camp teleport",new WalkerTile(2193, 3258, 0)),
-	MOS_LE_HARMLESS("Mos le'harmless teleport", new WalkerTile(3700, 2996, 0)),
-	LUMBERYARD("Lumberyard teleport",new WalkerTile(3302, 3487, 0)),
-	ZULLANDRA("Zul-andra teleport",new WalkerTile(2195, 3055, 0)),
-	KEY_MASTER("Key master teleport",new WalkerTile(1311, 1251, 0)),
-	REVENANT_CAVES("Revenant cave teleport",new WalkerTile(3130, 3832, 0)),
-	WATSON("Watson teleport", new WalkerTile(1645, 3579,0))
+	NARDAH("Nardah teleport",new RSTile(3419, 2916, 0)),
+	DIGSITE("Digsite teleport",new RSTile(3325, 3411, 0)),
+	FELDIP_HILLS("Feldip hills teleport",new RSTile(2540, 2924, 0)),
+	LUNAR_ISLE("Lunar isle teleport",new RSTile(2095, 3913, 0)),
+	MORTTON("Mort'ton teleport",new RSTile(3487, 3287, 0)),
+	PEST_CONTROL("Pest control teleport",new RSTile(2658, 2658, 0)),
+	PISCATORIS("Piscatoris teleport",new RSTile(2340, 3650, 0)),
+	TAI_BWO_WANNAI("Tai bwo wannai teleport",new RSTile(2789,3065,0)),
+	ELF_CAMP("Elf camp teleport",new RSTile(2193, 3258, 0)),
+	MOS_LE_HARMLESS("Mos le'harmless teleport", new RSTile(3700, 2996, 0)),
+	LUMBERYARD("Lumberyard teleport",new RSTile(3302, 3487, 0)),
+	ZULLANDRA("Zul-andra teleport",new RSTile(2195, 3055, 0)),
+	KEY_MASTER("Key master teleport",new RSTile(1311, 1251, 0)),
+	REVENANT_CAVES("Revenant cave teleport",new RSTile(3130, 3832, 0)),
+	WATSON("Watson teleport", new RSTile(1645, 3579,0))
 	;
 	private String name;
-	private WalkerTile location;
-	TeleportScrolls(String name, WalkerTile location){
+	private RSTile location;
+	TeleportScrolls(String name, RSTile location){
 		this.name = name;
 		this.location = location;
 	}
@@ -45,7 +45,7 @@ public enum TeleportScrolls implements Validatable {
 		return Web.methods.inventory.open() &&
 				scroll[0].doClick() &&
 				(!shouldWait || Timer.waitCondition(() ->
-						this.location.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) < 15, 8000));
+						this.location.distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) < 15, 8000));
 	}
 	
 	public boolean hasScroll(){
@@ -53,7 +53,7 @@ public enum TeleportScrolls implements Validatable {
 		return scroll.length > 0;
 	}
 
-	public WalkerTile getLocation(){
+	public RSTile getLocation(){
 		return location;
 	}
 

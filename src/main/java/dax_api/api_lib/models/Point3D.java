@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.rsb.wrappers.common.Positionable;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 public class Point3D {
 
@@ -40,8 +40,8 @@ public class Point3D {
 
     public Positionable toPositionable() {
         return new Positionable() {
-            public WalkerTile getAnimablePosition() {
-                return new WalkerTile(x, y, z);
+            public RSTile getAnimablePosition() {
+                return new RSTile(x, y, z);
             }
 
             public boolean adjustCameraTo() {
@@ -49,8 +49,8 @@ public class Point3D {
             }
 
             @Override
-            public WalkerTile getLocation() {
-                return new WalkerTile(new WorldPoint(x, y, z));
+            public RSTile getLocation() {
+                return new RSTile(new WorldPoint(x, y, z));
             }
 
             @Override
@@ -61,8 +61,8 @@ public class Point3D {
     }
 
     public static Point3D fromPositionable(Positionable positionable) {
-        WalkerTile WalkerTile = positionable.getLocation();
-        return new Point3D(WalkerTile.getX(), WalkerTile.getY(), WalkerTile.getPlane());
+        RSTile RSTile = positionable.getLocation();
+        return new Point3D(RSTile.getX(), RSTile.getY(), RSTile.getPlane());
     }
 
 }

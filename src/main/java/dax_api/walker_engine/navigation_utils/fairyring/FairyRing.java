@@ -10,7 +10,7 @@ import net.runelite.rsb.methods.Web;
 import net.runelite.rsb.util.Timer;
 import net.runelite.rsb.wrappers.RSObject;
 import net.runelite.rsb.wrappers.RSWidget;
-import net.runelite.rsb.wrappers.subwrap.WalkerTile;
+import net.runelite.rsb.wrappers.RSTile;
 
 import java.util.Arrays;
 
@@ -52,8 +52,8 @@ public class FairyRing {
 				return false;
 			}
 		}
-		final WalkerTile myPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
-		return location.turnTo() && pressTeleport() && Timer.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
+		final RSTile myPos = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
+		return location.turnTo() && pressTeleport() && Timer.waitCondition(() -> myPos.distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
 	}
 
 	private static boolean hasInterface(){
@@ -66,9 +66,9 @@ public class FairyRing {
 	}
 
 	private static boolean takeLastDestination(Locations location){
-		final WalkerTile myPos = new WalkerTile(new WalkerTile(Web.methods.players.getMyPlayer().getLocation()));
+		final RSTile myPos = new RSTile(new RSTile(Web.methods.players.getMyPlayer().getLocation()));
 		return InteractionHelper.click(ring[0],"Last-destination (" + location + ")") &&
-				Timer.waitCondition(() -> myPos.distanceTo(new WalkerTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
+				Timer.waitCondition(() -> myPos.distanceTo(new RSTile(Web.methods.players.getMyPlayer().getLocation())) > 20,8000);
 	}
 
 	private static boolean pressTeleport(){
